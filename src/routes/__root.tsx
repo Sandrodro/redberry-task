@@ -8,6 +8,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         <Link to="/" className="[&.active]:font-bold">
           Home
         </Link>
+        <Link to="/sessions" className="[&.active]:font-bold">
+          Sessions
+        </Link>
+        <Link to="/profile" className="[&.active]:font-bold">
+          Profile
+        </Link>
       </nav>
       <Outlet />
     </>
