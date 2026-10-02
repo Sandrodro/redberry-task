@@ -1,5 +1,5 @@
 import { keepPreviousData, queryOptions } from '@tanstack/react-query'
-import { api, apiData } from '../client'
+import { api } from '../client'
 import { Endpoint } from '../endpoints'
 import { filterOptionsKeys, sessionsKeys } from '../queryKeys'
 import type {
@@ -12,25 +12,26 @@ import type {
 
 export const filterOptionsQueryOptions = queryOptions({
   queryKey: filterOptionsKeys.all.queryKey,
-  queryFn: () => apiData<FilterOptions>(Endpoint.FilterOptions),
+  queryFn: async () => (await api.get<{ data: FilterOptions }>(Endpoint.FilterOptions)).data,
   staleTime: Infinity,
 })
 
 export const sessionsQueryOptions = (filters: SessionsFilters = {}) =>
   queryOptions({
     queryKey: sessionsKeys.list(filters).queryKey,
-    queryFn: () => api<SessionsPage>(Endpoint.Sessions, { query: { ...filters } }),
+    queryFn: () => api.get<SessionsPage>(Endpoint.Sessions, { query: { ...filters } }),
     placeholderData: keepPreviousData,
   })
 
 export const sessionQueryOptions = (id: number) =>
   queryOptions({
     queryKey: sessionsKeys.detail(id).queryKey,
-    queryFn: () => apiData<Session>(`${Endpoint.Sessions}/${id}`),
+    queryFn: async () => (await api.get<{ data: Session }>(`${Endpoint.Sessions}/${id}`)).data,
   })
 
 export const seatMapQueryOptions = (id: number) =>
   queryOptions({
     queryKey: sessionsKeys.seats(id).queryKey,
-    queryFn: () => apiData<SeatMap>(`${Endpoint.Sessions}/${id}/seats`),
+    queryFn: async () =>
+      (await api.get<{ data: SeatMap }>(`${Endpoint.Sessions}/${id}/seats`)).data,
   })

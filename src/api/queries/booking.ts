@@ -1,5 +1,5 @@
 import { queryOptions, useMutation, useQueryClient } from '@tanstack/react-query'
-import { ApiError, apiData } from '../client'
+import { ApiError, api } from '../client'
 import { Endpoint } from '../endpoints'
 import { holdsKeys, sessionsKeys, ticketsKeys } from '../queryKeys'
 import type { CreateOrderInput, HoldSeatInput, Order, SeatHold } from '../types'
@@ -7,7 +7,7 @@ import type { CreateOrderInput, HoldSeatInput, Order, SeatHold } from '../types'
 export const holdQueryOptions = (holdId: string) =>
   queryOptions({
     queryKey: holdsKeys.detail(holdId).queryKey,
-    queryFn: () => apiData<SeatHold>(`${Endpoint.Holds}/${holdId}`),
+    queryFn: async () => (await api.get<{ data: SeatHold }>(`${Endpoint.Holds}/${holdId}`)).data,
   })
 
 /** Seat maps and seat counts go stale when holds change, so refresh them. */
@@ -19,11 +19,8 @@ function useRefreshSessions() {
 export function useCreateHold(sessionId: number) {
   const refreshSessions = useRefreshSessions()
   return useMutation({
-    mutationFn: (seats: HoldSeatInput[]) =>
-      apiData<SeatHold>(`${Endpoint.Sessions}/${sessionId}/holds`, {
-        method: 'POST',
-        json: { seats },
-      }),
+    mutationFn: async (seats: HoldSeatInput[]) =>
+      (await api.post<{ data: SeatHold }>(`${Endpoint.Sessions}/${sessionId}/holds`, { seats })).data,
     onSuccess: refreshSessions,
     onError: (error) => {
       if (error instanceof ApiError && error.status === 409) refreshSessions()
@@ -34,7 +31,7 @@ export function useCreateHold(sessionId: number) {
 export function useReleaseHold() {
   const refreshSessions = useRefreshSessions()
   return useMutation({
-    mutationFn: (holdId: string) => apiData<void>(`${Endpoint.Holds}/${holdId}`, { method: 'DELETE' }),
+    mutationFn: (holdId: string) => api.delete<void>(`${Endpoint.Holds}/${holdId}`),
     onSuccess: refreshSessions,
   })
 }
@@ -43,8 +40,8 @@ export function useCreateOrder() {
   const queryClient = useQueryClient()
   const refreshSessions = useRefreshSessions()
   return useMutation({
-    mutationFn: (input: CreateOrderInput) =>
-      apiData<Order>(Endpoint.Orders, { method: 'POST', json: input }),
+    mutationFn: async (input: CreateOrderInput) =>
+      (await api.post<{ data: Order }>(Endpoint.Orders, input)).data,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ticketsKeys._def })
       return refreshSessions()

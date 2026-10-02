@@ -1,0 +1,22 @@
+import type { ComponentPropsWithoutRef } from 'react'
+import { Typography } from './Typography'
+
+const variants = {
+  primary: 'bg-brand text-white',
+  secondary: 'bg-white text-background',
+  tertiary: 'bg-white/10 text-white',
+} as const
+
+type ButtonProps = {
+  variant?: keyof typeof variants
+} & ComponentPropsWithoutRef<'button'>
+
+export function Button({ variant = 'primary', className, children, ...props }: ButtonProps) {
+  const base = `flex cursor-pointer items-center justify-center rounded-full px-[22px] py-[13px] ${variants[variant]}`
+
+  return (
+    <button className={className ? `${base} ${className}` : base} {...props}>
+      <Typography variant="button">{children}</Typography>
+    </button>
+  )
+}

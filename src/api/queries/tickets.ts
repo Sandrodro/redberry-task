@@ -1,5 +1,5 @@
 import { queryOptions, useMutation, useQueryClient } from '@tanstack/react-query'
-import { apiData } from '../client'
+import { api } from '../client'
 import { Endpoint } from '../endpoints'
 import { sessionsKeys, ticketsKeys } from '../queryKeys'
 import type { Order } from '../types'
@@ -7,14 +7,19 @@ import type { Order } from '../types'
 export const ticketsQueryOptions = (filter?: 'upcoming' | 'past') =>
   queryOptions({
     queryKey: ticketsKeys.list(filter).queryKey,
-    queryFn: () => apiData<Order[]>(Endpoint.Tickets, { query: { filter } }),
+    queryFn: async () =>
+      (await api.get<{ data: Order[] }>(Endpoint.Tickets, { query: { filter } })).data,
   })
 
 export function useRefundOrder() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (reference: string) =>
-      apiData<Order>(`${Endpoint.Orders}/${encodeURIComponent(reference)}/refund`, { method: 'POST' }),
+    mutationFn: async (reference: string) =>
+      (
+        await api.post<{ data: Order }>(
+          `${Endpoint.Orders}/${encodeURIComponent(reference)}/refund`,
+        )
+      ).data,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ticketsKeys._def })
       queryClient.invalidateQueries({ queryKey: sessionsKeys._def })

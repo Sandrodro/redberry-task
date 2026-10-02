@@ -1,6 +1,7 @@
-import { tokenStorage } from '../utils/tokenStorage'
+import { storage } from '../utils/storage'
 
 const BASE_URL = import.meta.env.VITE_API_URL as string
+export const TOKEN_KEY = 'token'
 
 export class ApiError extends Error {
   status: number
@@ -22,12 +23,7 @@ export class ApiError extends Error {
 
 type QueryValue = string | number | boolean | string[] | undefined
 
-interface RequestOptions {
-  method?: 'GET' | 'POST' | 'PUT' | 'DELETE'
-  query?: Record<string, QueryValue>
-  json?: unknown
-  form?: Record<string, string | number | boolean | File | null | undefined>
-}
+type FormFields = Record<string, string | number | boolean | File | null | undefined>
 
 function buildQuery(query: Record<string, QueryValue>) {
   const params = new URLSearchParams()
@@ -43,7 +39,8 @@ function buildQuery(query: Record<string, QueryValue>) {
   return string ? `?${string}` : ''
 }
 
-function buildForm(fields: NonNullable<RequestOptions['form']>) {
+/** Pass the result as a request body to send `multipart/form-data`. */
+export function toFormData(fields: FormFields) {
   const form = new FormData()
   for (const [key, value] of Object.entries(fields)) {
     if (value === undefined || value === null) continue
@@ -52,26 +49,28 @@ function buildForm(fields: NonNullable<RequestOptions['form']>) {
   return form
 }
 
-export async function api<T>(
+async function request<T>(
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE',
   path: string,
-  { method = 'GET', query, json, form }: RequestOptions = {},
+  body?: FormData | object,
+  query?: Record<string, QueryValue>,
 ): Promise<T> {
   const headers: Record<string, string> = { Accept: 'application/json' }
-  const token = tokenStorage.get()
+  const token = storage.get(TOKEN_KEY)
   if (token) headers.Authorization = `Bearer ${token}`
 
-  let body: BodyInit | undefined
-  if (json !== undefined) {
+  let payload: BodyInit | undefined
+  if (body instanceof FormData) {
+    payload = body
+  } else if (body !== undefined) {
     headers['Content-Type'] = 'application/json'
-    body = JSON.stringify(json)
-  } else if (form) {
-    body = buildForm(form)
+    payload = JSON.stringify(body)
   }
 
   const response = await fetch(`${BASE_URL}${path}${query ? buildQuery(query) : ''}`, {
     method,
     headers,
-    body,
+    body: payload,
   })
 
   if (!response.ok) {
@@ -81,7 +80,10 @@ export async function api<T>(
   return response.json()
 }
 
-/** For endpoints that wrap the payload as `{ data }`. */
-export async function apiData<T>(path: string, options?: RequestOptions) {
-  return (await api<{ data: T }>(path, options)).data
+export const api = {
+  get: <T>(path: string, options?: { query?: Record<string, QueryValue> }) =>
+    request<T>('GET', path, undefined, options?.query),
+  post: <T>(path: string, body?: FormData | object) => request<T>('POST', path, body),
+  put: <T>(path: string, body?: FormData | object) => request<T>('PUT', path, body),
+  delete: <T>(path: string) => request<T>('DELETE', path),
 }

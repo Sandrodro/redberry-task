@@ -8,11 +8,11 @@
   --color-surface: #1e2031;
   --color-elevated: #2a2c3d;
 
-  --color-foreground: #ffffff;
+  --color-white: #ffffff;
   --color-muted: #a9a9a9;
   --color-subtle: #505261;
 
-  --color-danger: #ec3013;
+  --color-brand: #ec3013;
   --color-success: #4ade80;
   --color-warning: #e27e04;
 
@@ -23,7 +23,11 @@
 }
 
 @layer base {
+  :root {
+    --shadow: rgb(0 0 0 / 0.2);
+  }
+
   body {
-    @apply bg-background font-sans text-foreground;
+    @apply bg-background font-sans text-white;
   }
 }

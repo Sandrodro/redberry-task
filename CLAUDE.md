@@ -36,12 +36,12 @@ src/
 - Routes in `src/routes/` only call `createFileRoute` and point to a component in `src/pages/`. No page logic in route files.
 - Build UI from reusable components. Check `src/components/` before writing new markup.
 - Use `Typography` for all text. Do not hand-write font size or weight classes.
-- Use theme tokens from `src/index.css` (`bg-background`, `text-muted`, `text-danger`, ...). No hardcoded hex values. Tints use the opacity modifier (`bg-danger/10`).
+- Use theme tokens from `src/index.css` (`bg-background`, `text-muted`, `text-brand`, ...). No hardcoded hex values. Tints use the opacity modifier (`bg-brand/10`).
 - Font is Archivo, loaded with `@fontsource-variable/archivo`.
 - Use `Endpoint` for every API path. Param paths interpolate from base entries: `${Endpoint.Movies}/${slug}`. `Endpoint` is an `as const` object, not an `enum`, because `erasableSyntaxOnly` is on.
 - Define query keys in `src/api/queryKeys.ts` with the key factory. Never write inline keys. Invalidate with `xKeys._def`.
 - Query options use `queryOptions()`. Mutations are hooks (`useCreateHold`, ...) that invalidate what they change.
-- Use `apiData` for `{ data }` responses and `api` for raw responses.
+- Use `api.get`, `api.post`, `api.put`, `api.delete`. Unwrap `{ data }` responses inline: `(await api.get<{ data: T }>(path)).data`. For multipart bodies, pass `toFormData(input)` as the body.
 - Read localStorage only through `storage` in `src/utils/storage.ts`.
 - The auth token is in localStorage under `TOKEN_KEY`, sent as `Authorization: Bearer`. Use `useAuth()` for login status and the active user.
 - Do not hardcode values the API provides (venues, formats, ticket ratios, seat cap, hold minutes). Read them from `/filter-options`.

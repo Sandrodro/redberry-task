@@ -4,8 +4,8 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import { tokenStorage } from "../../utils/tokenStorage";
-import { ApiError, apiData } from "../client";
+import { storage } from "../../utils/storage";
+import { ApiError, api, toFormData, TOKEN_KEY } from "../client";
 import { Endpoint } from "../endpoints";
 import type { AuthResponse, LoginInput, RegisterInput, User } from "../types";
 
@@ -13,11 +13,11 @@ export const meQueryOptions = queryOptions({
   queryKey: ["me"],
   queryFn: async () => {
     try {
-      return await apiData<User>(Endpoint.Me);
+      return (await api.get<{ data: User }>(Endpoint.Me)).data;
     } catch (error) {
       // A 401 means the stored token is stale. Drop it and act as a guest.
       if (error instanceof ApiError && error.status === 401)
-        tokenStorage.clear();
+        storage.remove(TOKEN_KEY);
       throw error;
     }
   },
@@ -25,13 +25,13 @@ export const meQueryOptions = queryOptions({
 
 /** The signed in user. Does not fetch when no token is stored. */
 export function useMe() {
-  return useQuery({ ...meQueryOptions, enabled: !!tokenStorage.get() });
+  return useQuery({ ...meQueryOptions, enabled: !!storage.get(TOKEN_KEY) });
 }
 
 function useStoreSession() {
   const queryClient = useQueryClient();
   return ({ user, token }: AuthResponse) => {
-    tokenStorage.set(token);
+    storage.set(TOKEN_KEY, token);
     queryClient.setQueryData(meQueryOptions.queryKey, user);
   };
 }
@@ -39,8 +39,8 @@ function useStoreSession() {
 export function useLogin() {
   const storeSession = useStoreSession();
   return useMutation({
-    mutationFn: (input: LoginInput) =>
-      apiData<AuthResponse>(Endpoint.Login, { method: "POST", json: input }),
+    mutationFn: async (input: LoginInput) =>
+      (await api.post<{ data: AuthResponse }>(Endpoint.Login, input)).data,
     onSuccess: storeSession,
   });
 }
@@ -48,11 +48,13 @@ export function useLogin() {
 export function useRegister() {
   const storeSession = useStoreSession();
   return useMutation({
-    mutationFn: (input: RegisterInput) =>
-      apiData<AuthResponse>(Endpoint.Register, {
-        method: "POST",
-        form: { ...input },
-      }),
+    mutationFn: async (input: RegisterInput) =>
+      (
+        await api.post<{ data: AuthResponse }>(
+          Endpoint.Register,
+          toFormData({ ...input }),
+        )
+      ).data,
     onSuccess: storeSession,
   });
 }
@@ -60,10 +62,10 @@ export function useRegister() {
 export function useLogout() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: () => apiData<void>(Endpoint.Logout, { method: "POST" }),
+    mutationFn: () => api.post<void>(Endpoint.Logout),
     // Clear the token whether or not the request succeeded.
     onSettled: () => {
-      tokenStorage.clear();
+      storage.remove(TOKEN_KEY);
       queryClient.removeQueries({ queryKey: meQueryOptions.queryKey });
       queryClient.removeQueries({ queryKey: ["tickets"] });
     },
