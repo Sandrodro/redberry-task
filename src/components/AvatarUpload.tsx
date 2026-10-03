@@ -1,4 +1,4 @@
-import { useRef, useState, type ChangeEvent } from 'react'
+import { useEffect, useRef, useState, type ChangeEvent } from 'react'
 import UploadIcon from '../assets/icons/upload.svg?react'
 import { Typography } from './core/Typography'
 
@@ -11,9 +11,15 @@ export function AvatarUpload({ onChange, error }: AvatarUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null)
   const [preview, setPreview] = useState<string>()
 
+  useEffect(
+    () => () => {
+      if (preview) URL.revokeObjectURL(preview)
+    },
+    [preview],
+  )
+
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
-    if (preview) URL.revokeObjectURL(preview)
     setPreview(file && URL.createObjectURL(file))
     onChange(file)
   }

@@ -1,4 +1,5 @@
 import { useForm } from '@tanstack/react-form'
+import { useState } from 'react'
 import { ApiError } from '../api/client'
 import { useRegister } from '../api/queries/auth'
 import type { RegisterInput } from '../api/types'
@@ -17,6 +18,7 @@ type SignUpModalProps = {
 
 export function SignUpModal({ open, onClose }: SignUpModalProps) {
   const register = useRegister()
+  const [resetKey, setResetKey] = useState(0)
   const error = register.error instanceof ApiError ? register.error : null
 
   const form = useForm({
@@ -27,11 +29,18 @@ export function SignUpModal({ open, onClose }: SignUpModalProps) {
       password_confirmation: '',
       avatar: undefined as File | undefined,
     } satisfies RegisterInput,
-    onSubmit: ({ value }) => register.mutate(value, { onSuccess: onClose }),
+    onSubmit: ({ value }) => register.mutate(value, { onSuccess: handleClose }),
   })
 
+  function handleClose() {
+    form.reset()
+    register.reset()
+    setResetKey((key) => key + 1)
+    onClose()
+  }
+
   return (
-    <Modal open={open} onClose={onClose} className="w-118.75">
+    <Modal open={open} onClose={handleClose} className="w-118.75">
       <form
         className="flex w-full flex-col gap-6"
         onSubmit={(e) => {
@@ -50,6 +59,7 @@ export function SignUpModal({ open, onClose }: SignUpModalProps) {
           <form.Field name="avatar">
             {(field) => (
               <AvatarUpload
+                key={resetKey}
                 onChange={field.handleChange}
                 error={error?.errors?.avatar?.[0]}
               />
