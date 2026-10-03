@@ -10,6 +10,10 @@ export default defineConfig({
     tanstackRouter({ target: 'react', autoCodeSplitting: true }),
     react(),
     tailwindcss(),
-    svgr({ svgrOptions: { replaceAttrValues: { white: 'currentColor' } } }),
+    svgr({
+      svgrOptions: {
+        replaceAttrValues: { white: 'currentColor', '#505261': 'currentColor' },
+      },
+    }),
   ],
 })

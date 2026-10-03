@@ -22,9 +22,9 @@ export function LoginFormModal({ open, onClose }: LoginFormModalProps) {
   })
 
   return (
-    <Modal open={open} onClose={onClose}>
+    <Modal open={open} onClose={onClose} className="w-[403px]">
       <form
-        className="flex w-[400px] max-w-full flex-col gap-6"
+        className="flex w-full flex-col gap-6"
         onSubmit={(e) => {
           e.preventDefault()
           e.stopPropagation()
