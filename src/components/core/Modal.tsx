@@ -20,6 +20,12 @@ export function Modal({ open, onClose, children }: ModalProps) {
     <dialog
       ref={ref}
       onClose={onClose}
+      onClick={(e) => {
+        // A click on the backdrop lands outside the dialog box.
+        const { top, bottom, left, right } = e.currentTarget.getBoundingClientRect()
+        const { clientX: x, clientY: y } = e
+        if (x < left || x > right || y < top || y > bottom) onClose()
+      }}
       className="relative m-auto rounded-[28px] bg-background p-8 text-white shadow-[0px_20px_50px_-10px_var(--shadow)] backdrop:bg-black/50"
     >
       <button

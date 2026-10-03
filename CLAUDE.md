@@ -24,7 +24,8 @@ src/
     queryKeys.ts    query key factories
     types.ts        API types
     queries/        one file per resource: query options and mutation hooks
-  components/       reusable UI components (Typography, ...)
+  components/       app components (Header, DefaultLayout, ...)
+    core/           base UI components (Button, Input, Modal, Typography)
   hooks/            app hooks (useAuth)
   pages/            page components (HomePage, SessionsPage, ProfilePage)
   routes/           route files only: declare the route, render a page
@@ -34,7 +35,7 @@ src/
 ## Conventions
 
 - Routes in `src/routes/` only call `createFileRoute` and point to a component in `src/pages/`. No page logic in route files.
-- Build UI from reusable components. Check `src/components/` before writing new markup.
+- Build UI from reusable components. Check `src/components/core/` and `src/components/` before writing new markup.
 - Use `Typography` for all text. Do not hand-write font size or weight classes.
 - Use theme tokens from `src/index.css` (`bg-background`, `text-muted`, `text-brand`, ...). No hardcoded hex values. Tints use the opacity modifier (`bg-brand/10`).
 - Font is Archivo, loaded with `@fontsource-variable/archivo`.

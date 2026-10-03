@@ -1,4 +1,4 @@
-import { Typography } from './Typography'
+import { Typography } from './core/Typography'
 
 export function Footer() {
   return (
