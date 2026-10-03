@@ -6,11 +6,12 @@ type AvatarProps = {
   src?: string | null
   initials: string
   dot?: keyof typeof dotColors
+  className?: string
 }
 
-export function Avatar({ src, initials, dot }: AvatarProps) {
+export function Avatar({ src, initials, dot, className = 'size-10' }: AvatarProps) {
   return (
-    <span className="relative flex size-10 shrink-0 items-center justify-center rounded-lg bg-card">
+    <span className={`relative flex shrink-0 items-center justify-center rounded-lg bg-card ${className}`}>
       {src ? (
         <img src={src} alt="" className="absolute inset-0 size-full rounded-lg object-cover" />
       ) : (

@@ -11,7 +11,8 @@ import type { AuthResponse, LoginInput, RegisterInput, User } from "../types";
 
 export const meQueryOptions = queryOptions({
   queryKey: ["me"],
-  queryFn: async () => {
+  // `null` marks a guest, set on logout. Setting data notifies mounted observers, removing the query does not.
+  queryFn: async (): Promise<User | null> => {
     try {
       return (await api.get<{ data: User }>(Endpoint.Me)).data;
     } catch (error) {
@@ -66,7 +67,7 @@ export function useLogout() {
     // Clear the token whether or not the request succeeded.
     onSettled: () => {
       storage.remove(TOKEN_KEY);
-      queryClient.removeQueries({ queryKey: meQueryOptions.queryKey });
+      queryClient.setQueryData(meQueryOptions.queryKey, null);
       queryClient.removeQueries({ queryKey: ["tickets"] });
     },
   });
