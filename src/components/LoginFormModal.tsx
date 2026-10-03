@@ -22,7 +22,7 @@ export function LoginFormModal({ open, onClose }: LoginFormModalProps) {
   })
 
   return (
-    <Modal open={open} onClose={onClose} className="w-[403px]">
+    <Modal open={open} onClose={onClose} className="w-100.75">
       <form
         className="flex w-full flex-col gap-6"
         onSubmit={(e) => {
@@ -73,7 +73,7 @@ export function LoginFormModal({ open, onClose }: LoginFormModalProps) {
         </Button>
         <Typography
           variant="bodyM"
-          className="flex items-center justify-center gap-[5px] text-muted"
+          className="flex items-center justify-center gap-1.25 text-muted"
         >
           Don't have an account?
           <button type="button" className="cursor-pointer text-brand">

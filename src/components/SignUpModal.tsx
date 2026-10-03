@@ -31,7 +31,7 @@ export function SignUpModal({ open, onClose }: SignUpModalProps) {
   })
 
   return (
-    <Modal open={open} onClose={onClose} className="w-[475px]">
+    <Modal open={open} onClose={onClose} className="w-118.75">
       <form
         className="flex w-full flex-col gap-6"
         onSubmit={(e) => {
@@ -123,7 +123,7 @@ export function SignUpModal({ open, onClose }: SignUpModalProps) {
             </Button>
             <Typography
               variant="bodyM"
-              className="flex items-center justify-center gap-[5px] text-muted"
+              className="flex items-center justify-center gap-1.25 text-muted"
             >
               Already have an account?
               <button type="button" className="cursor-pointer text-brand">

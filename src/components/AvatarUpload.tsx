@@ -29,7 +29,7 @@ export function AvatarUpload({ onChange, error }: AvatarUploadProps) {
           className={`flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-lg ${
             preview
               ? ''
-              : 'border-[0.5px] border-dashed border-elevated bg-white/10 pb-[13px] pl-2.5 pr-3 pt-[11px]'
+              : 'border-[0.5px] border-dashed border-elevated bg-white/10 pb-3.25 pl-2.5 pr-3 pt-2.75'
           }`}
         >
           {preview ? (
@@ -38,7 +38,7 @@ export function AvatarUpload({ onChange, error }: AvatarUploadProps) {
             <UploadIcon className="text-subtle" />
           )}
         </span>
-        <span className="flex flex-col gap-[3px]">
+        <span className="flex flex-col gap-0.75">
           <Typography variant="button">Upload avatar (optional)</Typography>
           <Typography variant="bodyS" as="span" className="text-muted">
             JPG, PNG or WEBP

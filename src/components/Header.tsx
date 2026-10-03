@@ -12,7 +12,7 @@ export function Header() {
   const signUpModal = useModal();
 
   return (
-    <header className="flex items-center justify-end px-[60px] pb-[40px] pt-[30px]">
+    <header className="flex items-center justify-end px-15 pb-10 pt-7.5">
       {user ? (
         <Link to="/profile" className="text-white">
           <Typography variant="labelM">{user.username}</Typography>
