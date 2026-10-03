@@ -32,7 +32,7 @@ export function LoginFormModal({ open, onClose }: LoginFormModalProps) {
         }}
       >
         <div className="flex flex-col gap-2">
-          <Typography variant="h2">Log In</Typography>
+          <Typography variant="h2">Log in</Typography>
           <Typography variant="bodyS" className="text-muted">
             Welcome back to Kino XII
           </Typography>
@@ -42,6 +42,7 @@ export function LoginFormModal({ open, onClose }: LoginFormModalProps) {
             <Input
               label="Email"
               type="email"
+              placeholder="example@gmail.com"
               value={field.state.value}
               onChange={(e) => field.handleChange(e.target.value)}
               onBlur={field.handleBlur}
@@ -54,6 +55,7 @@ export function LoginFormModal({ open, onClose }: LoginFormModalProps) {
             <Input
               label="Password"
               type="password"
+              placeholder="••••••••"
               value={field.state.value}
               onChange={(e) => field.handleChange(e.target.value)}
               onBlur={field.handleBlur}
@@ -67,13 +69,16 @@ export function LoginFormModal({ open, onClose }: LoginFormModalProps) {
           </Typography>
         )}
         <Button type="submit" disabled={login.isPending} className="mt-2">
-          Log In
+          Log in
         </Button>
-        <Typography variant="bodyM" className="mt-2 text-center text-muted">
-          Don't have an account?{' '}
-          <Typography variant="button" className="cursor-pointer text-brand">
-            Sign up
-          </Typography>
+        <Typography
+          variant="bodyM"
+          className="flex items-center justify-center gap-[5px] text-muted"
+        >
+          Don't have an account?
+          <button type="button" className="cursor-pointer text-brand">
+            <Typography variant="button">Sign up</Typography>
+          </button>
         </Typography>
       </form>
     </Modal>

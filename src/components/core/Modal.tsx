@@ -1,4 +1,5 @@
 import { useEffect, useRef, type ReactNode } from 'react'
+import CloseIcon from '../../assets/icons/close.svg?react'
 
 type ModalProps = {
   open: boolean
@@ -26,7 +27,7 @@ export function Modal({ open, onClose, children }: ModalProps) {
         const { clientX: x, clientY: y } = e
         if (x < left || x > right || y < top || y > bottom) onClose()
       }}
-      className="relative m-auto rounded-[28px] bg-background p-8 text-white shadow-[0px_20px_50px_-10px_var(--shadow)] backdrop:bg-black/50"
+      className="relative m-auto rounded-[28px] border border-elevated bg-background p-8 text-white shadow-[0px_20px_50px_-10px_var(--shadow)] backdrop:bg-black/50"
     >
       <button
         type="button"
@@ -34,9 +35,7 @@ export function Modal({ open, onClose, children }: ModalProps) {
         onClick={onClose}
         className="absolute right-8 top-8 cursor-pointer text-white"
       >
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-          <path d="M6 6l12 12M18 6L6 18" />
-        </svg>
+        <CloseIcon className="size-6" />
       </button>
       {children}
     </dialog>
