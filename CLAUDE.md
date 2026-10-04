@@ -28,6 +28,7 @@ src/
     core/           base UI components (Button, Input, Modal, Typography)
   hooks/            app hooks (useAuth)
   pages/            page components (HomePage, SessionsPage, ProfilePage)
+  providers/        context providers mounted in the root route (AuthModalProvider)
   routes/           route files only: declare the route, render a page
   utils/            generic helpers (storage)
 ```
@@ -35,6 +36,7 @@ src/
 ## Conventions
 
 - Routes in `src/routes/` only call `createFileRoute` and point to a component in `src/pages/`. No page logic in route files.
+- Routes that need a logged in user go in `src/routes/_protected/`. A guest gets the login modal on the same URL and goes home if they close it. To open the modal from code, use `useAuthModal().openLogin({ onSuccess, onCancel })`. `onSuccess` resumes what the user was doing.
 - Build UI from reusable components. Check `src/components/core/` and `src/components/` before writing new markup.
 - Use `Typography` for all text. Do not hand-write font size or weight classes.
 - Use theme tokens from `src/index.css` (`bg-background`, `text-muted`, `text-brand`, ...). No hardcoded hex values. Tints use the opacity modifier (`bg-brand/10`).
