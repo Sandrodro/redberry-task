@@ -12,7 +12,7 @@ type ButtonProps = {
 } & ComponentPropsWithoutRef<'button'>
 
 export function Button({ variant = 'primary', className, children, ...props }: ButtonProps) {
-  const base = `flex cursor-pointer items-center justify-center rounded-full px-5.5 py-3.25 ${variants[variant]}`
+  const base = `flex cursor-pointer items-center justify-center rounded-full px-5.5 py-3.25 disabled:cursor-not-allowed disabled:opacity-50 ${variants[variant]}`
 
   return (
     <button className={className ? `${base} ${className}` : base} {...props}>

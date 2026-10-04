@@ -18,7 +18,8 @@
     "@tanstack/react-router": "^1.170.41",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "tailwindcss": "^4.3.3"
+    "tailwindcss": "^4.3.3",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@tanstack/react-query-devtools": "^5.104.0",

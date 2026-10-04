@@ -4,7 +4,7 @@ Cinema booking frontend for the Redberry Bootcamp XII task. API contract: https:
 
 ## Stack
 
-React 19, TypeScript, Vite, Tailwind v4, TanStack Router (file-based), TanStack Query, TanStack Form, `@lukemorales/query-key-factory`. Package manager is pnpm.
+React 19, TypeScript, Vite, Tailwind v4, TanStack Router (file-based), TanStack Query, TanStack Form, `@lukemorales/query-key-factory`, Zod. Package manager is pnpm.
 
 ## Commands
 
@@ -37,6 +37,7 @@ src/
 
 - Routes in `src/routes/` only call `createFileRoute` and point to a component in `src/pages/`. No page logic in route files.
 - Routes that need a logged in user go in `src/routes/_protected/`. A guest gets the login modal on the same URL and goes home if they close it. To open the modal from code, use `useAuthModal().openLogin({ onSuccess, onCancel })`. `onSuccess` resumes what the user was doing.
+- Form validation is a Zod schema in `src/utils/`, passed to `useForm` as `validators: { onMount, onChange }`. Show a field error only when `field.state.meta.isBlurred` is true.
 - Build UI from reusable components. Check `src/components/core/` and `src/components/` before writing new markup.
 - Use `Typography` for all text. Do not hand-write font size or weight classes.
 - Use theme tokens from `src/index.css` (`bg-background`, `text-muted`, `text-brand`, ...). No hardcoded hex values. Tints use the opacity modifier (`bg-brand/10`).

@@ -1,14 +1,31 @@
-import { useForm } from '@tanstack/react-form'
+import { useForm, type AnyFieldApi } from '@tanstack/react-form'
 import { useQuery } from '@tanstack/react-query'
 import CalendarIcon from '../assets/icons/calendar.svg?react'
 import { ApiError } from '../api/client'
 import { useUpdateProfile } from '../api/queries/profile'
 import { filterOptionsQueryOptions } from '../api/queries/sessions'
-import type { ProfileInput, User } from '../api/types'
+import type { AgeRating, ProfileInput, User } from '../api/types'
+import { getAge, MIN_AGE, profileSchema } from '../utils/profileSchema'
 import { Button } from './core/Button'
 import { Input } from './core/Input'
 import { Select } from './core/Select'
 import { Typography } from './core/Typography'
+
+/** Shows the client error once the field was blurred. Falls back to the server error. */
+function getError(field: AnyFieldApi, serverError?: string) {
+  const issue = field.state.meta.isBlurred ? field.state.meta.errors[0] : undefined
+  return issue?.message ?? serverError
+}
+
+function getAgeNote(dateOfBirth: string, ageRatings: AgeRating[] = []) {
+  if (!dateOfBirth) return undefined
+  const age = getAge(dateOfBirth)
+  if (age < MIN_AGE) return undefined
+  const blocked = ageRatings.filter((rating) => rating.minAge > age).map((rating) => rating.code)
+  if (blocked.length === 0) return undefined
+  const list = new Intl.ListFormat('en', { type: 'disjunction' }).format(blocked)
+  return `You cannot buy tickets for ${list} titles`
+}
 
 export function PersonalInformationForm({ user }: { user: User }) {
   const update = useUpdateProfile()
@@ -22,7 +39,12 @@ export function PersonalInformationForm({ user }: { user: User }) {
       dateOfBirth: user.dateOfBirth ?? '',
       preferredVenueId: user.preferredVenue?.id ?? null,
     } satisfies ProfileInput,
-    onSubmit: ({ value }) => update.mutate(value),
+    validators: { onMount: profileSchema, onChange: profileSchema },
+    onSubmit: ({ value }) => {
+      const input = profileSchema.parse(value)
+      // The saved values become the new defaults, so the button is disabled until the next edit.
+      update.mutate(input, { onSuccess: () => form.reset(input) })
+    },
   })
 
   return (
@@ -43,7 +65,7 @@ export function PersonalInformationForm({ user }: { user: User }) {
                 value={field.state.value}
                 onChange={(e) => field.handleChange(e.target.value)}
                 onBlur={field.handleBlur}
-                error={error?.errors?.fullName?.[0]}
+                error={getError(field, error?.errors?.fullName?.[0])}
               />
             )}
           </form.Field>
@@ -63,7 +85,7 @@ export function PersonalInformationForm({ user }: { user: User }) {
                 value={field.state.value}
                 onChange={(e) => field.handleChange(e.target.value)}
                 onBlur={field.handleBlur}
-                error={error?.errors?.mobileNumber?.[0]}
+                error={getError(field, error?.errors?.mobileNumber?.[0])}
               />
             )}
           </form.Field>
@@ -75,7 +97,8 @@ export function PersonalInformationForm({ user }: { user: User }) {
                 value={field.state.value}
                 onChange={(e) => field.handleChange(e.target.value)}
                 onBlur={field.handleBlur}
-                error={error?.errors?.dateOfBirth?.[0]}
+                error={getError(field, error?.errors?.dateOfBirth?.[0])}
+                hint={getAgeNote(field.state.value, filterOptions?.ageRatings)}
                 icon={<CalendarIcon className="pointer-events-none size-4 shrink-0 text-white" />}
                 className="[&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:inset-0 [&::-webkit-calendar-picker-indicator]:size-full [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-0"
               />
@@ -108,9 +131,13 @@ export function PersonalInformationForm({ user }: { user: User }) {
           </Typography>
         )}
       </div>
-      <Button type="submit" disabled={update.isPending} className="self-start">
-        Save changes
-      </Button>
+      <form.Subscribe selector={(state) => state.canSubmit && !state.isDefaultValue}>
+        {(canSave) => (
+          <Button type="submit" disabled={!canSave || update.isPending} className="self-start">
+            {update.isPending ? 'Saving...' : 'Save changes'}
+          </Button>
+        )}
+      </form.Subscribe>
     </form>
   )
 }
