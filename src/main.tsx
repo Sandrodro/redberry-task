@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { createRouter, RouterProvider } from '@tanstack/react-router'
+import { createRouter, defaultStringifySearch, RouterProvider } from '@tanstack/react-router'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
@@ -16,7 +16,12 @@ const queryClient = new QueryClient({
   },
 })
 
-const router = createRouter({ routeTree, context: { queryClient } })
+const router = createRouter({
+  routeTree,
+  context: { queryClient },
+  // Keep commas readable in the URL: ?venue=galleria,batumi
+  stringifySearch: (search) => defaultStringifySearch(search).replace(/%2C/g, ','),
+})
 
 declare module '@tanstack/react-router' {
   interface Register {

@@ -4,6 +4,7 @@ import { Typography } from './Typography'
 const tones = {
   brand: 'bg-brand/10 text-brand',
   neutral: 'bg-white/10 text-white',
+  elevated: 'bg-elevated text-white',
 } as const
 
 const sizes = {
