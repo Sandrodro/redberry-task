@@ -73,8 +73,8 @@ export function Carousel<T>({
           ))}
         </div>
       </div>
-      <div className="absolute inset-x-16.75 bottom-10.5 flex items-center gap-6">
-        <div className="flex flex-1 items-center gap-2">
+      <div className="absolute inset-x-16.75 bottom-10.5 flex items-center gap-5">
+        <div className="flex flex-1 items-center gap-1.75">
           {items.map((item, index) => (
             <button
               key={getKey(item)}
@@ -89,7 +89,7 @@ export function Carousel<T>({
             </button>
           ))}
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5">
           <ArrowButton direction="prev" onClick={() => emblaApi?.scrollPrev()} />
           <ArrowButton direction="next" onClick={() => emblaApi?.scrollNext()} />
         </div>

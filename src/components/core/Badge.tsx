@@ -8,7 +8,7 @@ const tones = {
 
 const sizes = {
   md: 'px-3 py-1.5',
-  sm: 'px-2 py-1',
+  sm: 'px-1.75 py-1',
 } as const
 
 type BadgeProps = {

@@ -15,12 +15,12 @@ export function FeaturedBanner({ movie }: { movie: FeaturedMovie }) {
         <div className="absolute inset-0 bg-elevated" />
       )}
       <div className="absolute inset-0 bg-linear-to-l from-black/8 to-black/80" />
-      <div className="absolute bottom-44.75 left-16.75 flex w-145 flex-col items-start gap-4.5">
-        <Badge tone="brand" className="uppercase">
+      <div className="absolute bottom-44.75 left-16.75 flex w-145 flex-col items-start gap-3.75">
+        <Badge tone="brand" className="px-2.5! uppercase">
           Premiere · Week of {formatDayMonth(movie.releaseDate)}
         </Badge>
-        <div className="flex flex-col gap-6">
-          <div className="flex flex-col gap-4.5">
+        <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-3.75">
             <Typography variant="display" as="h2" className="uppercase">
               {movie.title}
             </Typography>
@@ -31,11 +31,11 @@ export function FeaturedBanner({ movie }: { movie: FeaturedMovie }) {
                 <Badge key={format.id}>{format.name}</Badge>
               ))}
             </div>
-            <Typography variant="bodyL" className="w-140">
+            <Typography variant="bodyM" className="w-140">
               {movie.synopsis}
             </Typography>
           </div>
-          <div className="flex gap-3">
+          <div className="flex gap-2.5">
             <ButtonLink to="/sessions" icon={<TicketIcon />}>
               Buy tickets
             </ButtonLink>
