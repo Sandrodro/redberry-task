@@ -84,6 +84,10 @@ export interface Movie {
   formats: Format[];
 }
 
+export interface FeaturedMovie extends Movie {
+  synopsis: string;
+}
+
 export interface MovieDetail extends Movie {
   synopsis: string;
   director: string | null;

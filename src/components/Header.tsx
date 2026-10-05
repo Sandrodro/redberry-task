@@ -11,7 +11,7 @@ export function Header() {
   const { openLogin, openSignUp } = useAuthModal();
 
   return (
-    <header className="flex items-center justify-between bg-[linear-gradient(180deg,black_-212.35%,rgba(0,0,0,0.51)_32.09%,rgba(0,0,0,0)_93.93%)] px-15 pb-10 pt-7.5">
+    <header className="relative z-10 flex items-center justify-between bg-[linear-gradient(180deg,black_-212.35%,rgba(0,0,0,0.51)_32.09%,rgba(0,0,0,0)_93.93%)] px-15 pb-10 pt-7.5">
       <div className="flex items-center gap-9">
         <Link to="/" className="flex items-center gap-1.5">
           <Typography variant="h2" as="span">

@@ -2,7 +2,7 @@ import { queryOptions, useMutation } from '@tanstack/react-query'
 import { api } from '../client'
 import { Endpoint } from '../endpoints'
 import { moviesKeys } from '../queryKeys'
-import type { Movie, MovieDetail, VenueSessions } from '../types'
+import type { FeaturedMovie, Movie, MovieDetail, VenueSessions } from '../types'
 
 export const searchQueryOptions = (q: string) =>
   queryOptions({
@@ -27,7 +27,7 @@ export const comingSoonQueryOptions = (limit?: number) =>
 
 export const featuredQueryOptions = queryOptions({
   queryKey: moviesKeys.featured.queryKey,
-  queryFn: async () => (await api.get<{ data: Movie[] }>(Endpoint.Featured)).data,
+  queryFn: async () => (await api.get<{ data: FeaturedMovie[] }>(Endpoint.Featured)).data,
 })
 
 export const movieQueryOptions = (slug: string) =>
