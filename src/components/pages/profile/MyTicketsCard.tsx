@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react'
-import type { Order } from '../api/types'
-import { formatShortDate } from '../utils/formatShortDate'
-import { Button } from './core/Button'
-import { Typography } from './core/Typography'
+import type { Order } from '../../../api/types'
+import { formatShortDate } from '../../../utils/formatShortDate'
+import { Button } from '../../core/Button'
+import { Typography } from '../../core/Typography'
 
 /** Refunds close this many hours before the session. Only used for the note, `isRefundable` drives the button. */
 const REFUND_CUTOFF_HOURS = 2

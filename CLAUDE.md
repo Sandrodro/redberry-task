@@ -24,10 +24,10 @@ src/
     queryKeys.ts    query key factories
     types.ts        API types
     queries/        one folder per resource, one hook per file (useFeaturedMoviesData, useLogin, ...)
-  components/       app components (Header, DefaultLayout, ...)
+  components/       app components used by more than one page (Header, DefaultLayout, ...)
     core/           base UI components (Button, Input, Modal, Typography)
+    pages/          one folder per page: the page component and the components only that page uses (home/HomePage, home/MovieCard, ...)
   hooks/            app hooks (useAuth)
-  pages/            page components (HomePage, SessionsPage, ProfilePage)
   providers/        context providers mounted in the root route (AuthModalProvider)
   routes/           route files only: declare the route, render a page
   utils/            generic helpers (storage)
@@ -35,10 +35,10 @@ src/
 
 ## Conventions
 
-- Routes in `src/routes/` only call `createFileRoute` and point to a component in `src/pages/`. No page logic in route files.
+- Routes in `src/routes/` only call `createFileRoute` and point to a page component in `src/components/pages/`. No page logic in route files.
 - Routes that need a logged in user go in `src/routes/_protected/`. A guest gets the login modal on the same URL and goes home if they close it. To open the modal from code, use `useAuthModal().openLogin({ onSuccess, onCancel })`. `onSuccess` resumes what the user was doing.
 - Form validation is a Zod schema in `src/utils/`, passed to `useForm` as `validators: { onMount, onChange }`. Show a field error only when `field.state.meta.isBlurred` is true.
-- Build UI from reusable components. Check `src/components/core/` and `src/components/` before writing new markup.
+- Build UI from reusable components. Check `src/components/core/` and `src/components/` before writing new markup. A component used by one page lives in that page's folder. When a second page needs it, move it up to `src/components/`.
 - Use `Typography` for all text. Do not hand-write font size or weight classes.
 - Use theme tokens from `src/index.css` (`bg-background`, `text-muted`, `text-brand`, ...). No hardcoded hex values. Tints use the opacity modifier (`bg-brand/10`).
 - Font is Archivo, loaded with `@fontsource-variable/archivo`.

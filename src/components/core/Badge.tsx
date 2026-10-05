@@ -6,13 +6,19 @@ const tones = {
   neutral: 'bg-white/10 text-white',
 } as const
 
+const sizes = {
+  md: 'px-3 py-1.5',
+  sm: 'px-2 py-1',
+} as const
+
 type BadgeProps = {
   tone?: keyof typeof tones
+  size?: keyof typeof sizes
   icon?: ReactNode
 } & ComponentPropsWithoutRef<'span'>
 
-export function Badge({ tone = 'neutral', icon, className, children, ...props }: BadgeProps) {
-  const base = `flex items-center gap-1 rounded-full px-3 py-1.5 ${tones[tone]}`
+export function Badge({ tone = 'neutral', size = 'md', icon, className, children, ...props }: BadgeProps) {
+  const base = `flex items-center gap-1 rounded-full ${sizes[size]} ${tones[tone]}`
 
   return (
     <span className={className ? `${base} ${className}` : base} {...props}>

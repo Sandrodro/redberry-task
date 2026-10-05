@@ -1,7 +1,7 @@
-import { PersonalInformationForm } from '../components/PersonalInformationForm'
-import { Tab } from '../components/core/Tab'
-import { Typography } from '../components/core/Typography'
-import { useAuth } from '../hooks/useAuth'
+import { PersonalInformationForm } from './PersonalInformationForm'
+import { Tab } from '../../core/Tab'
+import { Typography } from '../../core/Typography'
+import { useAuth } from '../../../hooks/useAuth'
 
 export function ProfilePage() {
   const { user } = useAuth()
