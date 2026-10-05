@@ -1,11 +1,22 @@
 import { Typography } from './core/Typography'
 
+const CURRENT_YEAR = new Date().getFullYear()
+
 export function Footer() {
   return (
-    <footer className="px-6 py-8 text-center">
-      <Typography variant="bodyS" className="text-muted">
-        Kino XII
-      </Typography>
+    <footer className="flex flex-col gap-5 px-8.5 pb-8.5 pt-6.75">
+      <hr className="h-px border-0 bg-elevated" />
+      <div className="flex items-center justify-between">
+        <div className="flex gap-1">
+          <Typography variant="button">KINO</Typography>
+          <Typography variant="button" className="text-brand">
+            XII
+          </Typography>
+        </div>
+        <Typography variant="bodyS" className="text-muted">
+          © {CURRENT_YEAR} Kino XII. All rights reserved.
+        </Typography>
+      </div>
     </footer>
   )
 }
