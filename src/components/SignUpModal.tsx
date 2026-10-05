@@ -1,7 +1,7 @@
 import { useForm } from '@tanstack/react-form'
 import { useState } from 'react'
 import { ApiError } from '../api/client'
-import { useRegister } from '../api/queries/auth'
+import { useRegister } from '../api/queries/auth/useRegister'
 import type { RegisterInput } from '../api/types'
 import { AvatarUpload } from './AvatarUpload'
 import { Button } from './core/Button'

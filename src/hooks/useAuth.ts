@@ -1,4 +1,4 @@
-import { useMe } from '../api/queries/auth'
+import { useMe } from '../api/queries/auth/useMe'
 
 export function useAuth() {
   const { data: user, isLoading } = useMe()

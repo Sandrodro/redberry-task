@@ -1,6 +1,6 @@
 import { useForm } from '@tanstack/react-form'
 import { ApiError } from '../api/client'
-import { useLogin } from '../api/queries/auth'
+import { useLogin } from '../api/queries/auth/useLogin'
 import type { LoginInput } from '../api/types'
 import { Button } from './core/Button'
 import { Input } from './core/Input'

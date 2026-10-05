@@ -1,9 +1,8 @@
 import { useForm, type AnyFieldApi } from '@tanstack/react-form'
-import { useQuery } from '@tanstack/react-query'
 import CalendarIcon from '../assets/icons/calendar.svg?react'
 import { ApiError } from '../api/client'
-import { useUpdateProfile } from '../api/queries/profile'
-import { filterOptionsQueryOptions } from '../api/queries/sessions'
+import { useUpdateProfile } from '../api/queries/profile/useUpdateProfile'
+import { useFilterOptionsData } from '../api/queries/sessions/useFilterOptionsData'
 import type { AgeRating, ProfileInput, User } from '../api/types'
 import { getAge, MIN_AGE, profileSchema } from '../utils/profileSchema'
 import { Button } from './core/Button'
@@ -30,7 +29,7 @@ function getAgeNote(dateOfBirth: string, ageRatings: AgeRating[] = []) {
 export function PersonalInformationForm({ user }: { user: User }) {
   const update = useUpdateProfile()
   const error = update.error instanceof ApiError ? update.error : null
-  const { data: filterOptions } = useQuery(filterOptionsQueryOptions)
+  const { data: filterOptions } = useFilterOptionsData()
 
   const form = useForm({
     defaultValues: {

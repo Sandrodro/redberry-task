@@ -1,16 +1,15 @@
-import { useQuery } from '@tanstack/react-query'
-import { featuredQueryOptions } from '../api/queries/catalogue'
+import { useFeaturedMoviesData } from '../api/queries/catalogue/useFeaturedMoviesData'
 import { Carousel } from '../components/core/Carousel'
 import { FeaturedBanner } from '../components/FeaturedBanner'
 
 export function HomePage() {
-  const { data: featured } = useQuery(featuredQueryOptions)
+  const { data: featuredMoviesData } = useFeaturedMoviesData()
 
   return (
     <div>
-      {featured && (
+      {featuredMoviesData && (
         <Carousel
-          items={featured}
+          items={featuredMoviesData}
           getKey={(movie) => movie.id}
           renderSlide={(movie) => <FeaturedBanner movie={movie} />}
           className="-mt-28 h-190"

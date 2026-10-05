@@ -1,0 +1,21 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { api } from '../../client'
+import { Endpoint } from '../../endpoints'
+import { sessionsKeys, ticketsKeys } from '../../queryKeys'
+import type { Order } from '../../types'
+
+export function useRefundOrder() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (reference: string) =>
+      (
+        await api.post<{ data: Order }>(
+          `${Endpoint.Orders}/${encodeURIComponent(reference)}/refund`,
+        )
+      ).data,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ticketsKeys._def })
+      queryClient.invalidateQueries({ queryKey: sessionsKeys._def })
+    },
+  })
+}

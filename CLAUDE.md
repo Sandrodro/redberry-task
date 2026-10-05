@@ -23,7 +23,7 @@ src/
     endpoints.ts    Endpoint const (paths)
     queryKeys.ts    query key factories
     types.ts        API types
-    queries/        one file per resource: query options and mutation hooks
+    queries/        one folder per resource, one hook per file (useFeaturedMoviesData, useLogin, ...)
   components/       app components (Header, DefaultLayout, ...)
     core/           base UI components (Button, Input, Modal, Typography)
   hooks/            app hooks (useAuth)
@@ -44,7 +44,7 @@ src/
 - Font is Archivo, loaded with `@fontsource-variable/archivo`.
 - Use `Endpoint` for every API path. Param paths interpolate from base entries: `${Endpoint.Movies}/${slug}`. `Endpoint` is an `as const` object, not an `enum`, because `erasableSyntaxOnly` is on.
 - Define query keys in `src/api/queryKeys.ts` with the key factory. Never write inline keys. Invalidate with `xKeys._def`.
-- Query options use `queryOptions()`. Mutations are hooks (`useCreateHold`, ...) that invalidate what they change.
+- Each query is a hook named `use{Thing}Data` that returns the `useQuery` result. Mutations are hooks (`useCreateHold`, ...) that invalidate what they change. Code outside a hook reads cache through the key factory, e.g. `authKeys.me.queryKey`.
 - Use `api.get`, `api.post`, `api.put`, `api.delete`. Unwrap `{ data }` responses inline: `(await api.get<{ data: T }>(path)).data`. For multipart bodies, pass `toFormData(input)` as the body.
 - Read localStorage only through `storage` in `src/utils/storage.ts`.
 - The auth token is in localStorage under `TOKEN_KEY`, sent as `Authorization: Bearer`. Use `useAuth()` for login status and the active user.

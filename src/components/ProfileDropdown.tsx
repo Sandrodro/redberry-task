@@ -4,7 +4,7 @@ import LogOutIcon from '../assets/icons/log-out.svg?react'
 import TicketIcon from '../assets/icons/ticket.svg?react'
 import UserIcon from '../assets/icons/user.svg?react'
 import type { User } from '../api/types'
-import { useLogout } from '../api/queries/auth'
+import { useLogout } from '../api/queries/auth/useLogout'
 import { Avatar } from './Avatar'
 import { Typography } from './core/Typography'
 

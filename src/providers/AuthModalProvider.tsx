@@ -1,6 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useCallback, useMemo, useRef, type ReactNode } from 'react'
-import { meQueryOptions } from '../api/queries/auth'
+import { authKeys } from '../api/queryKeys'
 import { AuthModalContext, type OpenLoginOptions } from '../hooks/useAuthModal'
 import { useModal } from '../hooks/useModal'
 import { LoginFormModal } from '../components/LoginFormModal'
@@ -30,7 +30,7 @@ export function AuthModalProvider({ children }: { children: ReactNode }) {
     const options = pending.current
     pending.current = undefined
     // The login mutation stores the user before it closes the modal.
-    if (queryClient.getQueryData(meQueryOptions.queryKey)) options?.onSuccess?.()
+    if (queryClient.getQueryData(authKeys.me.queryKey)) options?.onSuccess?.()
     else options?.onCancel?.()
   }
 
