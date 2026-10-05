@@ -1,20 +1,28 @@
 import useEmblaCarousel from 'embla-carousel-react'
+import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures'
 import { useCallback, useEffect, useState, type Key, type ReactNode } from 'react'
 
 type SliderProps<T> = {
   items: T[]
   getKey: (item: T) => Key
   renderItem: (item: T) => ReactNode
+  /** Tailwind gap class for the space between items. */
+  gapClassName?: string
   className?: string
 }
 
-/** Draggable row that scrolls freely. A fade on the right edge shows there is more to scroll. */
-export function Slider<T>({ items, getKey, renderItem, className = '' }: SliderProps<T>) {
-  const [viewportRef, emblaApi] = useEmblaCarousel({
-    dragFree: true,
-    align: 'start',
-    containScroll: 'trimSnaps',
-  })
+/** Row that scrolls freely by drag or horizontal wheel. A fade on the right edge shows there is more to scroll. */
+export function Slider<T>({
+  items,
+  getKey,
+  renderItem,
+  gapClassName = 'gap-4.25',
+  className = '',
+}: SliderProps<T>) {
+  const [viewportRef, emblaApi] = useEmblaCarousel(
+    { dragFree: true, align: 'start', containScroll: 'trimSnaps' },
+    [WheelGesturesPlugin()],
+  )
   const [canScrollNext, setCanScrollNext] = useState(true)
 
   const syncCanScrollNext = useCallback(() => {
@@ -32,7 +40,7 @@ export function Slider<T>({ items, getKey, renderItem, className = '' }: SliderP
   return (
     <div className={`relative ${className}`}>
       <div ref={viewportRef} className="overflow-hidden">
-        <div className="flex gap-4.25">
+        <div className={`flex ${gapClassName}`}>
           {items.map((item) => (
             <div key={getKey(item)} className="min-w-0 flex-none">
               {renderItem(item)}

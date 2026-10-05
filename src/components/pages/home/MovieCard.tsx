@@ -1,12 +1,11 @@
 import { Link } from '@tanstack/react-router'
 import type { Movie } from '../../../api/types'
+import { formatMovieDetails } from '../../../utils/formatMovieDetails'
 import { Badge } from '../../core/Badge'
 import { ButtonLink } from '../../core/ButtonLink'
 import { Typography } from '../../core/Typography'
 
 export function MovieCard({ movie }: { movie: Movie }) {
-  const details = [movie.genres[0]?.name, `${movie.runtimeMinutes} min`].filter(Boolean).join(' · ')
-
   return (
     <article className="flex h-113 w-65 flex-col justify-between rounded-[20px] bg-card p-3.5 shadow-[0_1px_2px_var(--shadow)]">
       <Link to="/sessions" className="flex flex-col gap-3">
@@ -26,7 +25,7 @@ export function MovieCard({ movie }: { movie: Movie }) {
               {movie.title}
             </Typography>
             <Typography variant="bodyM" className="text-muted">
-              {details}
+              {formatMovieDetails(movie)}
             </Typography>
           </div>
           <Badge tone="brand" size="sm" className="self-start">

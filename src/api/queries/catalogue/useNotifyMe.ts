@@ -1,8 +1,10 @@
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { api } from '../../client'
 import { Endpoint } from '../../endpoints'
+import { moviesKeys } from '../../queryKeys'
 
 export function useNotifyMe() {
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (slug: string) =>
       (
@@ -10,5 +12,7 @@ export function useNotifyMe() {
           `${Endpoint.Movies}/${encodeURIComponent(slug)}/notify`,
         )
       ).data,
+    // `isNotified` is part of the movie lists.
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: moviesKeys._def }),
   })
 }
