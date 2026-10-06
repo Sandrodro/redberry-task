@@ -1,4 +1,4 @@
-import { Fragment, type ReactNode } from 'react'
+import { Fragment, type CSSProperties, type ReactNode } from 'react'
 import type { Seat, SeatMap as SeatMapData } from '@/api/types'
 import stripes from '@/assets/icons/seat-held-stripes.svg'
 import { Typography } from '@/components/core/Typography'
@@ -10,6 +10,26 @@ type SeatMapProps = {
   /** Codes of seats that another buyer took while this user was choosing. They show as sold. */
   lostCodes: string[]
   onToggle: (seat: Seat, sectionName: string) => void
+}
+
+/** Width of the left column in `StepLayout` (`w-180`). */
+const MAP_WIDTH = 720
+const MAX_SEAT_SIZE = 52
+const ROW_GAP = 8
+const ROW_LABEL_WIDTH = 20
+const AISLE_WIDTH = 16
+
+/** One seat size for the whole hall: the largest that fits the widest row, up to the design size. */
+function getSeatSize(map: SeatMapData) {
+  const sizes = map.sections.flatMap((section) =>
+    section.rows.map((row) => {
+      const aisles = row.seats.filter((seat) => seat.aisleAfter).length
+      const items = row.seats.length + aisles + 1
+      const fixedWidth = ROW_LABEL_WIDTH + aisles * AISLE_WIDTH + (items - 1) * ROW_GAP
+      return Math.floor((MAP_WIDTH - fixedWidth) / Math.max(row.seats.length, 1))
+    }),
+  )
+  return Math.min(MAX_SEAT_SIZE, ...sizes)
 }
 
 function LegendItem({ label, children }: { label: string; children: ReactNode }) {
@@ -58,7 +78,10 @@ export function SeatMap({ map, selectedIds, lostCodes, onToggle }: SeatMapProps)
   }
 
   return (
-    <div className="flex flex-col items-center gap-8">
+    <div
+      className="flex flex-col items-center gap-8"
+      style={{ '--seat-size': `${getSeatSize(map)}px` } as CSSProperties}
+    >
       <div className="flex h-7.5 w-[calc(100%-40px)] items-center justify-center rounded-b-[20px] bg-elevated">
         <Typography variant="labelS">SCREEN</Typography>
       </div>
@@ -75,7 +98,7 @@ export function SeatMap({ map, selectedIds, lostCodes, onToggle }: SeatMapProps)
               {row.seats.map((seat) => (
                 <Fragment key={seat.id}>
                   {seat.state === 'unavailable' ? (
-                    <span className="size-13 shrink-0" />
+                    <span className="size-(--seat-size) shrink-0" />
                   ) : (
                     <SeatButton
                       label={seat.label}

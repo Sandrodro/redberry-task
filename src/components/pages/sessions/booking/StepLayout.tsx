@@ -12,12 +12,12 @@ type StepLayoutProps = {
 export function StepLayout({ step, onSeatsClick, main, aside }: StepLayoutProps) {
   return (
     <div className="flex gap-5">
-      <div className="flex w-180 flex-col gap-8">
+      <div className="flex w-180 shrink-0 flex-col gap-8">
         <StepIndicator step={step} onSeatsClick={onSeatsClick} />
         {main}
       </div>
       <div className="w-px self-stretch rounded-full bg-card" />
-      <aside className="flex w-80.25 flex-col gap-3">{aside}</aside>
+      <aside className="flex w-80.25 shrink-0 flex-col gap-3">{aside}</aside>
     </div>
   )
 }
