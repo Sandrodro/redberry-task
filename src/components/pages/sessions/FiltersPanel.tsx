@@ -1,9 +1,9 @@
 import { useFilterOptionsData } from '@/api/queries/filter-options/useFilterOptionsData'
 import { useSessionsFilters } from '@/hooks/useSessionsFilters'
 import { getAvailableFormats } from '@/utils/sessionsSearchSchema'
+import { DateStrip } from '@/components/DateStrip'
 import { Typography } from '@/components/core/Typography'
 import { CheckboxFilter } from './CheckboxFilter'
-import { DateStrip } from './DateStrip'
 
 /** "Morning (before 12:00)" becomes the label "Morning" and the hint "before 12:00". */
 function splitTimeBandLabel(label: string) {

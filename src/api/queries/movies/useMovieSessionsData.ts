@@ -1,11 +1,11 @@
-import { useQuery } from '@tanstack/react-query'
+import { keepPreviousData, queryOptions, useQuery } from '@tanstack/react-query'
 import { api } from '@/api/client'
 import { Endpoint } from '@/api/endpoints'
 import { moviesKeys } from '@/api/queryKeys'
 import type { VenueSessions } from '@/api/types'
 
-export function useMovieSessionsData(slug: string, date?: string) {
-  return useQuery({
+export const movieSessionsQueryOptions = (slug: string, date?: string) =>
+  queryOptions({
     queryKey: moviesKeys.sessions(slug, date).queryKey,
     queryFn: async () =>
       (
@@ -15,4 +15,7 @@ export function useMovieSessionsData(slug: string, date?: string) {
         )
       ).data,
   })
+
+export function useMovieSessionsData(slug: string, date?: string) {
+  return useQuery({ ...movieSessionsQueryOptions(slug, date), placeholderData: keepPreviousData })
 }

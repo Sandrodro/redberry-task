@@ -36,7 +36,7 @@ export function FeaturedBanner({ movie }: { movie: FeaturedMovie }) {
             </Typography>
           </div>
           <div className="flex gap-2.5">
-            <ButtonLink to="/sessions" icon={<TicketIcon />}>
+            <ButtonLink to="/movies/$slug" params={{ slug: movie.slug }} icon={<TicketIcon />}>
               Buy tickets
             </ButtonLink>
             <ButtonLink to="/sessions" variant="tertiary">

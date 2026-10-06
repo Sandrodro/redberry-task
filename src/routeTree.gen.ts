@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProtectedRouteImport } from './routes/_protected'
 import { Route as SessionsRouteImport } from './routes/sessions'
 import { Route as ProtectedProfileRouteImport } from './routes/_protected/profile'
+import { Route as MoviesSlugRouteImport } from './routes/movies.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -33,16 +34,23 @@ const ProtectedProfileRoute = ProtectedProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => ProtectedRoute,
 } as any)
+const MoviesSlugRoute = MoviesSlugRouteImport.update({
+  id: '/movies/$slug',
+  path: '/movies/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/sessions': typeof SessionsRoute
   '/profile': typeof ProtectedProfileRoute
+  '/movies/$slug': typeof MoviesSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/sessions': typeof SessionsRoute
   '/profile': typeof ProtectedProfileRoute
+  '/movies/$slug': typeof MoviesSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -50,19 +58,27 @@ export interface FileRoutesById {
   '/_protected': typeof ProtectedRouteWithChildren
   '/sessions': typeof SessionsRoute
   '/_protected/profile': typeof ProtectedProfileRoute
+  '/movies/$slug': typeof MoviesSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/sessions' | '/profile'
+  fullPaths: '/' | '/sessions' | '/profile' | '/movies/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/sessions' | '/profile'
-  id: '__root__' | '/' | '/_protected' | '/sessions' | '/_protected/profile'
+  to: '/' | '/sessions' | '/profile' | '/movies/$slug'
+  id:
+    | '__root__'
+    | '/'
+    | '/_protected'
+    | '/sessions'
+    | '/_protected/profile'
+    | '/movies/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ProtectedRoute: typeof ProtectedRouteWithChildren
   SessionsRoute: typeof SessionsRoute
+  MoviesSlugRoute: typeof MoviesSlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -95,6 +111,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedProfileRouteImport
       parentRoute: typeof ProtectedRoute
     }
+    '/movies/$slug': {
+      id: '/movies/$slug'
+      path: '/movies/$slug'
+      fullPath: '/movies/$slug'
+      preLoaderRoute: typeof MoviesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -114,6 +137,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ProtectedRoute: ProtectedRouteWithChildren,
   SessionsRoute: SessionsRoute,
+  MoviesSlugRoute: MoviesSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

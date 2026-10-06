@@ -8,7 +8,7 @@ import { Typography } from '@/components/core/Typography'
 export function MovieCard({ movie }: { movie: Movie }) {
   return (
     <article className="flex h-113 w-65 flex-col justify-between rounded-[20px] bg-card p-3 shadow-[0_1px_2px_var(--shadow),inset_0_0_4px_var(--shadow)]">
-      <Link to="/sessions" className="flex flex-col gap-2.5">
+      <Link to="/movies/$slug" params={{ slug: movie.slug }} className="flex flex-col gap-2.5">
         {movie.posterUrl ? (
           <img
             src={movie.posterUrl}
@@ -35,7 +35,7 @@ export function MovieCard({ movie }: { movie: Movie }) {
       </Link>
       <div className="flex items-center justify-between">
         <Typography variant="labelS">From ₾ {movie.fromPrice}</Typography>
-        <ButtonLink to="/sessions" size="sm">
+        <ButtonLink to="/movies/$slug" params={{ slug: movie.slug }} size="sm">
           Buy Ticket
         </ButtonLink>
       </div>

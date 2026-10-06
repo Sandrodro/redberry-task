@@ -15,7 +15,7 @@ export function SessionCard({ session }: { session: Session }) {
       type="button"
       disabled={session.isSoldOut}
       onClick={() => openBooking(session)}
-      className="flex w-63 flex-col gap-3 rounded-2xl bg-card p-3.75 text-left disabled:cursor-not-allowed disabled:opacity-40"
+      className="flex w-63 cursor-pointer flex-col gap-3 rounded-2xl bg-card p-3.75 text-left disabled:cursor-not-allowed disabled:opacity-40"
     >
       <div className="flex w-full items-center justify-between">
         <Typography variant="h3" as="span">

@@ -20,6 +20,8 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
       const user = queryClient.getQueryData<User | null>(authKeys.me.queryKey)
       if (!user) openLogin({ onSuccess: () => open(target) })
       else if (!user.profileComplete) navigate({ to: '/profile' })
+      // Too young for this film. The movie page shows its sessions disabled with the reason.
+      else if (user.age !== null && user.age < target.movie.ageRating.minAge) return
       else setSession(target)
     },
     [queryClient, openLogin, navigate],

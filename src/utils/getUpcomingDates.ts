@@ -1,3 +1,6 @@
+/** How many days the date pickers offer. */
+export const UPCOMING_DAY_COUNT = 7
+
 export type DateOption = { value: string; weekday: string; day: number }
 
 const weekdayFormat = new Intl.DateTimeFormat('en-US', { weekday: 'short' })
@@ -17,4 +20,10 @@ export function getUpcomingDates(count: number): DateOption[] {
       day: date.getDate(),
     }
   })
+}
+
+/** The first upcoming day that has sessions, or today when none has. */
+export function getFirstAvailableDate(availableDates: string[]) {
+  const dates = getUpcomingDates(UPCOMING_DAY_COUNT)
+  return (dates.find((date) => availableDates.includes(date.value)) ?? dates[0]).value
 }
