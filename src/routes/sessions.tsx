@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { filterOptionsQueryOptions } from '@/api/queries/sessions/useFilterOptionsData'
+import { filterOptionsQueryOptions } from '@/api/queries/filter-options/useFilterOptionsData'
 import { sessionsListQueryOptions } from '@/api/queries/sessions/useSessionsData'
 import { SessionsPage } from '@/components/pages/sessions/SessionsPage'
 import { sessionsSearchSchema, toSessionsFilters } from '@/utils/sessionsSearchSchema'

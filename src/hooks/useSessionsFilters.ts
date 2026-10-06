@@ -1,5 +1,5 @@
 import { useNavigate, useSearch } from '@tanstack/react-router'
-import { useFilterOptionsData } from '@/api/queries/sessions/useFilterOptionsData'
+import { useFilterOptionsData } from '@/api/queries/filter-options/useFilterOptionsData'
 import type { SessionSort, SessionsFilters } from '@/api/types'
 import { parseList, toSessionsFilters, type SessionsSearch } from '@/utils/sessionsSearchSchema'
 

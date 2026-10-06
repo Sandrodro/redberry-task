@@ -1,4 +1,4 @@
-import { useFilterOptionsData } from '@/api/queries/sessions/useFilterOptionsData'
+import { useFilterOptionsData } from '@/api/queries/filter-options/useFilterOptionsData'
 import type { SessionSort } from '@/api/types'
 import ArrowIcon from '@/assets/icons/arrow.svg?react'
 import { useSessionsFilters } from '@/hooks/useSessionsFilters'

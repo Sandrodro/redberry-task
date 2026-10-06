@@ -1,7 +1,7 @@
 import { useForm, type AnyFieldApi } from '@tanstack/react-form'
 import type { ComponentProps } from 'react'
 import { ApiError } from '@/api/client'
-import { useCreateOrder } from '@/api/queries/booking/useCreateOrder'
+import { useCreateOrder } from '@/api/queries/orders/useCreateOrder'
 import type { Order, SeatHold, Session, User } from '@/api/types'
 import { useAuthModal } from '@/hooks/useAuthModal'
 import { checkoutSchema, type CheckoutValues } from '@/utils/checkoutSchema'

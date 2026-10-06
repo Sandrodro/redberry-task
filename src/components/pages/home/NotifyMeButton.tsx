@@ -1,5 +1,5 @@
 import { ApiError } from '@/api/client'
-import { useNotifyMe } from '@/api/queries/catalogue/useNotifyMe'
+import { useNotifyMe } from '@/api/queries/movies/useNotifyMe'
 import BellIcon from '@/assets/icons/bell.svg?react'
 import CheckIcon from '@/assets/icons/check.svg?react'
 import { useAuthModal } from '@/hooks/useAuthModal'

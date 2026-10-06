@@ -1,4 +1,4 @@
-import { useFilterOptionsData } from '@/api/queries/sessions/useFilterOptionsData'
+import { useFilterOptionsData } from '@/api/queries/filter-options/useFilterOptionsData'
 import { useSessionsFilters } from '@/hooks/useSessionsFilters'
 import { getAvailableFormats } from '@/utils/sessionsSearchSchema'
 import { Typography } from '@/components/core/Typography'

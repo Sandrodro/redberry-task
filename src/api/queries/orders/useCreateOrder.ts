@@ -3,7 +3,7 @@ import { ApiError, api } from '@/api/client'
 import { Endpoint } from '@/api/endpoints'
 import { ticketsKeys } from '@/api/queryKeys'
 import type { CreateOrderInput, Order } from '@/api/types'
-import { useRefreshSessions } from './useRefreshSessions'
+import { useRefreshSessions } from '@/api/queries/sessions/useRefreshSessions'
 
 export function useCreateOrder() {
   const queryClient = useQueryClient()
