@@ -3,6 +3,7 @@ import { useSessionsData } from '@/api/queries/sessions/useSessionsData'
 import { useSessionsFilters } from '@/hooks/useSessionsFilters'
 import { Button } from '@/components/core/Button'
 import { Pagination } from '@/components/core/Pagination'
+import { Spinner } from '@/components/core/Spinner'
 import { Typography } from '@/components/core/Typography'
 import { FiltersPanel } from './FiltersPanel'
 import { MovieSessionsRow } from './MovieSessionsRow'
@@ -15,7 +16,7 @@ function formatCount(total: number) {
 
 export function SessionsPage() {
   const { filters, setPage } = useSessionsFilters()
-  const { data, isError, isPlaceholderData, refetch } = useSessionsData(filters)
+  const { data, isPending, isError, isPlaceholderData, refetch } = useSessionsData(filters)
 
   return (
     <div className="flex flex-col gap-9 px-12.75 pb-16 pt-1.5">
@@ -33,6 +34,11 @@ export function SessionsPage() {
               {data && <Typography variant="labelS">{formatCount(data.meta.totalSessions)}</Typography>}
               <SortSelect />
             </div>
+            {isPending && (
+              <div className="flex justify-center py-20">
+                <Spinner />
+              </div>
+            )}
             {isError && (
               <div className="flex flex-col items-start gap-3">
                 <Typography variant="bodyM" className="text-muted">
