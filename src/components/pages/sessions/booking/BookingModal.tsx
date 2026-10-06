@@ -9,7 +9,7 @@ import type { Order, Seat, SeatHold, Session, TicketTypeSlug } from '@/api/types
 import { useAuth } from '@/hooks/useAuth'
 import { useAuthModal } from '@/hooks/useAuthModal'
 import { Modal } from '@/components/core/Modal'
-import { Typography } from '@/components/core/Typography'
+import { Spinner } from '@/components/core/Spinner'
 import { BookingHeader } from './BookingHeader'
 import { CheckoutStep } from './CheckoutStep'
 import { ConfirmationView } from './ConfirmationView'
@@ -103,13 +103,11 @@ export function BookingModal({ session, onClose }: BookingModalProps) {
   }
 
   return (
-    <Modal open onClose={handleClose} className="w-286.5">
+    <Modal open onClose={handleClose} className={`w-286.5 ${order ? '' : 'min-h-165'}`}>
       {order ? (
         <ConfirmationView order={order} onClose={handleClose} />
-      ) : !filterOptions || !user ? (
-        <Typography variant="bodyM" className="text-muted">
-          Loading...
-        </Typography>
+      ) : !filterOptions || !user || seatMap.isPending ? (
+        <Spinner className="absolute inset-0 m-auto" />
       ) : (
         <div className="flex flex-col gap-8">
           <BookingHeader session={session} secondsLeft={secondsLeft} />
@@ -118,7 +116,6 @@ export function BookingModal({ session, onClose }: BookingModalProps) {
               session={session}
               filterOptions={filterOptions}
               seatMap={seatMap.data}
-              isMapError={seatMap.isError}
               onRetryMap={() => seatMap.refetch()}
               selected={selected}
               lostCodes={lostCodes}

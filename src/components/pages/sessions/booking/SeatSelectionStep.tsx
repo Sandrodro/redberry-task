@@ -12,7 +12,6 @@ type SeatSelectionStepProps = {
   session: Session
   filterOptions: FilterOptions
   seatMap: SeatMapData | undefined
-  isMapError: boolean
   onRetryMap: () => void
   selected: SelectedSeat[]
   lostCodes: string[]
@@ -27,7 +26,6 @@ export function SeatSelectionStep({
   session,
   filterOptions,
   seatMap,
-  isMapError,
   onRetryMap,
   selected,
   lostCodes,
@@ -65,7 +63,7 @@ export function SeatSelectionStep({
             lostCodes={lostCodes}
             onToggle={onToggleSeat}
           />
-        ) : isMapError ? (
+        ) : (
           <div className="flex flex-col items-start gap-3">
             <Typography variant="bodyM" className="text-muted">
               Could not load the hall map.
@@ -74,10 +72,6 @@ export function SeatSelectionStep({
               Try again
             </Button>
           </div>
-        ) : (
-          <Typography variant="bodyM" className="text-muted">
-            Loading the hall map...
-          </Typography>
         )
       }
       aside={

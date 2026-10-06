@@ -1,7 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { useCallback, useMemo, useState, type ReactNode } from 'react'
-import { seatMapQueryOptions } from '@/api/queries/sessions/useSeatMapData'
 import type { Session, User } from '@/api/types'
 import { authKeys } from '@/api/queryKeys'
 import { BookingModal } from '@/components/pages/sessions/booking/BookingModal'
@@ -21,9 +20,7 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
       const user = queryClient.getQueryData<User | null>(authKeys.me.queryKey)
       if (!user) openLogin({ onSuccess: () => open(target) })
       else if (!user.profileComplete) navigate({ to: '/profile' })
-      // Load the hall map first, so the modal opens with the seats already drawn. A failed load opens
-      // the modal anyway, where the map shows a retry button.
-      else queryClient.fetchQuery(seatMapQueryOptions(target.id)).catch(() => {}).then(() => setSession(target))
+      else setSession(target)
     },
     [queryClient, openLogin, navigate],
   )
