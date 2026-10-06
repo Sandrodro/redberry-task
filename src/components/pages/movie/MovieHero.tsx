@@ -1,6 +1,7 @@
 import type { MovieDetail } from '@/api/types'
 import TimerIcon from '@/assets/icons/timer.svg?react'
 import { Badge } from '@/components/core/Badge'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/core/Tooltip'
 import { Typography } from '@/components/core/Typography'
 
 export function MovieHero({ movie }: { movie: MovieDetail }) {
@@ -36,9 +37,14 @@ export function MovieHero({ movie }: { movie: MovieDetail }) {
               </Typography>
             </div>
             <div className="flex gap-1.75">
-              <Badge tone="brand" className="px-2.5!" title={movie.ageRating.description}>
-                {movie.ageRating.code}
-              </Badge>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Badge tone="brand" className="px-2.5!">
+                    {movie.ageRating.code}
+                  </Badge>
+                </TooltipTrigger>
+                <TooltipContent>{movie.ageRating.description}</TooltipContent>
+              </Tooltip>
               <Badge className="px-2.5!" icon={<TimerIcon className="size-3.5" />}>
                 {movie.runtimeMinutes} Min
               </Badge>

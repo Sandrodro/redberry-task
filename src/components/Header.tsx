@@ -1,10 +1,18 @@
 import { Link } from "@tanstack/react-router";
+import { lazy, Suspense } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useAuthModal } from "@/hooks/useAuthModal";
 import { Button } from "./core/Button";
-import { ProfileMenu } from "./ProfileMenu";
 import { SearchField } from "./SearchField";
 import { Typography } from "./core/Typography";
+
+// Loaded on demand: the menu pulls in Radix, which a guest never needs.
+const ProfileMenu = lazy(() =>
+  import("./ProfileMenu").then((module) => ({ default: module.ProfileMenu })),
+);
+
+/** Holds the menu's place while it loads, so the header does not jump. */
+const menuPlaceholder = <div aria-hidden className="h-10 w-30.25" />;
 
 export function Header() {
   const { user, isLoading } = useAuth();
@@ -28,9 +36,11 @@ export function Header() {
       <div className="flex items-center gap-8">
         <SearchField />
         {isLoading ? (
-          <div aria-hidden className="h-10 w-30.25" />
+          menuPlaceholder
         ) : user ? (
-          <ProfileMenu user={user} />
+          <Suspense fallback={menuPlaceholder}>
+            <ProfileMenu user={user} />
+          </Suspense>
         ) : (
           <div className="flex gap-3">
             <Button onClick={openSignUp}>Sign up</Button>

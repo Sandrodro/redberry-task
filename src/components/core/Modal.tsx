@@ -1,4 +1,4 @@
-import { useEffect, useRef, type ReactNode } from 'react'
+import { useEffect, useRef, type MouseEvent, type ReactNode } from 'react'
 import CloseIcon from '@/assets/icons/close.svg?react'
 
 type ModalProps = {
@@ -8,8 +8,18 @@ type ModalProps = {
   className?: string
 }
 
+/** A click on the backdrop lands on the dialog, outside its box. Clicks that start on a child are
+ * ignored, since a programmatic click (file input) reports 0,0 coordinates. */
+function isBackdropEvent(e: MouseEvent<HTMLDialogElement>) {
+  if (e.target !== e.currentTarget) return false
+  const { top, bottom, left, right } = e.currentTarget.getBoundingClientRect()
+  const { clientX: x, clientY: y } = e
+  return x < left || x > right || y < top || y > bottom
+}
+
 export function Modal({ open, onClose, children, className }: ModalProps) {
   const ref = useRef<HTMLDialogElement>(null)
+  const pressStartedOnBackdrop = useRef(false)
 
   useEffect(() => {
     const dialog = ref.current
@@ -22,13 +32,13 @@ export function Modal({ open, onClose, children, className }: ModalProps) {
     <dialog
       ref={ref}
       onClose={onClose}
+      onPointerDown={(e) => {
+        pressStartedOnBackdrop.current = isBackdropEvent(e)
+      }}
       onClick={(e) => {
-        // A click on the backdrop lands outside the dialog box. Clicks that start on a child
-        // are ignored, since a programmatic click (file input) reports 0,0 coordinates.
-        if (e.target !== e.currentTarget) return
-        const { top, bottom, left, right } = e.currentTarget.getBoundingClientRect()
-        const { clientX: x, clientY: y } = e
-        if (x < left || x > right || y < top || y > bottom) onClose()
+        // A drag that starts inside the dialog and ends on the backdrop also clicks the dialog,
+        // so the press must have started on the backdrop too.
+        if (pressStartedOnBackdrop.current && isBackdropEvent(e)) onClose()
       }}
       className={`m-auto rounded-[28px] border border-elevated bg-background p-7.75 text-white shadow-[0px_20px_50px_-10px_var(--shadow)] backdrop:bg-black/30 backdrop:backdrop-blur-[5px] ${className ?? ''}`}
     >

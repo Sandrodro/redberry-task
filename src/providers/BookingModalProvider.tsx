@@ -1,11 +1,17 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
-import { useCallback, useMemo, useState, type ReactNode } from 'react'
+import { lazy, Suspense, useCallback, useMemo, useState, type ReactNode } from 'react'
 import type { Session, User } from '@/api/types'
 import { authKeys } from '@/api/queryKeys'
-import { BookingModal } from '@/components/pages/sessions/booking/BookingModal'
 import { useAuthModal } from '@/hooks/useAuthModal'
 import { BookingModalContext } from '@/hooks/useBookingModal'
+
+// Loaded on first open: the seat map and checkout are not needed until a session is picked.
+const BookingModal = lazy(() =>
+  import('@/components/pages/sessions/booking/BookingModal').then((module) => ({
+    default: module.BookingModal,
+  })),
+)
 
 /** Owns the booking modal, so any session card can open it. Mount it inside `AuthModalProvider`. */
 export function BookingModalProvider({ children }: { children: ReactNode }) {
@@ -31,7 +37,11 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
   return (
     <BookingModalContext value={value}>
       {children}
-      {session && <BookingModal key={session.id} session={session} onClose={() => setSession(null)} />}
+      {session && (
+        <Suspense fallback={null}>
+          <BookingModal key={session.id} session={session} onClose={() => setSession(null)} />
+        </Suspense>
+      )}
     </BookingModalContext>
   )
 }

@@ -27,6 +27,15 @@
     --shadow: rgb(0 0 0 / 0.2);
   }
 
+  /* The gutter is always reserved, so the page does not shift when a modal hides the scrollbar. */
+  html {
+    scrollbar-gutter: stable;
+  }
+
+  html:has(dialog[open]) {
+    overflow: hidden;
+  }
+
   body {
     @apply bg-background font-sans text-white;
   }

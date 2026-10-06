@@ -6,22 +6,19 @@ import UserIcon from '@/assets/icons/user.svg?react'
 import type { User } from '@/api/types'
 import { useLogout } from '@/api/queries/auth/useLogout'
 import { Avatar } from './Avatar'
+import { DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from './core/DropdownMenu'
 import { Typography } from './core/Typography'
-
-const itemClass =
-  'flex w-full cursor-pointer items-center gap-2 rounded-[10px] py-2.5 pl-5 text-left'
 
 type ProfileDropdownProps = {
   user: User
   initials: string
-  onClose: () => void
 }
 
-export function ProfileDropdown({ user, initials, onClose }: ProfileDropdownProps) {
+export function ProfileDropdown({ user, initials }: ProfileDropdownProps) {
   const logout = useLogout()
 
   return (
-    <div className="flex w-75.5 flex-col gap-1 rounded-2xl bg-background pb-2.5">
+    <DropdownMenuContent className="flex w-75.5 flex-col gap-1 rounded-2xl bg-background pb-2.5">
       <div className="flex flex-col gap-4">
         <div className="flex items-center gap-2.5 pl-5 pt-5">
           <Avatar
@@ -61,29 +58,23 @@ export function ProfileDropdown({ user, initials, onClose }: ProfileDropdownProp
       </div>
       <div className="flex flex-col gap-1">
         <div className="flex flex-col gap-0.5 pt-1">
-          <Link
-            to="/profile"
-            onClick={onClose}
-            className={`${itemClass} h-10`}
-          >
-            <UserIcon className="size-4 shrink-0" />
-            <Typography variant="labelM">My Profile</Typography>
-          </Link>
-          <button type="button" className={`${itemClass} h-10`}>
+          <DropdownMenuItem asChild className="h-10">
+            <Link to="/profile">
+              <UserIcon className="size-4 shrink-0" />
+              <Typography variant="labelM">My Profile</Typography>
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem className="h-10">
             <TicketIcon className="size-4 shrink-0" />
             <Typography variant="labelM">My Tickets</Typography>
-          </button>
+          </DropdownMenuItem>
         </div>
-        <div className="h-px w-full bg-white/10" />
-        <button
-          type="button"
-          onClick={() => logout.mutate()}
-          className={`${itemClass} text-brand`}
-        >
+        <DropdownMenuSeparator />
+        <DropdownMenuItem className="text-brand" onSelect={() => logout.mutate()}>
           <LogOutIcon className="size-4 shrink-0" />
           <Typography variant="labelM">Log out</Typography>
-        </button>
+        </DropdownMenuItem>
       </div>
-    </div>
+    </DropdownMenuContent>
   )
 }
