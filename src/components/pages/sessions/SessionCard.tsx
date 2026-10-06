@@ -1,17 +1,20 @@
 import type { Session } from '../../../api/types'
 import SeatsIcon from '../../../assets/icons/seats.svg?react'
+import { useBookingModal } from '../../../hooks/useBookingModal'
 import { Badge } from '../../core/Badge'
 import { Typography } from '../../core/Typography'
 
 const LOW_SEATS_LIMIT = 10
 
 export function SessionCard({ session }: { session: Session }) {
+  const { openBooking } = useBookingModal()
   const lowSeats = session.seatsLeft <= LOW_SEATS_LIMIT
 
   return (
     <button
       type="button"
       disabled={session.isSoldOut}
+      onClick={() => openBooking(session)}
       className="flex w-63 flex-col gap-3 rounded-2xl bg-card p-3.75 text-left disabled:cursor-not-allowed disabled:opacity-40"
     >
       <div className="flex w-full items-center justify-between">

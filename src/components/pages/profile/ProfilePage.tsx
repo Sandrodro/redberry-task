@@ -1,3 +1,4 @@
+import AlertIcon from '../../../assets/icons/alert.svg?react'
 import { PersonalInformationForm } from './PersonalInformationForm'
 import { Tab } from '../../core/Tab'
 import { Typography } from '../../core/Typography'
@@ -15,6 +16,12 @@ export function ProfilePage() {
           <Tab>My Tickets</Tab>
         </div>
       </div>
+      {user && !user.profileComplete && (
+        <div className="mt-6 flex items-center gap-2 rounded-xl bg-warning/10 px-4 py-3 text-warning">
+          <AlertIcon className="size-4 shrink-0" />
+          <Typography variant="labelS">Complete your profile to book tickets.</Typography>
+        </div>
+      )}
       {user && (
         <div className="mt-11">
           <PersonalInformationForm user={user} />

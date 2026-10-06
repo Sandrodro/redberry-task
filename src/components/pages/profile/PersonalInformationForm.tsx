@@ -1,20 +1,15 @@
-import { useForm, type AnyFieldApi } from '@tanstack/react-form'
+import { useForm } from '@tanstack/react-form'
 import CalendarIcon from '../../../assets/icons/calendar.svg?react'
 import { ApiError } from '../../../api/client'
 import { useUpdateProfile } from '../../../api/queries/profile/useUpdateProfile'
 import { useFilterOptionsData } from '../../../api/queries/sessions/useFilterOptionsData'
 import type { AgeRating, ProfileInput, User } from '../../../api/types'
+import { getFieldError } from '../../../utils/getFieldError'
 import { getAge, MIN_AGE, profileSchema } from '../../../utils/profileSchema'
 import { Button } from '../../core/Button'
 import { Input } from '../../core/Input'
 import { Select } from '../../core/Select'
 import { Typography } from '../../core/Typography'
-
-/** Shows the client error once the field was blurred. Falls back to the server error. */
-function getError(field: AnyFieldApi, serverError?: string) {
-  const issue = field.state.meta.isBlurred ? field.state.meta.errors[0] : undefined
-  return issue?.message ?? serverError
-}
 
 function getAgeNote(dateOfBirth: string, ageRatings: AgeRating[] = []) {
   if (!dateOfBirth) return undefined
@@ -64,7 +59,7 @@ export function PersonalInformationForm({ user }: { user: User }) {
                 value={field.state.value}
                 onChange={(e) => field.handleChange(e.target.value)}
                 onBlur={field.handleBlur}
-                error={getError(field, error?.errors?.fullName?.[0])}
+                error={getFieldError(field, error?.errors?.fullName?.[0])}
               />
             )}
           </form.Field>
@@ -84,7 +79,7 @@ export function PersonalInformationForm({ user }: { user: User }) {
                 value={field.state.value}
                 onChange={(e) => field.handleChange(e.target.value)}
                 onBlur={field.handleBlur}
-                error={getError(field, error?.errors?.mobileNumber?.[0])}
+                error={getFieldError(field, error?.errors?.mobileNumber?.[0])}
               />
             )}
           </form.Field>
@@ -96,7 +91,7 @@ export function PersonalInformationForm({ user }: { user: User }) {
                 value={field.state.value}
                 onChange={(e) => field.handleChange(e.target.value)}
                 onBlur={field.handleBlur}
-                error={getError(field, error?.errors?.dateOfBirth?.[0])}
+                error={getFieldError(field, error?.errors?.dateOfBirth?.[0])}
                 hint={getAgeNote(field.state.value, filterOptions?.ageRatings)}
                 icon={<CalendarIcon className="pointer-events-none size-4 shrink-0 text-white" />}
                 className="[&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:inset-0 [&::-webkit-calendar-picker-indicator]:size-full [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-0"
