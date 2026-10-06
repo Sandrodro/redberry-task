@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import ArrowIcon from '../assets/icons/arrow.svg?react'
-import type { User } from '../api/types'
+import ArrowIcon from '@/assets/icons/arrow.svg?react'
+import type { User } from '@/api/types'
 import { Avatar } from './Avatar'
 import { ProfileDropdown } from './ProfileDropdown'
 import { Typography } from './core/Typography'

@@ -1,5 +1,5 @@
-import { getUpcomingDates } from '../../../utils/getUpcomingDates'
-import { Typography } from '../../core/Typography'
+import { getUpcomingDates } from '@/utils/getUpcomingDates'
+import { Typography } from '@/components/core/Typography'
 
 const DAY_COUNT = 7
 

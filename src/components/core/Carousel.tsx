@@ -2,7 +2,7 @@ import Autoplay from 'embla-carousel-autoplay'
 import Fade from 'embla-carousel-fade'
 import useEmblaCarousel from 'embla-carousel-react'
 import { useCallback, useEffect, useState, type Key, type ReactNode } from 'react'
-import ArrowLeftIcon from '../../assets/icons/arrow-left.svg?react'
+import ArrowLeftIcon from '@/assets/icons/arrow-left.svg?react'
 
 const AUTOPLAY_DELAY_MS = 6000
 

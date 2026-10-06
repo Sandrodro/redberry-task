@@ -1,5 +1,5 @@
 import { useEffect, useRef, type ReactNode } from 'react'
-import CloseIcon from '../../assets/icons/close.svg?react'
+import CloseIcon from '@/assets/icons/close.svg?react'
 
 type ModalProps = {
   open: boolean

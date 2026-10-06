@@ -1,8 +1,8 @@
-import type { Session } from '../../../api/types'
-import SeatsIcon from '../../../assets/icons/seats.svg?react'
-import { useBookingModal } from '../../../hooks/useBookingModal'
-import { Badge } from '../../core/Badge'
-import { Typography } from '../../core/Typography'
+import type { Session } from '@/api/types'
+import SeatsIcon from '@/assets/icons/seats.svg?react'
+import { useBookingModal } from '@/hooks/useBookingModal'
+import { Badge } from '@/components/core/Badge'
+import { Typography } from '@/components/core/Typography'
 
 const LOW_SEATS_LIMIT = 10
 

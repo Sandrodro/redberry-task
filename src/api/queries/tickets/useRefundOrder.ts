@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { api } from '../../client'
-import { Endpoint } from '../../endpoints'
-import { sessionsKeys, ticketsKeys } from '../../queryKeys'
-import type { Order } from '../../types'
+import { api } from '@/api/client'
+import { Endpoint } from '@/api/endpoints'
+import { sessionsKeys, ticketsKeys } from '@/api/queryKeys'
+import type { Order } from '@/api/types'
 
 export function useRefundOrder() {
   const queryClient = useQueryClient()

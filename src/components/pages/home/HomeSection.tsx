@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
-import { Typography } from '../../core/Typography'
+import { Typography } from '@/components/core/Typography'
 
 type HomeSectionProps = {
   title: string

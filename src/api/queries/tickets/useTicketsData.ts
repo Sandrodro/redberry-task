@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
-import { api } from '../../client'
-import { Endpoint } from '../../endpoints'
-import { ticketsKeys } from '../../queryKeys'
-import type { Order } from '../../types'
+import { api } from '@/api/client'
+import { Endpoint } from '@/api/endpoints'
+import { ticketsKeys } from '@/api/queryKeys'
+import type { Order } from '@/api/types'
 
 export function useTicketsData(filter?: 'upcoming' | 'past') {
   return useQuery({

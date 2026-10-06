@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { useAuth } from "../hooks/useAuth";
-import { useAuthModal } from "../hooks/useAuthModal";
+import { useAuth } from "@/hooks/useAuth";
+import { useAuthModal } from "@/hooks/useAuthModal";
 import { Button } from "./core/Button";
 import { ProfileMenu } from "./ProfileMenu";
 import { SearchField } from "./SearchField";

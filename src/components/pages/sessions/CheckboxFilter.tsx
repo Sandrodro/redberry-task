@@ -1,5 +1,5 @@
-import { Checkbox } from '../../core/Checkbox'
-import { Typography } from '../../core/Typography'
+import { Checkbox } from '@/components/core/Checkbox'
+import { Typography } from '@/components/core/Typography'
 
 type CheckboxFilterProps = {
   title: string

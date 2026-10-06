@@ -50,7 +50,7 @@ src/
 - The auth token is in localStorage under `TOKEN_KEY`, sent as `Authorization: Bearer`. Use `useAuth()` for login status and the active user.
 - Do not hardcode values the API provides (venues, formats, ticket ratios, seat cap, hold minutes). Read them from `/filter-options`.
 - Error handling follows the docs: `422` with `errors` maps to form fields. `422` with only `message` is a booking rule, show the message. `409` means seats were lost, read `contested`. `401` should open login and replay the action.
-- Import paths are relative. Match the style of the file you edit (some files use single quotes and no semicolons, some were reformatted).
+- Import from other folders with the `@/` alias (`@/components/core/Button`, `@/api/types`). `@` maps to `src/`. Imports from the same folder stay relative (`./SeatMap`). Match the quote and semicolon style of the file you edit (some files use single quotes and no semicolons, some were reformatted).
 
 ## Environment
 

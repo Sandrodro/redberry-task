@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
-import { api } from '../../client'
-import { Endpoint } from '../../endpoints'
-import { holdsKeys } from '../../queryKeys'
-import type { SeatHold } from '../../types'
+import { api } from '@/api/client'
+import { Endpoint } from '@/api/endpoints'
+import { holdsKeys } from '@/api/queryKeys'
+import type { SeatHold } from '@/api/types'
 
 export function useHoldData(holdId: string) {
   return useQuery({

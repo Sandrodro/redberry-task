@@ -1,8 +1,8 @@
-import type { Movie } from '../../../api/types'
-import { formatDayMonth } from '../../../utils/formatDayMonth'
-import { formatMovieDetails } from '../../../utils/formatMovieDetails'
-import { Badge } from '../../core/Badge'
-import { Typography } from '../../core/Typography'
+import type { Movie } from '@/api/types'
+import { formatDayMonth } from '@/utils/formatDayMonth'
+import { formatMovieDetails } from '@/utils/formatMovieDetails'
+import { Badge } from '@/components/core/Badge'
+import { Typography } from '@/components/core/Typography'
 import { NotifyMeButton } from './NotifyMeButton'
 
 export function ComingSoonCard({ movie }: { movie: Movie }) {

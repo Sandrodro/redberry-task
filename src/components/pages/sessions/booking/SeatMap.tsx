@@ -1,7 +1,7 @@
 import { Fragment, type ReactNode } from 'react'
-import type { Seat, SeatMap as SeatMapData } from '../../../../api/types'
-import stripes from '../../../../assets/icons/seat-held-stripes.svg'
-import { Typography } from '../../../core/Typography'
+import type { Seat, SeatMap as SeatMapData } from '@/api/types'
+import stripes from '@/assets/icons/seat-held-stripes.svg'
+import { Typography } from '@/components/core/Typography'
 import { SeatButton, type SeatButtonState } from './SeatButton'
 
 type SeatMapProps = {

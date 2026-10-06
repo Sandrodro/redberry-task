@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react'
-import type { Session } from '../api/types'
+import type { Session } from '@/api/types'
 
 type BookingModalContextValue = {
   /** Opens the booking modal for a session. A guest logs in first, a user with an incomplete profile goes to the profile page. */

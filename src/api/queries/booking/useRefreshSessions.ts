@@ -1,5 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query'
-import { sessionsKeys } from '../../queryKeys'
+import { sessionsKeys } from '@/api/queryKeys'
 
 /** Seat maps and seat counts go stale when holds change, so refresh them. */
 export function useRefreshSessions() {

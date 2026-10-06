@@ -1,5 +1,5 @@
 import type { ComponentPropsWithoutRef } from 'react'
-import CheckboxCheckedIcon from '../../assets/icons/checkbox-checked.svg?react'
+import CheckboxCheckedIcon from '@/assets/icons/checkbox-checked.svg?react'
 import { Typography } from './Typography'
 
 type CheckboxProps = {

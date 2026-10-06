@@ -1,7 +1,7 @@
 import { useNavigate } from '@tanstack/react-router'
 import { useEffect, type ReactNode } from 'react'
-import { useAuth } from '../hooks/useAuth'
-import { useAuthModal } from '../hooks/useAuthModal'
+import { useAuth } from '@/hooks/useAuth'
+import { useAuthModal } from '@/hooks/useAuthModal'
 
 /** Shows `children` to logged in users. A guest gets the login modal, and goes home if they close it. */
 export function RequireAuth({ children }: { children: ReactNode }) {

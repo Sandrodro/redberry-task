@@ -1,5 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { authKeys } from "../../queryKeys";
+import { authKeys } from "@/api/queryKeys";
 
 /** Fields like `isNotified` and `isMine` depend on who is logged in, so refetch everything except auth after a login or logout. */
 export function useRefreshUserData() {

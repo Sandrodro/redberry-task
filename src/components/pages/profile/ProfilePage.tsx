@@ -1,8 +1,8 @@
-import AlertIcon from '../../../assets/icons/alert.svg?react'
+import AlertIcon from '@/assets/icons/alert.svg?react'
 import { PersonalInformationForm } from './PersonalInformationForm'
-import { Tab } from '../../core/Tab'
-import { Typography } from '../../core/Typography'
-import { useAuth } from '../../../hooks/useAuth'
+import { Tab } from '@/components/core/Tab'
+import { Typography } from '@/components/core/Typography'
+import { useAuth } from '@/hooks/useAuth'
 
 export function ProfilePage() {
   const { user } = useAuth()

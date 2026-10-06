@@ -1,5 +1,5 @@
 import type { ComponentPropsWithoutRef } from 'react'
-import ArrowIcon from '../../assets/icons/arrow.svg?react'
+import ArrowIcon from '@/assets/icons/arrow.svg?react'
 import { Typography } from './Typography'
 
 /** First and last page, the current page and its neighbours. "gap" stands for the pages left out. */

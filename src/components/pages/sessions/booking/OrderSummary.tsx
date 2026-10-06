@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
-import type { Session } from '../../../../api/types'
-import { formatShortDate } from '../../../../utils/formatShortDate'
-import { Typography } from '../../../core/Typography'
+import type { Session } from '@/api/types'
+import { formatShortDate } from '@/utils/formatShortDate'
+import { Typography } from '@/components/core/Typography'
 
 type OrderSummaryProps = {
   session: Session

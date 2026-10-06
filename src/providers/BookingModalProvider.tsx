@@ -1,11 +1,11 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { useCallback, useMemo, useState, type ReactNode } from 'react'
-import type { Session, User } from '../api/types'
-import { authKeys } from '../api/queryKeys'
-import { BookingModal } from '../components/pages/sessions/booking/BookingModal'
-import { useAuthModal } from '../hooks/useAuthModal'
-import { BookingModalContext } from '../hooks/useBookingModal'
+import type { Session, User } from '@/api/types'
+import { authKeys } from '@/api/queryKeys'
+import { BookingModal } from '@/components/pages/sessions/booking/BookingModal'
+import { useAuthModal } from '@/hooks/useAuthModal'
+import { BookingModalContext } from '@/hooks/useBookingModal'
 
 /** Owns the booking modal, so any session card can open it. Mount it inside `AuthModalProvider`. */
 export function BookingModalProvider({ children }: { children: ReactNode }) {

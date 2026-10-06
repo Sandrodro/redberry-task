@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
-import { api } from '../../client'
-import { Endpoint } from '../../endpoints'
-import { sessionsKeys } from '../../queryKeys'
-import type { SeatMap } from '../../types'
+import { api } from '@/api/client'
+import { Endpoint } from '@/api/endpoints'
+import { sessionsKeys } from '@/api/queryKeys'
+import type { SeatMap } from '@/api/types'
 
 export function useSeatMapData(id: number) {
   return useQuery({

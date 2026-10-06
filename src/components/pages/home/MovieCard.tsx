@@ -1,9 +1,9 @@
 import { Link } from '@tanstack/react-router'
-import type { Movie } from '../../../api/types'
-import { formatMovieDetails } from '../../../utils/formatMovieDetails'
-import { Badge } from '../../core/Badge'
-import { ButtonLink } from '../../core/ButtonLink'
-import { Typography } from '../../core/Typography'
+import type { Movie } from '@/api/types'
+import { formatMovieDetails } from '@/utils/formatMovieDetails'
+import { Badge } from '@/components/core/Badge'
+import { ButtonLink } from '@/components/core/ButtonLink'
+import { Typography } from '@/components/core/Typography'
 
 export function MovieCard({ movie }: { movie: Movie }) {
   return (

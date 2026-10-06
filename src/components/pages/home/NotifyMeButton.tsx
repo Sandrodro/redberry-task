@@ -1,9 +1,9 @@
-import { ApiError } from '../../../api/client'
-import { useNotifyMe } from '../../../api/queries/catalogue/useNotifyMe'
-import BellIcon from '../../../assets/icons/bell.svg?react'
-import CheckIcon from '../../../assets/icons/check.svg?react'
-import { useAuthModal } from '../../../hooks/useAuthModal'
-import { Typography } from '../../core/Typography'
+import { ApiError } from '@/api/client'
+import { useNotifyMe } from '@/api/queries/catalogue/useNotifyMe'
+import BellIcon from '@/assets/icons/bell.svg?react'
+import CheckIcon from '@/assets/icons/check.svg?react'
+import { useAuthModal } from '@/hooks/useAuthModal'
+import { Typography } from '@/components/core/Typography'
 
 type NotifyMeButtonProps = {
   slug: string

@@ -1,5 +1,5 @@
-import stripes from '../../../../assets/icons/seat-held-stripes.svg'
-import { Typography } from '../../../core/Typography'
+import stripes from '@/assets/icons/seat-held-stripes.svg'
+import { Typography } from '@/components/core/Typography'
 
 export type SeatButtonState = 'available' | 'selected' | 'sold' | 'held'
 

@@ -1,10 +1,10 @@
-import type { FeaturedMovie } from '../../../api/types'
-import TicketIcon from '../../../assets/icons/ticket.svg?react'
-import TimerIcon from '../../../assets/icons/timer.svg?react'
-import { formatDayMonth } from '../../../utils/formatDayMonth'
-import { Badge } from '../../core/Badge'
-import { ButtonLink } from '../../core/ButtonLink'
-import { Typography } from '../../core/Typography'
+import type { FeaturedMovie } from '@/api/types'
+import TicketIcon from '@/assets/icons/ticket.svg?react'
+import TimerIcon from '@/assets/icons/timer.svg?react'
+import { formatDayMonth } from '@/utils/formatDayMonth'
+import { Badge } from '@/components/core/Badge'
+import { ButtonLink } from '@/components/core/ButtonLink'
+import { Typography } from '@/components/core/Typography'
 
 export function FeaturedBanner({ movie }: { movie: FeaturedMovie }) {
   return (

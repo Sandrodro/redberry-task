@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { ApiError, api } from '../../client'
-import { Endpoint } from '../../endpoints'
-import { ticketsKeys } from '../../queryKeys'
-import type { CreateOrderInput, Order } from '../../types'
+import { ApiError, api } from '@/api/client'
+import { Endpoint } from '@/api/endpoints'
+import { ticketsKeys } from '@/api/queryKeys'
+import type { CreateOrderInput, Order } from '@/api/types'
 import { useRefreshSessions } from './useRefreshSessions'
 
 export function useCreateOrder() {

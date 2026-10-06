@@ -1,8 +1,8 @@
-import { useFilterOptionsData } from '../../../api/queries/sessions/useFilterOptionsData'
-import type { SessionSort } from '../../../api/types'
-import ArrowIcon from '../../../assets/icons/arrow.svg?react'
-import { useSessionsFilters } from '../../../hooks/useSessionsFilters'
-import { Typography } from '../../core/Typography'
+import { useFilterOptionsData } from '@/api/queries/sessions/useFilterOptionsData'
+import type { SessionSort } from '@/api/types'
+import ArrowIcon from '@/assets/icons/arrow.svg?react'
+import { useSessionsFilters } from '@/hooks/useSessionsFilters'
+import { Typography } from '@/components/core/Typography'
 
 export function SortSelect() {
   const { data: options } = useFilterOptionsData()

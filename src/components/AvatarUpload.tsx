@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type ChangeEvent } from 'react'
-import UploadIcon from '../assets/icons/upload.svg?react'
+import UploadIcon from '@/assets/icons/upload.svg?react'
 import { Typography } from './core/Typography'
 
 type AvatarUploadProps = {

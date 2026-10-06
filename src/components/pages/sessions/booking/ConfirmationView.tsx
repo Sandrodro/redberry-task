@@ -1,9 +1,9 @@
 import { useNavigate } from '@tanstack/react-router'
-import type { Order } from '../../../../api/types'
-import CheckIcon from '../../../../assets/icons/check.svg?react'
-import { Badge } from '../../../core/Badge'
-import { Button } from '../../../core/Button'
-import { Typography } from '../../../core/Typography'
+import type { Order } from '@/api/types'
+import CheckIcon from '@/assets/icons/check.svg?react'
+import { Badge } from '@/components/core/Badge'
+import { Button } from '@/components/core/Button'
+import { Typography } from '@/components/core/Typography'
 import { OrderSummary } from './OrderSummary'
 
 type ConfirmationViewProps = {

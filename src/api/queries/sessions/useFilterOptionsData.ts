@@ -1,8 +1,8 @@
 import { queryOptions, useQuery } from '@tanstack/react-query'
-import { api } from '../../client'
-import { Endpoint } from '../../endpoints'
-import { filterOptionsKeys } from '../../queryKeys'
-import type { FilterOptions } from '../../types'
+import { api } from '@/api/client'
+import { Endpoint } from '@/api/endpoints'
+import { filterOptionsKeys } from '@/api/queryKeys'
+import type { FilterOptions } from '@/api/types'
 
 export const filterOptionsQueryOptions = () =>
   queryOptions({

@@ -1,8 +1,8 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { storage } from "../../../utils/storage";
-import { TOKEN_KEY } from "../../client";
-import { authKeys } from "../../queryKeys";
-import type { AuthResponse } from "../../types";
+import { storage } from "@/utils/storage";
+import { TOKEN_KEY } from "@/api/client";
+import { authKeys } from "@/api/queryKeys";
+import type { AuthResponse } from "@/api/types";
 import { useRefreshUserData } from "./useRefreshUserData";
 
 export function useStoreSession() {

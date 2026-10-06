@@ -1,4 +1,4 @@
-import type { Seat, TicketTypeSlug } from '../../../../api/types'
+import type { Seat, TicketTypeSlug } from '@/api/types'
 
 export type SelectedSeat = {
   seat: Seat

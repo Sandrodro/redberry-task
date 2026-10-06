@@ -1,4 +1,4 @@
-import SearchIcon from '../assets/icons/magnifying-glass.svg?react'
+import SearchIcon from '@/assets/icons/magnifying-glass.svg?react'
 
 export function SearchField() {
   return (

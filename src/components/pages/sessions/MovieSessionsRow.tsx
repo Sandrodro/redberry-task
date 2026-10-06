@@ -1,7 +1,7 @@
-import type { MovieSessions } from '../../../api/types'
-import { Badge } from '../../core/Badge'
-import { Slider } from '../../core/Slider'
-import { Typography } from '../../core/Typography'
+import type { MovieSessions } from '@/api/types'
+import { Badge } from '@/components/core/Badge'
+import { Slider } from '@/components/core/Slider'
+import { Typography } from '@/components/core/Typography'
 import { SessionCard } from './SessionCard'
 
 export function MovieSessionsRow({ movie, sessions }: MovieSessions) {

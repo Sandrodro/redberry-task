@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
-import AlertIcon from '../../assets/icons/alert.svg?react'
-import CheckIcon from '../../assets/icons/check.svg?react'
+import AlertIcon from '@/assets/icons/alert.svg?react'
+import CheckIcon from '@/assets/icons/check.svg?react'
 import { Typography } from './Typography'
 
 export type FieldProps = {

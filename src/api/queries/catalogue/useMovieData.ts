@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
-import { api } from '../../client'
-import { Endpoint } from '../../endpoints'
-import { moviesKeys } from '../../queryKeys'
-import type { MovieDetail } from '../../types'
+import { api } from '@/api/client'
+import { Endpoint } from '@/api/endpoints'
+import { moviesKeys } from '@/api/queryKeys'
+import type { MovieDetail } from '@/api/types'
 
 export function useMovieData(slug: string) {
   return useQuery({

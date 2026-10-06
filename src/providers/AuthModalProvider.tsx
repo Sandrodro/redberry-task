@@ -1,10 +1,10 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useCallback, useMemo, useRef, type ReactNode } from 'react'
-import { authKeys } from '../api/queryKeys'
-import { AuthModalContext, type OpenLoginOptions } from '../hooks/useAuthModal'
-import { useModal } from '../hooks/useModal'
-import { LoginFormModal } from '../components/LoginFormModal'
-import { SignUpModal } from '../components/SignUpModal'
+import { authKeys } from '@/api/queryKeys'
+import { AuthModalContext, type OpenLoginOptions } from '@/hooks/useAuthModal'
+import { useModal } from '@/hooks/useModal'
+import { LoginFormModal } from '@/components/LoginFormModal'
+import { SignUpModal } from '@/components/SignUpModal'
 
 /** Owns the login and sign up modals, so any component can open them. */
 export function AuthModalProvider({ children }: { children: ReactNode }) {

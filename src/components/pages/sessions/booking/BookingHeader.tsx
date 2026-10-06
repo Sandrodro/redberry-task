@@ -1,6 +1,6 @@
-import type { Session } from '../../../../api/types'
-import { formatLongDate } from '../../../../utils/formatLongDate'
-import { Typography } from '../../../core/Typography'
+import type { Session } from '@/api/types'
+import { formatLongDate } from '@/utils/formatLongDate'
+import { Typography } from '@/components/core/Typography'
 
 type BookingHeaderProps = {
   session: Session

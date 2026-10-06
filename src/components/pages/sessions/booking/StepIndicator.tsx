@@ -1,4 +1,4 @@
-import { Typography } from '../../../core/Typography'
+import { Typography } from '@/components/core/Typography'
 
 export type BookingStep = 'seats' | 'checkout'
 

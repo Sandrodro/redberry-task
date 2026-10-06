@@ -1,7 +1,7 @@
 import { useNavigate, useSearch } from '@tanstack/react-router'
-import { useFilterOptionsData } from '../api/queries/sessions/useFilterOptionsData'
-import type { SessionSort, SessionsFilters } from '../api/types'
-import { parseList, toSessionsFilters, type SessionsSearch } from '../utils/sessionsSearchSchema'
+import { useFilterOptionsData } from '@/api/queries/sessions/useFilterOptionsData'
+import type { SessionSort, SessionsFilters } from '@/api/types'
+import { parseList, toSessionsFilters, type SessionsSearch } from '@/utils/sessionsSearchSchema'
 
 type ListKey = 'venue' | 'format' | 'language' | 'band'
 

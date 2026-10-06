@@ -1,4 +1,4 @@
-import type { Movie } from '../api/types'
+import type { Movie } from '@/api/types'
 
 /** "Horror · 95 min". Shows the first genre only. */
 export function formatMovieDetails(movie: Movie) {

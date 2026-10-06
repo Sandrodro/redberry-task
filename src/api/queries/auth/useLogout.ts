@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { storage } from "../../../utils/storage";
-import { api, TOKEN_KEY } from "../../client";
-import { Endpoint } from "../../endpoints";
-import { authKeys, ticketsKeys } from "../../queryKeys";
+import { storage } from "@/utils/storage";
+import { api, TOKEN_KEY } from "@/api/client";
+import { Endpoint } from "@/api/endpoints";
+import { authKeys, ticketsKeys } from "@/api/queryKeys";
 import { useRefreshUserData } from "./useRefreshUserData";
 
 export function useLogout() {

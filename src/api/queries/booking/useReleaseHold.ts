@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
-import { api } from '../../client'
-import { Endpoint } from '../../endpoints'
+import { api } from '@/api/client'
+import { Endpoint } from '@/api/endpoints'
 import { useRefreshSessions } from './useRefreshSessions'
 
 export function useReleaseHold() {

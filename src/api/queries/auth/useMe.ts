@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import { storage } from "../../../utils/storage";
-import { ApiError, api, TOKEN_KEY } from "../../client";
-import { Endpoint } from "../../endpoints";
-import { authKeys } from "../../queryKeys";
-import type { User } from "../../types";
+import { storage } from "@/utils/storage";
+import { ApiError, api, TOKEN_KEY } from "@/api/client";
+import { Endpoint } from "@/api/endpoints";
+import { authKeys } from "@/api/queryKeys";
+import type { User } from "@/api/types";
 
 /** The signed in user. Does not fetch when no token is stored. */
 export function useMe() {

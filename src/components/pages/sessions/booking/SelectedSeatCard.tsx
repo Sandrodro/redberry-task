@@ -1,6 +1,6 @@
-import type { TicketType, TicketTypeSlug } from '../../../../api/types'
-import CloseIcon from '../../../../assets/icons/close.svg?react'
-import { Typography } from '../../../core/Typography'
+import type { TicketType, TicketTypeSlug } from '@/api/types'
+import CloseIcon from '@/assets/icons/close.svg?react'
+import { Typography } from '@/components/core/Typography'
 import type { SelectedSeat } from './types'
 
 type SelectedSeatCardProps = {

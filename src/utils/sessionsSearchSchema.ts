@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import type { FilterOptions, SessionsFilters, TimeBand } from '../api/types'
+import type { FilterOptions, SessionsFilters, TimeBand } from '@/api/types'
 
 /** The URL parser turns a value like `123` into a number, so a number is turned back into a string. */
 const text = z.coerce.string().optional().catch(undefined)
