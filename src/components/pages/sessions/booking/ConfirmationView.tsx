@@ -4,6 +4,7 @@ import CheckIcon from '@/assets/icons/check.svg?react'
 import { Badge } from '@/components/core/Badge'
 import { Button } from '@/components/core/Button'
 import { Typography } from '@/components/core/Typography'
+import { usePrefetchTickets } from '@/hooks/usePrefetchTickets'
 import { OrderSummary } from './OrderSummary'
 
 type ConfirmationViewProps = {
@@ -13,6 +14,7 @@ type ConfirmationViewProps = {
 
 export function ConfirmationView({ order, onClose }: ConfirmationViewProps) {
   const navigate = useNavigate()
+  const prefetchTickets = usePrefetchTickets()
 
   return (
     <div className="mx-auto flex w-110 flex-col items-center gap-6 py-6">
@@ -40,9 +42,10 @@ export function ConfirmationView({ order, onClose }: ConfirmationViewProps) {
       </div>
       <div className="flex gap-3">
         <Button
+          onMouseEnter={prefetchTickets}
           onClick={() => {
             onClose()
-            navigate({ to: '/profile' })
+            navigate({ to: '/profile', search: { tab: 'tickets' } })
           }}
         >
           My Tickets

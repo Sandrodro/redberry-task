@@ -5,6 +5,7 @@ import TicketIcon from '@/assets/icons/ticket.svg?react'
 import UserIcon from '@/assets/icons/user.svg?react'
 import type { User } from '@/api/types'
 import { useLogout } from '@/api/queries/auth/useLogout'
+import { usePrefetchTickets } from '@/hooks/usePrefetchTickets'
 import { Avatar } from './Avatar'
 import { DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from './core/DropdownMenu'
 import { Typography } from './core/Typography'
@@ -16,6 +17,7 @@ type ProfileDropdownProps = {
 
 export function ProfileDropdown({ user, initials }: ProfileDropdownProps) {
   const logout = useLogout()
+  const prefetchTickets = usePrefetchTickets()
 
   return (
     <DropdownMenuContent className="flex w-75.5 flex-col gap-1 rounded-2xl bg-background pb-2.5">
@@ -64,9 +66,11 @@ export function ProfileDropdown({ user, initials }: ProfileDropdownProps) {
               <Typography variant="labelM">My Profile</Typography>
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem className="h-10">
-            <TicketIcon className="size-4 shrink-0" />
-            <Typography variant="labelM">My Tickets</Typography>
+          <DropdownMenuItem asChild className="h-10">
+            <Link to="/profile" search={{ tab: 'tickets' }} onMouseEnter={prefetchTickets}>
+              <TicketIcon className="size-4 shrink-0" />
+              <Typography variant="labelM">My Tickets</Typography>
+            </Link>
           </DropdownMenuItem>
         </div>
         <DropdownMenuSeparator />

@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import type { Order } from '@/api/types'
 import { formatShortDate } from '@/utils/formatShortDate'
 import { Button } from '@/components/core/Button'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/core/Tooltip'
 import { Typography } from '@/components/core/Typography'
 
 /** Refunds close this many hours before the session. Only used for the note, `isRefundable` drives the button. */
@@ -21,9 +22,10 @@ function MetaItem({ label, children }: { label: string; children: ReactNode }) {
 type MyTicketsCardProps = {
   order: Order
   onRefund: () => void
+  error?: string
 }
 
-export function MyTicketsCard({ order, onRefund }: MyTicketsCardProps) {
+export function MyTicketsCard({ order, onRefund, error }: MyTicketsCardProps) {
   const { session, tickets } = order
   const { movie } = session
   // `date` and `time` are the venue's local time, so no time zone conversion is needed.
@@ -32,7 +34,7 @@ export function MyTicketsCard({ order, onRefund }: MyTicketsCardProps) {
   const refundUntilTime = refundUntil.toTimeString().slice(0, 5)
 
   return (
-    <article className="flex overflow-hidden rounded-[26px] bg-card">
+    <article className="flex gap-4.5 overflow-hidden rounded-[26px] bg-card">
       <div className="flex flex-1 items-center gap-4.5 px-7.5">
         {movie.posterUrl ? (
           <img
@@ -99,24 +101,39 @@ export function MyTicketsCard({ order, onRefund }: MyTicketsCardProps) {
             </Typography>
             <Typography variant="h1">₾{order.totalPrice}</Typography>
           </div>
-          <Button
-            variant="tertiary"
-            size="sm"
-            onClick={onRefund}
-            disabled={!order.isRefundable}
-            title={
-              order.isRefundable
-                ? undefined
-                : `Refunds close ${REFUND_CUTOFF_HOURS} hours before the session starts`
-            }
-            className="w-full"
-          >
-            Refund
-          </Button>
-          {order.isRefundable && (
-            <Typography variant="bodyS" className="text-center text-muted">
-              Refundable until {refundUntilTime}, {formatShortDate(refundUntil)}
-            </Typography>
+          {order.isUpcoming && (
+            <>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span className="block">
+                    <Button
+                      variant="tertiary"
+                      size="sm"
+                      onClick={onRefund}
+                      disabled={!order.isRefundable}
+                      className="w-full"
+                    >
+                      Refund
+                    </Button>
+                  </span>
+                </TooltipTrigger>
+                {!order.isRefundable && (
+                  <TooltipContent>
+                    Refunds close {REFUND_CUTOFF_HOURS} hours before the session starts
+                  </TooltipContent>
+                )}
+              </Tooltip>
+              {order.isRefundable && (
+                <Typography variant="bodyS" className="text-center text-muted">
+                  Refundable until {refundUntilTime}, {formatShortDate(refundUntil)}
+                </Typography>
+              )}
+              {error && (
+                <Typography variant="bodyS" className="text-center text-brand">
+                  {error}
+                </Typography>
+              )}
+            </>
           )}
         </div>
       </div>
