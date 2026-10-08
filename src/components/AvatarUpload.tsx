@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ChangeEvent } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import UploadIcon from '@/assets/icons/upload.svg?react'
 import { Typography } from './core/Typography'
 
@@ -17,12 +17,6 @@ export function AvatarUpload({ onChange, error }: AvatarUploadProps) {
     },
     [preview],
   )
-
-  function handleChange(e: ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0]
-    setPreview(file && URL.createObjectURL(file))
-    onChange(file)
-  }
 
   return (
     <div className="flex flex-col gap-2">
@@ -56,7 +50,11 @@ export function AvatarUpload({ onChange, error }: AvatarUploadProps) {
         type="file"
         accept="image/jpeg,image/png,image/webp"
         hidden
-        onChange={handleChange}
+        onChange={(e) => {
+          const file = e.target.files?.[0]
+          setPreview(file && URL.createObjectURL(file))
+          onChange(file)
+        }}
       />
       {error && (
         <Typography variant="labelS" className="text-brand">

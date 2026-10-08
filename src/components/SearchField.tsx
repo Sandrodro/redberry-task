@@ -1,5 +1,5 @@
 import { useNavigate } from '@tanstack/react-router'
-import { useRef, useState, type FocusEvent, type FormEvent, type KeyboardEvent } from 'react'
+import { useRef, useState } from 'react'
 import CloseIcon from '@/assets/icons/close.svg?react'
 import SearchIcon from '@/assets/icons/magnifying-glass.svg?react'
 import { SearchDropdown } from './SearchDropdown'
@@ -18,41 +18,28 @@ export function SearchField() {
     setOpen(false)
   }
 
-  function handleBlur(event: FocusEvent<HTMLDivElement>) {
-    if (!event.currentTarget.contains(event.relatedTarget)) close()
-  }
-
-  function handleKeyDown(event: KeyboardEvent<HTMLDivElement>) {
-    if (event.key !== 'Escape') return
-    close()
-    inputRef.current?.blur()
-  }
-
-  function handleSubmit(event: FormEvent) {
-    event.preventDefault()
-    if (!trimmed) return
-    navigate({ to: '/sessions', search: { search: trimmed } })
-    close()
-    inputRef.current?.blur()
-  }
-
-  function clear() {
-    setQuery('')
-    inputRef.current?.focus()
-  }
-
-  function selectMovie() {
-    setQuery('')
-    close()
-  }
-
   return (
     <div
       className="relative flex w-120 flex-col items-end"
-      onBlur={handleBlur}
-      onKeyDown={handleKeyDown}
+      onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) close()
+      }}
+      onKeyDown={(event) => {
+        if (event.key !== 'Escape') return
+        close()
+        inputRef.current?.blur()
+      }}
     >
-      <form onSubmit={handleSubmit} className={expanded ? 'w-120' : 'w-95'}>
+      <form
+        onSubmit={(event) => {
+          event.preventDefault()
+          if (!trimmed) return
+          navigate({ to: '/sessions', search: { search: trimmed } })
+          close()
+          inputRef.current?.blur()
+        }}
+        className={expanded ? 'w-120' : 'w-95'}
+      >
         <label
           className={`flex h-10.25 w-full items-center gap-2 rounded-full border bg-white/10 py-1.5 pr-2 ${
             expanded
@@ -79,7 +66,10 @@ export function SearchField() {
             <button
               type="button"
               aria-label="Clear search"
-              onClick={clear}
+              onClick={() => {
+                setQuery('')
+                inputRef.current?.focus()
+              }}
               className="flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-full bg-white/10"
             >
               <CloseIcon className="size-4" />
@@ -87,7 +77,16 @@ export function SearchField() {
           )}
         </label>
       </form>
-      {open && <SearchDropdown query={trimmed} onSelectMovie={selectMovie} onBrowse={close} />}
+      {open && (
+        <SearchDropdown
+          query={trimmed}
+          onSelectMovie={() => {
+            setQuery('')
+            close()
+          }}
+          onBrowse={close}
+        />
+      )}
     </div>
   )
 }

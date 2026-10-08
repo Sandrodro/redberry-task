@@ -1,12 +1,15 @@
 import type { Session } from '@/api/types'
 import { formatLongDate } from '@/utils/formatDate'
 import { Typography } from '@/components/core/Typography'
-import { formatTimer } from './utils'
 
 type BookingHeaderProps = {
   session: Session
   /** Null until seats are held. */
   secondsLeft: number | null
+}
+
+function formatTimer(seconds: number) {
+  return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`
 }
 
 export function BookingHeader({ session, secondsLeft }: BookingHeaderProps) {

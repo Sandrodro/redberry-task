@@ -14,9 +14,11 @@ const EMAIL_PATTERN = /^\S+@\S+\.\S+$/
 type SignUpModalProps = {
   open: boolean
   onClose: () => void
+  /** Closes this modal and opens the login modal. */
+  onLogIn: () => void
 }
 
-export function SignUpModal({ open, onClose }: SignUpModalProps) {
+export function SignUpModal({ open, onClose, onLogIn }: SignUpModalProps) {
   const register = useRegister()
   const [resetKey, setResetKey] = useState(0)
   const error = register.error instanceof ApiError ? register.error : null
@@ -32,10 +34,14 @@ export function SignUpModal({ open, onClose }: SignUpModalProps) {
     onSubmit: ({ value }) => register.mutate(value, { onSuccess: handleClose }),
   })
 
-  function handleClose() {
+  function reset() {
     form.reset()
     register.reset()
     setResetKey((key) => key + 1)
+  }
+
+  function handleClose() {
+    reset()
     onClose()
   }
 
@@ -136,7 +142,14 @@ export function SignUpModal({ open, onClose }: SignUpModalProps) {
               className="flex items-center justify-center gap-1.25 text-muted"
             >
               Already have an account?
-              <button type="button" className="cursor-pointer text-brand">
+              <button
+                type="button"
+                onClick={() => {
+                  reset()
+                  onLogIn()
+                }}
+                className="cursor-pointer text-brand"
+              >
                 <Typography variant="button">Log in</Typography>
               </button>
             </Typography>

@@ -50,15 +50,6 @@ export function MovieSessions({ movie }: { movie: MovieDetail }) {
   const fade = `transition-opacity ${isPlaceholderData ? 'opacity-60' : ''}`
   const isUnderage = !!user && user.age !== null && user.age < movie.ageRating.minAge
 
-  function prefetchDate(hoveredDate: string) {
-    void queryClient
-      .query({
-        ...movieSessionsQueryOptions(movie.slug, hoveredDate),
-        staleTime: PREFETCH_STALE_MS,
-      })
-      .catch(noop)
-  }
-
   return (
     <section className="flex min-w-0 flex-1 flex-col gap-6.75 pb-6.5">
       <div className="flex flex-col gap-3.5">
@@ -75,7 +66,14 @@ export function MovieSessions({ movie }: { movie: MovieDetail }) {
           size="lg"
           value={date}
           onChange={setSelectedDate}
-          onHover={prefetchDate}
+          onHover={(hoveredDate) => {
+            void queryClient
+              .query({
+                ...movieSessionsQueryOptions(movie.slug, hoveredDate),
+                staleTime: PREFETCH_STALE_MS,
+              })
+              .catch(noop)
+          }}
           availableDates={movie.availableDates}
         />
       </div>

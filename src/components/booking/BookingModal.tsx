@@ -5,7 +5,7 @@ import { useRefreshSessions } from '@/api/queries/sessions/useRefreshSessions'
 import { useReleaseHold } from '@/api/queries/holds/useReleaseHold'
 import { useFilterOptionsData } from '@/api/queries/filter-options/useFilterOptionsData'
 import { useSeatMapData } from '@/api/queries/sessions/useSeatMapData'
-import type { Order, Seat, SeatHold, Session, TicketTypeSlug } from '@/api/types'
+import type { Order, Seat, SeatHold, Session } from '@/api/types'
 import { useAuth } from '@/hooks/useAuth'
 import { useAuthModal } from '@/hooks/useAuthModal'
 import { Modal } from '@/components/core/Modal'
@@ -60,10 +60,6 @@ export function BookingModal({ session, onClose }: BookingModalProps) {
     } else {
       setSelected([...selected, { seat, sectionName, ticketType: 'adult' }])
     }
-  }
-
-  function changeTicketType(seatId: number, ticketType: TicketTypeSlug) {
-    setSelected(selected.map((item) => (item.seat.id === seatId ? { ...item, ticketType } : item)))
   }
 
   /** Seats another buyer took. They show as sold, leave the selection, and the rest of the selection stays. */
@@ -123,7 +119,13 @@ export function BookingModal({ session, onClose }: BookingModalProps) {
               notice={notice}
               isPending={createHold.isPending}
               onToggleSeat={toggleSeat}
-              onChangeType={changeTicketType}
+              onChangeType={(seatId, ticketType) =>
+                setSelected(
+                  selected.map((item) =>
+                    item.seat.id === seatId ? { ...item, ticketType } : item,
+                  ),
+                )
+              }
               onNext={holdSeats}
             />
           ) : (

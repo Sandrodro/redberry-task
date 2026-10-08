@@ -9,12 +9,9 @@ import { SignUpModal } from '@/components/SignUpModal'
 /** Owns the login and sign up modals, so any component can open them. */
 export function AuthModalProvider({ children }: { children: ReactNode }) {
   const queryClient = useQueryClient()
-  const loginModal = useModal()
-  const signUpModal = useModal()
+  const { isOpen: isLoginOpen, open: showLogin, close: closeLogin } = useModal()
+  const { isOpen: isSignUpOpen, open: openSignUp, close: closeSignUp } = useModal()
   const pending = useRef<OpenLoginOptions>(undefined)
-
-  const { open: showLogin } = loginModal
-  const { open: openSignUp } = signUpModal
 
   const openLogin = useCallback(
     (options?: OpenLoginOptions) => {
@@ -25,11 +22,11 @@ export function AuthModalProvider({ children }: { children: ReactNode }) {
   )
   const value = useMemo(() => ({ openLogin, openSignUp }), [openLogin, openSignUp])
 
-  function closeLogin() {
-    loginModal.close()
+  /** Runs the callbacks of the last `openLogin`. Sign up is another way through the same flow, so it resolves them too. */
+  function resolvePending() {
     const options = pending.current
     pending.current = undefined
-    // The login mutation stores the user before it closes the modal.
+    // The login and register mutations store the user before they close their modal.
     if (queryClient.getQueryData(authKeys.me.queryKey)) options?.onSuccess?.()
     else options?.onCancel?.()
   }
@@ -37,8 +34,30 @@ export function AuthModalProvider({ children }: { children: ReactNode }) {
   return (
     <AuthModalContext value={value}>
       {children}
-      <LoginFormModal open={loginModal.isOpen} onClose={closeLogin} />
-      <SignUpModal open={signUpModal.isOpen} onClose={signUpModal.close} />
+      <LoginFormModal
+        open={isLoginOpen}
+        onClose={() => {
+          closeLogin()
+          resolvePending()
+        }}
+        // The callbacks of `openLogin` stay pending until the sign up modal closes.
+        onSignUp={() => {
+          closeLogin()
+          openSignUp()
+        }}
+      />
+      <SignUpModal
+        open={isSignUpOpen}
+        onClose={() => {
+          closeSignUp()
+          resolvePending()
+        }}
+        // `showLogin` and not `openLogin`, so the pending callbacks are kept.
+        onLogIn={() => {
+          closeSignUp()
+          showLogin()
+        }}
+      />
     </AuthModalContext>
   )
 }

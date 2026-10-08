@@ -10,9 +10,11 @@ import { Typography } from './core/Typography'
 type LoginFormModalProps = {
   open: boolean
   onClose: () => void
+  /** Closes this modal and opens the sign up modal. */
+  onSignUp: () => void
 }
 
-export function LoginFormModal({ open, onClose }: LoginFormModalProps) {
+export function LoginFormModal({ open, onClose, onSignUp }: LoginFormModalProps) {
   const login = useLogin()
   const error = login.error instanceof ApiError ? login.error : null
 
@@ -76,7 +78,7 @@ export function LoginFormModal({ open, onClose }: LoginFormModalProps) {
           className="flex items-center justify-center gap-1.25 text-muted"
         >
           Don't have an account?
-          <button type="button" className="cursor-pointer text-brand">
+          <button type="button" onClick={onSignUp} className="cursor-pointer text-brand">
             <Typography variant="button">Sign up</Typography>
           </button>
         </Typography>
