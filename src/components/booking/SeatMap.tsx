@@ -3,6 +3,7 @@ import type { Seat, SeatMap as SeatMapData } from '@/api/types'
 import stripes from '@/assets/icons/seat-held-stripes.svg'
 import { Typography } from '@/components/core/Typography'
 import { SeatButton, type SeatButtonState } from './SeatButton'
+import { getSeatSize } from './utils'
 
 type SeatMapProps = {
   map: SeatMapData
@@ -10,26 +11,6 @@ type SeatMapProps = {
   /** Codes of seats that another buyer took while this user was choosing. They show as sold. */
   lostCodes: string[]
   onToggle: (seat: Seat, sectionName: string) => void
-}
-
-/** Width of the left column in `StepLayout` (`w-180`). */
-const MAP_WIDTH = 720
-const MAX_SEAT_SIZE = 52
-const ROW_GAP = 8
-const ROW_LABEL_WIDTH = 20
-const AISLE_WIDTH = 16
-
-/** One seat size for the whole hall: the largest that fits the widest row, up to the design size. */
-function getSeatSize(map: SeatMapData) {
-  const sizes = map.sections.flatMap((section) =>
-    section.rows.map((row) => {
-      const aisles = row.seats.filter((seat) => seat.aisleAfter).length
-      const items = row.seats.length + aisles + 1
-      const fixedWidth = ROW_LABEL_WIDTH + aisles * AISLE_WIDTH + (items - 1) * ROW_GAP
-      return Math.floor((MAP_WIDTH - fixedWidth) / Math.max(row.seats.length, 1))
-    }),
-  )
-  return Math.min(MAX_SEAT_SIZE, ...sizes)
 }
 
 function LegendItem({ label, children }: { label: string; children: ReactNode }) {

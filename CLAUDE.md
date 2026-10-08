@@ -41,6 +41,7 @@ src/
 - Routes that need a logged in user go in `src/routes/_protected/`. A guest gets the login modal on the same URL and goes home if they close it. To open the modal from code, use `useAuthModal().openLogin({ onSuccess, onCancel })`. `onSuccess` resumes what the user was doing.
 - Form validation is a Zod schema in `src/utils/`, passed to `useForm` as `validators: { onMount, onChange }`. Show a field error only when `field.state.meta.isBlurred` is true.
 - Build UI from reusable components. Check `src/components/core/` and `src/components/` before writing new markup. A component used by one page lives in that page's folder. When a second page needs it, move it up to `src/components/`.
+- Helper functions (formatting, calculations) do not live in component files. A feature folder with such helpers keeps them in a `utils.ts` next to its components (`components/booking/utils.ts`). A helper used by more than one folder goes in `src/utils/`.
 - Use `Typography` for all text. Do not hand-write font size or weight classes.
 - Use theme tokens from `src/index.css` (`bg-background`, `text-muted`, `text-brand`, ...). No hardcoded hex values. Tints use the opacity modifier (`bg-brand/10`).
 - Font is Archivo, loaded with `@fontsource-variable/archivo`.

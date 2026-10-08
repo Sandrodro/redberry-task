@@ -6,13 +6,13 @@ import type {
   TicketTypeSlug,
 } from '@/api/types'
 import { useAuth } from '@/hooks/useAuth'
-import { getTicketPrice, roundPrice } from '@/utils/ticketPrice'
 import { Button } from '@/components/core/Button'
 import { Typography } from '@/components/core/Typography'
 import { SeatMap } from './SeatMap'
 import { SelectedSeatCard } from './SelectedSeatCard'
 import { StepLayout } from './StepLayout'
 import type { SelectedSeat } from './types'
+import { getTicketPrice, roundPrice } from './utils'
 
 type SeatSelectionStepProps = {
   session: Session

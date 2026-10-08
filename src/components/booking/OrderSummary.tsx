@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import type { Session } from '@/api/types'
 import { formatShortDate } from '@/utils/formatDate'
 import { Typography } from '@/components/core/Typography'
+import { formatTickets } from './utils'
 
 type OrderSummaryProps = {
   session: Session
@@ -20,15 +21,6 @@ function Row({ label, children }: { label: string; children: ReactNode }) {
       <Typography variant="labelS">{children}</Typography>
     </div>
   )
-}
-
-/** "2 x Adult, 1 x Child", in the order the types first appear. */
-function formatTickets(seats: OrderSummaryProps['seats']) {
-  const counts = new Map<string, number>()
-  seats.forEach(({ ticketType }) =>
-    counts.set(ticketType.name, (counts.get(ticketType.name) ?? 0) + 1),
-  )
-  return [...counts].map(([name, count]) => `${count} x ${name}`).join(', ')
 }
 
 export function OrderSummary({ session, seats, total, showPoster }: OrderSummaryProps) {
