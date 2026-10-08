@@ -9,7 +9,9 @@ export const Route = createFileRoute('/movies/$slug')({
   // The movie and its first day of sessions are awaited, so the page opens with both loaded.
   // A failed request is left to the page, which shows the error text.
   loader: async ({ context: { queryClient }, params: { slug } }) => {
-    const movie = await queryClient.query({ ...movieQueryOptions(slug), staleTime: 'static' }).catch(() => null)
+    const movie = await queryClient
+      .query({ ...movieQueryOptions(slug), staleTime: 'static' })
+      .catch(() => null)
     if (movie) {
       await queryClient
         .query(movieSessionsQueryOptions(slug, getFirstAvailableDate(movie.availableDates)))

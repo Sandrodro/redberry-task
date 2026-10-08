@@ -2,15 +2,13 @@ import { useState } from 'react'
 import { ApiError } from '@/api/client'
 import { useRefundOrder } from '@/api/queries/tickets/useRefundOrder'
 import { useTicketsData } from '@/api/queries/tickets/useTicketsData'
-import type { Order } from '@/api/types'
+import type { Order, TicketFilter } from '@/api/types'
 import { Spinner } from '@/components/core/Spinner'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/core/Tabs'
 import { TooltipProvider } from '@/components/core/Tooltip'
 import { Typography } from '@/components/core/Typography'
 import { MyTicketsCard } from './MyTicketsCard'
 import { RefundConfirmModal } from './RefundConfirmModal'
-
-type Filter = 'upcoming' | 'past'
 
 export function MyTickets() {
   const upcoming = useTicketsData('upcoming')
@@ -33,7 +31,7 @@ export function MyTickets() {
     })
   }
 
-  function renderList(filter: Filter, query: typeof upcoming) {
+  function renderList(filter: TicketFilter, query: typeof upcoming) {
     if (query.isPending) return <Spinner className="mx-auto mt-10" />
     if (!query.data?.length) {
       return (

@@ -93,7 +93,8 @@ export function BookingModal({ session, onClose }: BookingModalProps) {
         setStep('checkout')
       },
       onError: (error) => {
-        if (!(error instanceof ApiError)) return setNotice('Could not hold the seats. Please try again.')
+        if (!(error instanceof ApiError))
+          return setNotice('Could not hold the seats. Please try again.')
         // A guest gets the login modal, then the hold runs again.
         if (error.status === 401) openLogin({ onSuccess: holdSeats })
         else if (error.status === 409) handleSeatsLost(error.contested ?? [])

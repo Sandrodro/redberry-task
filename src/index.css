@@ -1,8 +1,8 @@
-@import "tailwindcss";
-@import "@fontsource-variable/archivo";
+@import 'tailwindcss';
+@import '@fontsource-variable/archivo';
 
 @theme {
-  --font-sans: "Archivo Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Archivo Variable', ui-sans-serif, system-ui, sans-serif;
 
   --color-background: #070c1c;
   --color-card: #1e2031;

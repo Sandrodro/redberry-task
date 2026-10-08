@@ -10,7 +10,9 @@ export function usePrefetchTickets() {
 
   return () => {
     for (const filter of ['upcoming', 'past'] as const) {
-      void queryClient.query({ ...ticketsQueryOptions(filter), staleTime: PREFETCH_STALE_MS }).catch(noop)
+      void queryClient
+        .query({ ...ticketsQueryOptions(filter), staleTime: PREFETCH_STALE_MS })
+        .catch(noop)
     }
   }
 }

@@ -50,7 +50,10 @@ export function Pagination({ page, lastPage, onChange }: PaginationProps) {
         </PageButton>
         {getPageItems(page, lastPage).map((item, index) =>
           item === 'gap' ? (
-            <span key={`gap-${index}`} className="flex size-10 items-center justify-center text-muted">
+            <span
+              key={`gap-${index}`}
+              className="flex size-10 items-center justify-center text-muted"
+            >
               <Typography variant="labelM" as="span">
                 ...
               </Typography>

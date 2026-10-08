@@ -10,7 +10,8 @@ type SeatButtonProps = {
 }
 
 /** `--seat-size` is set by `SeatMap`, so every seat in a hall has the same size. */
-const base = 'relative flex size-(--seat-size) shrink-0 items-center justify-center overflow-hidden rounded-[10px]'
+const base =
+  'relative flex size-(--seat-size) shrink-0 items-center justify-center overflow-hidden rounded-[10px]'
 
 export function SeatButton({ label, state, onClick }: SeatButtonProps) {
   if (state === 'sold') {

@@ -56,7 +56,8 @@ export function CheckoutStep({
   const { openLogin } = useAuthModal()
   const error = createOrder.error instanceof ApiError ? createOrder.error : null
   // A 422 with `errors` is shown on the fields. Everything else without a booking rule handler is shown here.
-  const formMessage = error && !error.errors && ![401, 409, 422].includes(error.status) ? error.message : null
+  const formMessage =
+    error && !error.errors && ![401, 409, 422].includes(error.status) ? error.message : null
 
   const form = useForm({
     defaultValues: {

@@ -11,7 +11,9 @@ type AvatarProps = {
 
 export function Avatar({ src, initials, dot, className = 'size-10' }: AvatarProps) {
   return (
-    <span className={`relative flex shrink-0 items-center justify-center rounded-lg bg-card ${className}`}>
+    <span
+      className={`relative flex shrink-0 items-center justify-center rounded-lg bg-card ${className}`}
+    >
       {src ? (
         <img src={src} alt="" className="absolute inset-0 size-full rounded-lg object-cover" />
       ) : (

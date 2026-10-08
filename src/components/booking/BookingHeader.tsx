@@ -1,5 +1,5 @@
 import type { Session } from '@/api/types'
-import { formatLongDate } from '@/utils/formatLongDate'
+import { formatLongDate } from '@/utils/formatDate'
 import { Typography } from '@/components/core/Typography'
 
 type BookingHeaderProps = {
@@ -24,7 +24,8 @@ export function BookingHeader({ session, secondsLeft }: BookingHeaderProps) {
           {movie.title}
         </Typography>
         <Typography variant="bodyS" className="text-muted">
-          {venue.name} · Hall {hall.name} · {date} · {session.time} · {format.name} · {language.name}
+          {venue.name} · Hall {hall.name} · {date} · {session.time} · {format.name} ·{' '}
+          {language.name}
         </Typography>
       </div>
       {secondsLeft !== null && (

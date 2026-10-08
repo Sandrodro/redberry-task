@@ -1,5 +1,5 @@
 import { createQueryKeys } from '@lukemorales/query-key-factory'
-import type { SessionsFilters } from './types'
+import type { SessionsFilters, TicketFilter } from './types'
 
 export const authKeys = createQueryKeys('auth', {
   me: null,
@@ -20,14 +20,9 @@ export const moviesKeys = createQueryKeys('movies', {
 
 export const sessionsKeys = createQueryKeys('sessions', {
   list: (filters: SessionsFilters) => [filters],
-  detail: (id: number) => [id],
   seats: (id: number) => [id],
 })
 
-export const holdsKeys = createQueryKeys('holds', {
-  detail: (holdId: string) => [holdId],
-})
-
 export const ticketsKeys = createQueryKeys('tickets', {
-  list: (filter?: 'upcoming' | 'past') => [{ filter }],
+  list: (filter?: TicketFilter) => [{ filter }],
 })

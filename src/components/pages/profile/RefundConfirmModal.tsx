@@ -10,15 +10,20 @@ type RefundConfirmModalProps = {
   onClose: () => void
 }
 
-export function RefundConfirmModal({ order, isPending, onConfirm, onClose }: RefundConfirmModalProps) {
+export function RefundConfirmModal({
+  order,
+  isPending,
+  onConfirm,
+  onClose,
+}: RefundConfirmModalProps) {
   return (
     <Modal open={order !== null} onClose={onClose} className="w-100.75">
       <div className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
           <Typography variant="h2">Refund this order?</Typography>
           <Typography variant="bodyM" className="text-muted">
-            Order #{order?.reference} (₾{order?.totalPrice}) will be refunded and the seats released. This cannot
-            be undone.
+            Order #{order?.reference} (₾{order?.totalPrice}) will be refunded and the seats
+            released. This cannot be undone.
           </Typography>
         </div>
         <div className="flex gap-3">

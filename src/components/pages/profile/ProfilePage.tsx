@@ -26,7 +26,9 @@ export function ProfilePage() {
           <Typography variant="h1">My Profile</Typography>
           <TabsList>
             <TabsTrigger value="personal">Personal Information</TabsTrigger>
-            <TabsTrigger value="tickets" onMouseEnter={prefetchTickets}>My Tickets</TabsTrigger>
+            <TabsTrigger value="tickets" onMouseEnter={prefetchTickets}>
+              My Tickets
+            </TabsTrigger>
           </TabsList>
         </div>
         {/* Kept mounted, so unsaved edits survive a switch to the other tab. */}

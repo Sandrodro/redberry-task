@@ -54,10 +54,7 @@ export function Carousel<T>({
   }, [emblaApi, syncSelectedIndex])
 
   return (
-    <section
-      aria-roledescription="carousel"
-      className={`relative overflow-hidden ${className}`}
-    >
+    <section aria-roledescription="carousel" className={`relative overflow-hidden ${className}`}>
       <div ref={viewportRef} className="h-full overflow-hidden">
         <div className="flex h-full">
           {items.map((item, index) => (

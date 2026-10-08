@@ -25,7 +25,9 @@ export function useSessionsFilters() {
   function toggle(key: ListKey, value: string) {
     update((previous) => {
       const current = parseList(previous[key]) ?? []
-      const next = current.includes(value) ? current.filter((item) => item !== value) : [...current, value]
+      const next = current.includes(value)
+        ? current.filter((item) => item !== value)
+        : [...current, value]
       return { [key]: next.join(',') || undefined }
     })
   }

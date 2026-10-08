@@ -27,7 +27,13 @@ type DateStripProps = {
   availableDates?: string[]
 }
 
-export function DateStrip({ value, onChange, onHover, size = 'sm', availableDates }: DateStripProps) {
+export function DateStrip({
+  value,
+  onChange,
+  onHover,
+  size = 'sm',
+  availableDates,
+}: DateStripProps) {
   const dates = getUpcomingDates(UPCOMING_DAY_COUNT)
   const selected = value ?? dates[0].value
   const style = sizes[size]

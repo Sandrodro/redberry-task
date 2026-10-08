@@ -5,7 +5,10 @@ import { profileSchema } from './profileSchema'
 function isExpiryInFuture(expiry: string, today = new Date()) {
   const [month, year] = expiry.split('/').map(Number)
   const expiryYear = 2000 + year
-  return expiryYear > today.getFullYear() || (expiryYear === today.getFullYear() && month >= today.getMonth() + 1)
+  return (
+    expiryYear > today.getFullYear() ||
+    (expiryYear === today.getFullYear() && month >= today.getMonth() + 1)
+  )
 }
 
 export const checkoutSchema = z.object({

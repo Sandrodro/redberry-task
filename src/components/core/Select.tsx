@@ -2,8 +2,7 @@ import { useId, type ComponentPropsWithoutRef } from 'react'
 import ArrowIcon from '@/assets/icons/arrow.svg?react'
 import { Field, type FieldProps } from './Field'
 
-type SelectProps = Omit<FieldProps, 'id' | 'icon' | 'success'> &
-  ComponentPropsWithoutRef<'select'>
+type SelectProps = Omit<FieldProps, 'id' | 'icon' | 'success'> & ComponentPropsWithoutRef<'select'>
 
 export function Select({ label, error, hint, className, children, ...props }: SelectProps) {
   const id = useId()

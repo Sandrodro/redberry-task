@@ -35,7 +35,10 @@ export function ConfirmationView({ order, onClose }: ConfirmationViewProps) {
       <div className="w-full">
         <OrderSummary
           session={order.session}
-          seats={order.tickets.map((ticket) => ({ code: ticket.seatCode, ticketType: ticket.ticketType }))}
+          seats={order.tickets.map((ticket) => ({
+            code: ticket.seatCode,
+            ticketType: ticket.ticketType,
+          }))}
           total={{ label: 'Total paid', value: order.totalPrice }}
           showPoster
         />

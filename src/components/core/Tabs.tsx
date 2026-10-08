@@ -42,7 +42,10 @@ export function TabsTrigger({
         <>
           <Typography variant="labelM">{children}</Typography>
           {count !== undefined && (
-            <Typography variant="labelS" className="text-subtle group-data-[state=active]:text-white">
+            <Typography
+              variant="labelS"
+              className="text-subtle group-data-[state=active]:text-white"
+            >
               {count}
             </Typography>
           )}

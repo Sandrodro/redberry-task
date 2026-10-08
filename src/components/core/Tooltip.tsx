@@ -10,12 +10,21 @@ export function TooltipProvider(props: ComponentProps<typeof TooltipPrimitive.Pr
 export const Tooltip = TooltipPrimitive.Root
 export const TooltipTrigger = TooltipPrimitive.Trigger
 
-export function TooltipContent({ className, children, ...props }: ComponentProps<typeof TooltipPrimitive.Content>) {
-  const base = 'z-50 max-w-70 rounded-lg bg-elevated px-3 py-1.5 text-white shadow-[0_2px_8px_var(--shadow)]'
+export function TooltipContent({
+  className,
+  children,
+  ...props
+}: ComponentProps<typeof TooltipPrimitive.Content>) {
+  const base =
+    'z-50 max-w-70 rounded-lg bg-elevated px-3 py-1.5 text-white shadow-[0_2px_8px_var(--shadow)]'
 
   return (
     <TooltipPrimitive.Portal>
-      <TooltipPrimitive.Content sideOffset={6} className={className ? `${base} ${className}` : base} {...props}>
+      <TooltipPrimitive.Content
+        sideOffset={6}
+        className={className ? `${base} ${className}` : base}
+        {...props}
+      >
         <Typography variant="bodyS">{children}</Typography>
       </TooltipPrimitive.Content>
     </TooltipPrimitive.Portal>

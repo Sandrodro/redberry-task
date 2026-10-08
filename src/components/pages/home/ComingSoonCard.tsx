@@ -1,5 +1,5 @@
 import type { Movie } from '@/api/types'
-import { formatDayMonth } from '@/utils/formatDayMonth'
+import { formatDayMonth } from '@/utils/formatDate'
 import { formatMovieDetails } from '@/utils/formatMovieDetails'
 import { Badge } from '@/components/core/Badge'
 import { Typography } from '@/components/core/Typography'

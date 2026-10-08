@@ -8,7 +8,10 @@ export function DropdownMenu(props: ComponentProps<typeof DropdownMenuPrimitive.
 
 export const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger
 
-export function DropdownMenuContent({ className, ...props }: ComponentProps<typeof DropdownMenuPrimitive.Content>) {
+export function DropdownMenuContent({
+  className,
+  ...props
+}: ComponentProps<typeof DropdownMenuPrimitive.Content>) {
   const base = 'z-10 outline-none'
 
   return (
@@ -23,11 +26,16 @@ export function DropdownMenuContent({ className, ...props }: ComponentProps<type
   )
 }
 
-export function DropdownMenuItem({ className, ...props }: ComponentProps<typeof DropdownMenuPrimitive.Item>) {
+export function DropdownMenuItem({
+  className,
+  ...props
+}: ComponentProps<typeof DropdownMenuPrimitive.Item>) {
   const base =
     'flex w-full cursor-pointer items-center gap-2 rounded-[10px] py-2.5 pl-5 text-left outline-none data-highlighted:bg-white/10'
 
-  return <DropdownMenuPrimitive.Item className={className ? `${base} ${className}` : base} {...props} />
+  return (
+    <DropdownMenuPrimitive.Item className={className ? `${base} ${className}` : base} {...props} />
+  )
 }
 
 export function DropdownMenuSeparator() {

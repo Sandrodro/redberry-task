@@ -8,7 +8,8 @@ export function useCreateHold(sessionId: number) {
   const refreshSessions = useRefreshSessions()
   return useMutation({
     mutationFn: async (seats: HoldSeatInput[]) =>
-      (await api.post<{ data: SeatHold }>(`${Endpoint.Sessions}/${sessionId}/holds`, { seats })).data,
+      (await api.post<{ data: SeatHold }>(`${Endpoint.Sessions}/${sessionId}/holds`, { seats }))
+        .data,
     onSuccess: refreshSessions,
     onError: (error) => {
       if (error instanceof ApiError && error.status === 409) refreshSessions()

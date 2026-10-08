@@ -1,6 +1,6 @@
 import { Fragment } from 'react'
 import { useSessionsData } from '@/api/queries/sessions/useSessionsData'
-import { useSessionsFilters } from '@/hooks/useSessionsFilters'
+import { useSessionsFilters } from './useSessionsFilters'
 import { Button } from '@/components/core/Button'
 import { Pagination } from '@/components/core/Pagination'
 import { Spinner } from '@/components/core/Spinner'
@@ -31,7 +31,9 @@ export function SessionsPage() {
         <section className="flex min-w-0 flex-1 flex-col gap-13">
           <div className="flex flex-col gap-6">
             <div className="flex items-center justify-between">
-              {data && <Typography variant="labelS">{formatCount(data.meta.totalSessions)}</Typography>}
+              {data && (
+                <Typography variant="labelS">{formatCount(data.meta.totalSessions)}</Typography>
+              )}
               <SortSelect />
             </div>
             {isPending && (
@@ -61,7 +63,11 @@ export function SessionsPage() {
             </div>
           </div>
           {data && (
-            <Pagination page={data.meta.currentPage} lastPage={data.meta.lastPage} onChange={setPage} />
+            <Pagination
+              page={data.meta.currentPage}
+              lastPage={data.meta.lastPage}
+              onChange={setPage}
+            />
           )}
         </section>
       </div>

@@ -8,7 +8,14 @@ type ButtonLinkProps = ButtonStyleProps & {
   children: ReactNode
 } & Omit<LinkComponentProps<'a'>, 'children'>
 
-export function ButtonLink({ variant, size, icon, className, children, ...props }: ButtonLinkProps) {
+export function ButtonLink({
+  variant,
+  size,
+  icon,
+  className,
+  children,
+  ...props
+}: ButtonLinkProps) {
   const base = `${buttonStyles({ variant, size })} gap-1`
 
   return (

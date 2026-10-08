@@ -103,9 +103,7 @@ export function PersonalInformationForm({ user }: { user: User }) {
               <Select
                 label="Preferred Venue (Optional)"
                 value={field.state.value ?? ''}
-                onChange={(e) =>
-                  field.handleChange(e.target.value ? Number(e.target.value) : null)
-                }
+                onChange={(e) => field.handleChange(e.target.value ? Number(e.target.value) : null)}
                 onBlur={field.handleBlur}
                 error={error?.errors?.preferredVenueId?.[0]}
               >

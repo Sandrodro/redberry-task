@@ -8,9 +8,17 @@ import { SessionCard } from './SessionCard'
 export function MovieSessionsRow({ movie, sessions }: MovieSessions) {
   return (
     <article className="flex flex-col gap-3.5">
-      <Link to="/movies/$slug" params={{ slug: movie.slug }} className="flex items-center gap-4 self-start">
+      <Link
+        to="/movies/$slug"
+        params={{ slug: movie.slug }}
+        className="flex items-center gap-4 self-start"
+      >
         {movie.posterUrl ? (
-          <img src={movie.posterUrl} alt="" className="h-20 w-14 shrink-0 rounded-lg object-cover" />
+          <img
+            src={movie.posterUrl}
+            alt=""
+            className="h-20 w-14 shrink-0 rounded-lg object-cover"
+          />
         ) : (
           <div className="h-20 w-14 shrink-0 rounded-lg bg-elevated" />
         )}

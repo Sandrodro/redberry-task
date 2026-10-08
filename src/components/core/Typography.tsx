@@ -28,5 +28,10 @@ export function Typography({ variant, as, className, ...props }: TypographyProps
   const { tag, className: variantClassName } = variants[variant]
   const Component = as ?? tag
 
-  return <Component className={className ? `${variantClassName} ${className}` : variantClassName} {...props} />
+  return (
+    <Component
+      className={className ? `${variantClassName} ${className}` : variantClassName}
+      {...props}
+    />
+  )
 }

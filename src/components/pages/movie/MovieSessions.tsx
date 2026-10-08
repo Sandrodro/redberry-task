@@ -1,9 +1,12 @@
 import { noop, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
-import { movieSessionsQueryOptions, useMovieSessionsData } from '@/api/queries/movies/useMovieSessionsData'
+import {
+  movieSessionsQueryOptions,
+  useMovieSessionsData,
+} from '@/api/queries/movies/useMovieSessionsData'
 import type { MovieDetail, Session } from '@/api/types'
 import { useAuth } from '@/hooks/useAuth'
-import { formatDayMonth } from '@/utils/formatDayMonth'
+import { formatDayMonth } from '@/utils/formatDate'
 import { getFirstAvailableDate } from '@/utils/getUpcomingDates'
 import { Spinner } from '@/components/core/Spinner'
 import { Typography } from '@/components/core/Typography'
@@ -18,7 +21,11 @@ const PREFETCH_STALE_MS = 30_000
 function groupByHall(sessions: Session[]) {
   const halls = new Map<number, { id: number; name: string; sessions: Session[] }>()
   for (const session of sessions) {
-    const hall = halls.get(session.hall.id) ?? { id: session.hall.id, name: session.hall.name, sessions: [] }
+    const hall = halls.get(session.hall.id) ?? {
+      id: session.hall.id,
+      name: session.hall.name,
+      sessions: [],
+    }
     hall.sessions.push(session)
     halls.set(hall.id, hall)
   }
@@ -30,7 +37,12 @@ export function MovieSessions({ movie }: { movie: MovieDetail }) {
   const queryClient = useQueryClient()
   const [selectedDate, setSelectedDate] = useState<string>()
   const date = selectedDate ?? getFirstAvailableDate(movie.availableDates)
-  const { data: venues, isPending, isError, isPlaceholderData } = useMovieSessionsData(movie.slug, date)
+  const {
+    data: venues,
+    isPending,
+    isError,
+    isPlaceholderData,
+  } = useMovieSessionsData(movie.slug, date)
 
   const sessionCount = venues?.reduce((total, venue) => total + venue.sessions.length, 0) ?? 0
   // While a new date loads, the previous sessions stay on screen, so the text names their date.
@@ -40,7 +52,10 @@ export function MovieSessions({ movie }: { movie: MovieDetail }) {
 
   function prefetchDate(hoveredDate: string) {
     void queryClient
-      .query({ ...movieSessionsQueryOptions(movie.slug, hoveredDate), staleTime: PREFETCH_STALE_MS })
+      .query({
+        ...movieSessionsQueryOptions(movie.slug, hoveredDate),
+        staleTime: PREFETCH_STALE_MS,
+      })
       .catch(noop)
   }
 
@@ -51,7 +66,8 @@ export function MovieSessions({ movie }: { movie: MovieDetail }) {
           <Typography variant="h2">Sessions</Typography>
           {sessionCount > 0 && (
             <Typography variant="bodyS" className={`text-muted ${fade}`}>
-              {sessionCount} {sessionCount === 1 ? 'session' : 'sessions'} on {formatDayMonth(shownDate)}
+              {sessionCount} {sessionCount === 1 ? 'session' : 'sessions'} on{' '}
+              {formatDayMonth(shownDate)}
             </Typography>
           )}
         </div>
@@ -66,7 +82,8 @@ export function MovieSessions({ movie }: { movie: MovieDetail }) {
       {isUnderage && (
         <WarningNote>
           <Typography variant="bodyS">
-            This film is rated {movie.ageRating.code}. You cannot buy tickets for it with this account.
+            This film is rated {movie.ageRating.code}. You cannot buy tickets for it with this
+            account.
           </Typography>
         </WarningNote>
       )}
@@ -92,7 +109,10 @@ export function MovieSessions({ movie }: { movie: MovieDetail }) {
               <Typography variant="button">{venue.name}</Typography>
               <div className="flex flex-wrap gap-2.5">
                 {groupByHall(sessions).map((hall) => (
-                  <div key={hall.id} className="flex flex-col gap-2.25 rounded-[18px] bg-card p-3.75">
+                  <div
+                    key={hall.id}
+                    className="flex flex-col gap-2.25 rounded-[18px] bg-card p-3.75"
+                  >
                     <Typography variant="labelS">Hall {hall.name}</Typography>
                     <div className="flex flex-wrap gap-2.25">
                       {hall.sessions.map((session) => (

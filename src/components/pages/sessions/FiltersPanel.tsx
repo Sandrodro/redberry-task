@@ -1,5 +1,5 @@
 import { useFilterOptionsData } from '@/api/queries/filter-options/useFilterOptionsData'
-import { useSessionsFilters } from '@/hooks/useSessionsFilters'
+import { useSessionsFilters } from './useSessionsFilters'
 import { getAvailableFormats } from '@/utils/sessionsSearchSchema'
 import { DateStrip } from '@/components/DateStrip'
 import { Typography } from '@/components/core/Typography'
@@ -24,7 +24,11 @@ export function FiltersPanel() {
       </Typography>
       <CheckboxFilter
         title="Venue"
-        options={options.venues.map((venue) => ({ value: venue.slug, label: venue.name, hint: venue.city }))}
+        options={options.venues.map((venue) => ({
+          value: venue.slug,
+          label: venue.name,
+          hint: venue.city,
+        }))}
         selected={filters.venues}
         onToggle={(value) => toggle('venue', value)}
       />
@@ -48,14 +52,20 @@ export function FiltersPanel() {
       <hr className="h-px border-0 bg-elevated" />
       <CheckboxFilter
         title="Language"
-        options={options.languages.map((language) => ({ value: language.slug, label: language.name }))}
+        options={options.languages.map((language) => ({
+          value: language.slug,
+          label: language.name,
+        }))}
         selected={filters.languages}
         onToggle={(value) => toggle('language', value)}
       />
       <hr className="h-px border-0 bg-elevated" />
       <CheckboxFilter
         title="Time of day"
-        options={options.timeBands.map((band) => ({ value: band.id, ...splitTimeBandLabel(band.label) }))}
+        options={options.timeBands.map((band) => ({
+          value: band.id,
+          ...splitTimeBandLabel(band.label),
+        }))}
         selected={filters.bands}
         onToggle={(value) => toggle('band', value)}
       />

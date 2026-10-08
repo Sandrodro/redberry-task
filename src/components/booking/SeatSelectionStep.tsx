@@ -1,4 +1,10 @@
-import type { FilterOptions, Seat, SeatMap as SeatMapData, Session, TicketTypeSlug } from '@/api/types'
+import type {
+  FilterOptions,
+  Seat,
+  SeatMap as SeatMapData,
+  Session,
+  TicketTypeSlug,
+} from '@/api/types'
 import { useAuth } from '@/hooks/useAuth'
 import { getTicketPrice, roundPrice } from '@/utils/ticketPrice'
 import { Button } from '@/components/core/Button'
@@ -49,7 +55,9 @@ export function SeatSelectionStep({
     return getTicketPrice(session.price, type?.priceRatio ?? 1)
   })
   const subtotal = roundPrice(prices.reduce((sum, price) => sum + price, 0))
-  const message = tooYoung ? `You must be at least ${minAge} years old to book ${ageCode} titles.` : notice
+  const message = tooYoung
+    ? `You must be at least ${minAge} years old to book ${ageCode} titles.`
+    : notice
 
   return (
     <StepLayout
@@ -76,12 +84,14 @@ export function SeatSelectionStep({
       }
       aside={
         <>
-          <Typography variant="button">Your seats · Max {filterOptions.maxSeatsPerOrder}</Typography>
+          <Typography variant="button">
+            Your seats · Max {filterOptions.maxSeatsPerOrder}
+          </Typography>
           <div className="flex max-h-87.75 flex-col gap-3 overflow-y-auto">
             {selected.length === 0 ? (
               <Typography variant="bodyS" className="text-muted">
-                Pick up to {filterOptions.maxSeatsPerOrder} seats from the map. Each seat can carry its own
-                ticket type.
+                Pick up to {filterOptions.maxSeatsPerOrder} seats from the map. Each seat can carry
+                its own ticket type.
               </Typography>
             ) : (
               selected.map((item, index) => (

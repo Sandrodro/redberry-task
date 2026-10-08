@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import type { MovieDetail } from '@/api/types'
-import { formatFullDate } from '@/utils/formatFullDate'
+import { formatFullDate } from '@/utils/formatDate'
 import { Typography } from '@/components/core/Typography'
 import { WarningNote } from './WarningNote'
 

@@ -20,6 +20,7 @@ export const sessionsSearchSchema = z.object({
   format: text,
   language: text,
   band: text,
+  search: z.coerce.string().max(100).optional().catch(undefined),
   sort: text,
   page: z.number().int().positive().optional().catch(undefined),
 })
@@ -45,7 +46,10 @@ export function getAvailableFormats(options: FilterOptions, venueSlugs: string[]
 
 /** The shape `/sessions` expects: lists are arrays, and every value is one the API knows. */
 export function toSessionsFilters(search: SessionsSearch, options: FilterOptions): SessionsFilters {
-  const venues = keepKnown(search.venue, options.venues.map((venue) => venue.slug))
+  const venues = keepKnown(
+    search.venue,
+    options.venues.map((venue) => venue.slug),
+  )
   return {
     date: search.date,
     venues,
@@ -53,8 +57,15 @@ export function toSessionsFilters(search: SessionsSearch, options: FilterOptions
       search.format,
       getAvailableFormats(options, venues).map((format) => format.slug),
     ),
-    languages: keepKnown(search.language, options.languages.map((language) => language.slug)),
-    bands: keepKnown(search.band, options.timeBands.map((band) => band.id)) as TimeBand[] | undefined,
+    languages: keepKnown(
+      search.language,
+      options.languages.map((language) => language.slug),
+    ),
+    bands: keepKnown(
+      search.band,
+      options.timeBands.map((band) => band.id),
+    ) as TimeBand[] | undefined,
+    search: search.search,
     sort: options.sorts.find((sort) => sort.id === search.sort)?.id,
     page: search.page,
   }

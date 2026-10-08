@@ -18,7 +18,14 @@ type BadgeProps = {
   icon?: ReactNode
 } & ComponentPropsWithoutRef<'span'>
 
-export function Badge({ tone = 'neutral', size = 'md', icon, className, children, ...props }: BadgeProps) {
+export function Badge({
+  tone = 'neutral',
+  size = 'md',
+  icon,
+  className,
+  children,
+  ...props
+}: BadgeProps) {
   const base = `flex items-center gap-1 rounded-full ${sizes[size]} ${tones[tone]}`
 
   return (

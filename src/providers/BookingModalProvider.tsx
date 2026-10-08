@@ -8,7 +8,7 @@ import { BookingModalContext } from '@/hooks/useBookingModal'
 
 // Loaded on first open: the seat map and checkout are not needed until a session is picked.
 const BookingModal = lazy(() =>
-  import('@/components/pages/sessions/booking/BookingModal').then((module) => ({
+  import('@/components/booking/BookingModal').then((module) => ({
     default: module.BookingModal,
   })),
 )
