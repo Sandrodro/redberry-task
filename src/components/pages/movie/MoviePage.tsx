@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import { useMovieData } from '@/api/queries/movies/useMovieData'
 import { ErrorState } from '@/components/core/ErrorState'
 import { Spinner } from '@/components/core/Spinner'
+import { TooltipProvider } from '@/components/core/Tooltip'
 import { addRecentlyViewed } from '@/utils/recentlyViewed'
 import { MovieDetails } from './MovieDetails'
 import { MovieHero } from './MovieHero'
@@ -37,12 +38,14 @@ export function MoviePage() {
   }
 
   return (
-    <div className="flex flex-col gap-8.5 pb-16">
-      <MovieHero movie={movie} />
-      <div className="flex gap-2.5 px-12.75">
-        <MovieSessions movie={movie} />
-        <MovieDetails movie={movie} />
+    <TooltipProvider>
+      <div className="flex flex-col gap-8.5 pb-16">
+        <MovieHero movie={movie} />
+        <div className="flex gap-2.5 px-12.75">
+          <MovieSessions movie={movie} />
+          <MovieDetails movie={movie} />
+        </div>
       </div>
-    </div>
+    </TooltipProvider>
   )
 }

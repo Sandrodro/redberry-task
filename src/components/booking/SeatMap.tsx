@@ -36,6 +36,9 @@ function Legend() {
       <LegendItem label="Sold">
         <span className="size-4 rounded-[5px] bg-card" />
       </LegendItem>
+      <LegendItem label="Unavailable">
+        <span className="size-4 rounded-[5px] border border-dashed border-subtle" />
+      </LegendItem>
       <LegendItem label="Held by another user">
         <span className="relative flex size-4 items-center justify-center overflow-hidden rounded-[5px] bg-card">
           <img
@@ -55,7 +58,7 @@ export function SeatMap({ map, selectedIds, lostCodes, onToggle }: SeatMapProps)
     if (selectedIds.includes(seat.id)) return 'selected'
     // The user's own live hold is not blocked, it stays pickable.
     if (seat.isMine) return 'available'
-    return seat.state === 'unavailable' ? 'sold' : seat.state
+    return seat.state
   }
 
   return (
@@ -78,15 +81,11 @@ export function SeatMap({ map, selectedIds, lostCodes, onToggle }: SeatMapProps)
               </span>
               {row.seats.map((seat) => (
                 <Fragment key={seat.id}>
-                  {seat.state === 'unavailable' ? (
-                    <span className="size-(--seat-size) shrink-0" />
-                  ) : (
-                    <SeatButton
-                      label={seat.label}
-                      state={getState(seat)}
-                      onClick={() => onToggle(seat, section.name)}
-                    />
-                  )}
+                  <SeatButton
+                    label={seat.label}
+                    state={getState(seat)}
+                    onClick={() => onToggle(seat, section.name)}
+                  />
                   {seat.aisleAfter && <span className="h-8 w-4 shrink-0" />}
                 </Fragment>
               ))}

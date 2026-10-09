@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import type { MovieDetail } from '@/api/types'
 import { formatFullDate } from '@/utils/formatDate'
 import { Typography } from '@/components/core/Typography'
-import { WarningNote } from './WarningNote'
+import { WarningNote } from '@/components/WarningNote'
 
 function DetailRow({ label, children }: { label: string; children: ReactNode }) {
   return (

@@ -1,12 +1,13 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ApiError } from '@/api/client'
 import { useCreateHold } from '@/api/queries/holds/useCreateHold'
 import { useRefreshSessions } from '@/api/queries/sessions/useRefreshSessions'
-import { useReleaseHold } from '@/api/queries/holds/useReleaseHold'
+import { useHoldData } from '@/api/queries/holds/useHoldData'
 import { useFilterOptionsData } from '@/api/queries/filter-options/useFilterOptionsData'
 import { useSeatMapData } from '@/api/queries/sessions/useSeatMapData'
 import type { Order, Seat, SeatHold, Session } from '@/api/types'
 import { useAuth } from '@/hooks/useAuth'
+import { storage } from '@/utils/storage'
 import { ErrorState } from '@/components/core/ErrorState'
 import { Modal } from '@/components/core/Modal'
 import { Spinner } from '@/components/core/Spinner'
@@ -17,6 +18,7 @@ import { SeatSelectionStep } from './SeatSelectionStep'
 import type { BookingStep } from './StepIndicator'
 import type { SelectedSeat } from './types'
 import { useHoldCountdown } from './useHoldCountdown'
+import { getHoldStorageKey, getSelectedSeats } from './utils'
 
 const HOLD_EXPIRED_MESSAGE = 'Your hold time expired. Please re-select your seats.'
 
@@ -36,7 +38,6 @@ export function BookingModal({ session, onClose }: BookingModalProps) {
   } = useFilterOptionsData()
   const seatMap = useSeatMapData(session.id)
   const createHold = useCreateHold(session.id)
-  const releaseHold = useReleaseHold()
   const refreshSessions = useRefreshSessions()
 
   const [step, setStep] = useState<BookingStep>('seats')
@@ -46,13 +47,34 @@ export function BookingModal({ session, onClose }: BookingModalProps) {
   const [notice, setNotice] = useState<string | null>(null)
   const [lostCodes, setLostCodes] = useState<string[]>([])
 
-  const secondsLeft = useHoldCountdown(order ? null : (hold?.expiresAt ?? null), handleHoldExpired)
+  // A hold from an earlier opening or a page reload. It is read once, when the modal opens.
+  const holdKey = getHoldStorageKey(session.id)
+  const [savedHoldId] = useState(() => storage.get(holdKey))
+  const savedHold = useHoldData(savedHoldId)
+  const [isResumed, setIsResumed] = useState(!savedHoldId)
+  const isResuming = !isResumed && !seatMap.isError
 
-  function handleClose() {
-    // A paid hold became an order. Any other live hold goes back on the map right away.
-    if (hold && !order) releaseHold.mutate(hold.holdId)
-    onClose()
+  const isSavedHoldLive = savedHold.data?.isLive === true && savedHold.data.sessionId === session.id
+  const isSavedHoldStale = savedHold.isError || (!!savedHold.data && !isSavedHoldLive)
+
+  // Needs the seat map to find the seats. Set once, during render, so the seat step never flashes before checkout.
+  if (!isResumed && !savedHold.isPending && seatMap.data) {
+    setIsResumed(true)
+    if (savedHold.data && isSavedHoldLive) {
+      setHold(savedHold.data)
+      setSelected(getSelectedSeats(seatMap.data, savedHold.data.seats))
+      setStep('checkout')
+    } else if (savedHold.data && !savedHold.data.isLive) {
+      setNotice(HOLD_EXPIRED_MESSAGE)
+    }
   }
+
+  // An expired or unknown hold is forgotten.
+  useEffect(() => {
+    if (isSavedHoldStale) storage.remove(holdKey)
+  }, [isSavedHoldStale, holdKey])
+
+  const secondsLeft = useHoldCountdown(order ? null : (hold?.expiresAt ?? null), handleHoldExpired)
 
   function toggleSeat(seat: Seat, sectionName: string) {
     if (!filterOptions) return
@@ -71,12 +93,14 @@ export function BookingModal({ session, onClose }: BookingModalProps) {
     setLostCodes((current) => [...new Set([...current, ...codes])])
     setSelected((current) => current.filter((item) => !codes.includes(item.seat.code)))
     setHold(null)
+    storage.remove(holdKey)
     setStep('seats')
     setNotice(`Seats ${codes.join(', ')} were just taken. Your other seats are still selected.`)
   }
 
   function handleHoldExpired() {
     setHold(null)
+    storage.remove(holdKey)
     setSelected([])
     setLostCodes([])
     setStep('seats')
@@ -90,6 +114,7 @@ export function BookingModal({ session, onClose }: BookingModalProps) {
     createHold.mutate(seats, {
       onSuccess: (data) => {
         setHold(data)
+        storage.set(holdKey, data.holdId)
         setStep('checkout')
       },
       onError: (error) => {
@@ -102,16 +127,16 @@ export function BookingModal({ session, onClose }: BookingModalProps) {
   }
 
   return (
-    <Modal open onClose={handleClose} className={`w-286.5 ${order ? '' : 'min-h-165'}`}>
+    <Modal open onClose={onClose} className={`w-286.5 ${order ? '' : 'min-h-165'}`}>
       {order ? (
-        <ConfirmationView order={order} onClose={handleClose} />
+        <ConfirmationView order={order} onClose={onClose} />
       ) : isFilterOptionsError && !filterOptions ? (
         <ErrorState
           message="Could not load the booking options."
           onRetry={() => refetchFilterOptions()}
           isRetrying={isFetchingFilterOptions}
         />
-      ) : !filterOptions || !user || seatMap.isPending ? (
+      ) : !filterOptions || !user || seatMap.isPending || isResuming ? (
         <Spinner className="absolute inset-0 m-auto" />
       ) : (
         <div className="flex flex-col gap-8">
@@ -143,7 +168,10 @@ export function BookingModal({ session, onClose }: BookingModalProps) {
               hold={hold}
               user={user}
               onBackToSeats={() => setStep('seats')}
-              onPaid={setOrder}
+              onPaid={(paid) => {
+                storage.remove(holdKey)
+                setOrder(paid)
+              }}
               onHoldExpired={handleHoldExpired}
               onSeatsLost={handleSeatsLost}
             />

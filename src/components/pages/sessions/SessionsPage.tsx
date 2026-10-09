@@ -6,6 +6,7 @@ import { EmptyState } from '@/components/core/EmptyState'
 import { ErrorState } from '@/components/core/ErrorState'
 import { Pagination } from '@/components/core/Pagination'
 import { Skeleton } from '@/components/core/Skeleton'
+import { TooltipProvider } from '@/components/core/Tooltip'
 import { Typography } from '@/components/core/Typography'
 import { FiltersPanel } from './FiltersPanel'
 import { MovieSessionsRow } from './MovieSessionsRow'
@@ -36,66 +37,68 @@ export function SessionsPage() {
   }, [filtersKey])
 
   return (
-    <div className="flex flex-col gap-9 px-12.75 pb-16 pt-1.5">
-      <div className="flex flex-col gap-1.5">
-        <Typography variant="h1">Sessions</Typography>
-        <Typography variant="bodyM" className="text-muted">
-          Browse showtimes across all venues
-        </Typography>
-      </div>
-      <div className="flex items-start gap-12.75">
-        <FiltersPanel />
-        <section ref={sectionRef} className="flex min-w-0 flex-1 scroll-mt-6 flex-col gap-13">
-          <div className="flex flex-col gap-6">
-            <div className="flex items-center justify-between">
-              {data && (
-                <Typography variant="labelS">{formatCount(data.meta.totalSessions)}</Typography>
+    <TooltipProvider>
+      <div className="flex flex-col gap-9 px-12.75 pb-16 pt-1.5">
+        <div className="flex flex-col gap-1.5">
+          <Typography variant="h1">Sessions</Typography>
+          <Typography variant="bodyM" className="text-muted">
+            Browse showtimes across all venues
+          </Typography>
+        </div>
+        <div className="flex items-start gap-12.75">
+          <FiltersPanel />
+          <section ref={sectionRef} className="flex min-w-0 flex-1 scroll-mt-6 flex-col gap-13">
+            <div className="flex flex-col gap-6">
+              <div className="flex items-center justify-between">
+                {data && (
+                  <Typography variant="labelS">{formatCount(data.meta.totalSessions)}</Typography>
+                )}
+                {isPending && <Skeleton className="h-3 w-32" />}
+                {/* Keeps the sort on the right when there is no count. */}
+                {isLoadingError && <span />}
+                <SortSelect />
+              </div>
+              {isPending && <SessionsSkeleton />}
+              {isLoadingError && (
+                <ErrorState
+                  message="Could not load sessions."
+                  onRetry={() => refetch()}
+                  isRetrying={isFetching}
+                />
               )}
-              {isPending && <Skeleton className="h-3 w-32" />}
-              {/* Keeps the sort on the right when there is no count. */}
-              {isLoadingError && <span />}
-              <SortSelect />
+              {data && !isPlaceholderData && data.data.length === 0 && (
+                <EmptyState
+                  title="No sessions found"
+                  description="Try another date or different filters."
+                >
+                  {activeCount > 0 && (
+                    <Button variant="tertiary" size="sm" onClick={clear}>
+                      Clear filters
+                    </Button>
+                  )}
+                </EmptyState>
+              )}
+              <div
+                className={`flex flex-col gap-8 transition-opacity ${isPlaceholderData ? 'opacity-60' : ''}`}
+              >
+                {data?.data.map((group, index) => (
+                  <Fragment key={group.movie.id}>
+                    {index > 0 && <hr className="h-px border-0 bg-elevated" />}
+                    <MovieSessionsRow {...group} />
+                  </Fragment>
+                ))}
+              </div>
             </div>
-            {isPending && <SessionsSkeleton />}
-            {isLoadingError && (
-              <ErrorState
-                message="Could not load sessions."
-                onRetry={() => refetch()}
-                isRetrying={isFetching}
+            {data && (
+              <Pagination
+                page={data.meta.currentPage}
+                lastPage={data.meta.lastPage}
+                onChange={setPage}
               />
             )}
-            {data && !isPlaceholderData && data.data.length === 0 && (
-              <EmptyState
-                title="No sessions found"
-                description="Try another date or different filters."
-              >
-                {activeCount > 0 && (
-                  <Button variant="tertiary" size="sm" onClick={clear}>
-                    Clear filters
-                  </Button>
-                )}
-              </EmptyState>
-            )}
-            <div
-              className={`flex flex-col gap-8 transition-opacity ${isPlaceholderData ? 'opacity-60' : ''}`}
-            >
-              {data?.data.map((group, index) => (
-                <Fragment key={group.movie.id}>
-                  {index > 0 && <hr className="h-px border-0 bg-elevated" />}
-                  <MovieSessionsRow {...group} />
-                </Fragment>
-              ))}
-            </div>
-          </div>
-          {data && (
-            <Pagination
-              page={data.meta.currentPage}
-              lastPage={data.meta.lastPage}
-              onChange={setPage}
-            />
-          )}
-        </section>
+          </section>
+        </div>
       </div>
-    </div>
+    </TooltipProvider>
   )
 }

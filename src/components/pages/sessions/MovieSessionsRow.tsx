@@ -3,9 +3,13 @@ import type { MovieSessions } from '@/api/types'
 import { Badge } from '@/components/core/Badge'
 import { Slider } from '@/components/core/Slider'
 import { Typography } from '@/components/core/Typography'
+import { UnderageNote } from '@/components/UnderageNote'
+import { useIsUnderage } from '@/hooks/useIsUnderage'
 import { SessionCard } from './SessionCard'
 
 export function MovieSessionsRow({ movie, sessions }: MovieSessions) {
+  const isUnderage = useIsUnderage(movie.ageRating)
+
   return (
     <article className="flex flex-col gap-3.5">
       <Link
@@ -36,10 +40,13 @@ export function MovieSessionsRow({ movie, sessions }: MovieSessions) {
           </Typography>
         </div>
       </Link>
+      {isUnderage && <UnderageNote ageRating={movie.ageRating} />}
       <Slider
         items={sessions}
         getKey={(session) => session.id}
-        renderItem={(session) => <SessionCard session={session} />}
+        renderItem={(session) => (
+          <SessionCard session={session} disabled={session.isSoldOut || isUnderage} />
+        )}
         gapClassName="gap-3"
       />
     </article>

@@ -23,6 +23,10 @@ export const sessionsKeys = createQueryKeys('sessions', {
   seats: (id: number) => [id],
 })
 
+export const holdsKeys = createQueryKeys('holds', {
+  detail: (id: string) => [id],
+})
+
 export const ticketsKeys = createQueryKeys('tickets', {
   list: (filter?: TicketFilter) => [{ filter }],
 })

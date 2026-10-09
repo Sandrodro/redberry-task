@@ -5,7 +5,7 @@ import {
   useMovieSessionsData,
 } from '@/api/queries/movies/useMovieSessionsData'
 import type { MovieDetail, Session } from '@/api/types'
-import { useAuth } from '@/hooks/useAuth'
+import { useIsUnderage } from '@/hooks/useIsUnderage'
 import { formatDayMonth } from '@/utils/formatDate'
 import { getFirstAvailableDate } from '@/utils/getUpcomingDates'
 import { EmptyState } from '@/components/core/EmptyState'
@@ -13,8 +13,8 @@ import { ErrorState } from '@/components/core/ErrorState'
 import { Spinner } from '@/components/core/Spinner'
 import { Typography } from '@/components/core/Typography'
 import { DateStrip } from '@/components/DateStrip'
+import { UnderageNote } from '@/components/UnderageNote'
 import { SessionTicket } from './SessionTicket'
-import { WarningNote } from './WarningNote'
 
 /** A date loaded on hover is reused for this long, so moving over it again does not fetch again. */
 const PREFETCH_STALE_MS = 30_000
@@ -35,7 +35,6 @@ function groupByHall(sessions: Session[]) {
 }
 
 export function MovieSessions({ movie }: { movie: MovieDetail }) {
-  const { user } = useAuth()
   const queryClient = useQueryClient()
   const [selectedDate, setSelectedDate] = useState<string>()
   const date = selectedDate ?? getFirstAvailableDate(movie.availableDates)
@@ -52,7 +51,7 @@ export function MovieSessions({ movie }: { movie: MovieDetail }) {
   // While a new date loads, the previous sessions stay on screen, so the text names their date.
   const shownDate = venues?.[0]?.sessions[0]?.date ?? date
   const fade = `transition-opacity ${isPlaceholderData ? 'opacity-60' : ''}`
-  const isUnderage = !!user && user.age !== null && user.age < movie.ageRating.minAge
+  const isUnderage = useIsUnderage(movie.ageRating)
 
   return (
     <section className="flex min-w-0 flex-1 flex-col gap-6.75 pb-6.5">
@@ -81,14 +80,7 @@ export function MovieSessions({ movie }: { movie: MovieDetail }) {
           availableDates={movie.availableDates}
         />
       </div>
-      {isUnderage && (
-        <WarningNote>
-          <Typography variant="bodyS">
-            This film is rated {movie.ageRating.code}. You cannot buy tickets for it with this
-            account.
-          </Typography>
-        </WarningNote>
-      )}
+      {isUnderage && <UnderageNote ageRating={movie.ageRating} />}
       {isPending && (
         <div className="flex justify-center py-10">
           <Spinner />

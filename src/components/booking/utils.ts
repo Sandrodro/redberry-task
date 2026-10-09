@@ -1,4 +1,5 @@
-import type { SeatMap } from '@/api/types'
+import type { SeatHold, SeatMap } from '@/api/types'
+import type { SelectedSeat } from './types'
 
 /** Width of the left column in `StepLayout` (`w-180`). */
 const MAP_WIDTH = 720
@@ -42,4 +43,20 @@ export function roundPrice(value: number) {
 /** Child and student prices are the session price times the ratio from `/filter-options`. */
 export function getTicketPrice(sessionPrice: number, priceRatio: number) {
   return roundPrice(sessionPrice * priceRatio)
+}
+
+/** Where the id of a session's live hold is kept, so the booking can resume after the modal closes or the page reloads. */
+export function getHoldStorageKey(sessionId: number) {
+  return `hold:${sessionId}`
+}
+
+/** The seats of a hold as the user selected them, found on the seat map. A seat the map no longer has is left out. */
+export function getSelectedSeats(map: SeatMap, holdSeats: SeatHold['seats']): SelectedSeat[] {
+  const seats = map.sections.flatMap((section) =>
+    section.rows.flatMap((row) => row.seats.map((seat) => ({ seat, sectionName: section.name }))),
+  )
+  return holdSeats.flatMap(({ seatId, ticketType }) => {
+    const found = seats.find((item) => item.seat.id === seatId)
+    return found ? [{ ...found, ticketType: ticketType.slug }] : []
+  })
 }

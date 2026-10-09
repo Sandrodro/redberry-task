@@ -1,7 +1,7 @@
 import stripes from '@/assets/icons/seat-held-stripes.svg'
 import { Typography } from '@/components/core/Typography'
 
-export type SeatButtonState = 'available' | 'selected' | 'sold' | 'held'
+export type SeatButtonState = 'available' | 'selected' | 'sold' | 'held' | 'unavailable'
 
 type SeatButtonProps = {
   label: string
@@ -17,6 +17,16 @@ export function SeatButton({ label, state, onClick }: SeatButtonProps) {
   if (state === 'sold') {
     return (
       <span className={`${base} bg-card text-subtle`}>
+        <Typography variant="h3" as="span">
+          {label}
+        </Typography>
+      </span>
+    )
+  }
+
+  if (state === 'unavailable') {
+    return (
+      <span className={`${base} border border-dashed border-subtle text-subtle`}>
         <Typography variant="h3" as="span">
           {label}
         </Typography>
