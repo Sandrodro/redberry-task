@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import UploadIcon from '@/assets/icons/upload.svg?react'
+import { AVATAR_TYPES, getAvatarFileError } from '@/utils/avatarFile'
 import { Typography } from './core/Typography'
 
 type AvatarUploadProps = {
@@ -10,6 +11,7 @@ type AvatarUploadProps = {
 export function AvatarUpload({ onChange, error }: AvatarUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null)
   const [preview, setPreview] = useState<string>()
+  const [fileError, setFileError] = useState<string>()
 
   useEffect(
     () => () => {
@@ -48,17 +50,19 @@ export function AvatarUpload({ onChange, error }: AvatarUploadProps) {
       <input
         ref={inputRef}
         type="file"
-        accept="image/jpeg,image/png,image/webp"
+        accept={AVATAR_TYPES.join(',')}
         hidden
         onChange={(e) => {
           const file = e.target.files?.[0]
-          setPreview(file && URL.createObjectURL(file))
-          onChange(file)
+          const message = file && getAvatarFileError(file)
+          setFileError(message || undefined)
+          setPreview(file && !message ? URL.createObjectURL(file) : undefined)
+          onChange(message ? undefined : file)
         }}
       />
-      {error && (
+      {(fileError ?? error) && (
         <Typography variant="labelS" className="text-brand">
-          {error}
+          {fileError ?? error}
         </Typography>
       )}
     </div>

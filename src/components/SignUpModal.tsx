@@ -49,6 +49,7 @@ export function SignUpModal({ open, onClose, onLogIn }: SignUpModalProps) {
     <Modal open={open} onClose={handleClose} className="w-118.75">
       <form
         className="flex w-full flex-col gap-6"
+        noValidate
         onSubmit={(e) => {
           e.preventDefault()
           e.stopPropagation()
