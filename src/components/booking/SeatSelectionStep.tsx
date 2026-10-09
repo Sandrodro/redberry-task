@@ -7,6 +7,7 @@ import type {
 } from '@/api/types'
 import { useAuth } from '@/hooks/useAuth'
 import { Button } from '@/components/core/Button'
+import { ErrorState } from '@/components/core/ErrorState'
 import { Typography } from '@/components/core/Typography'
 import { SeatMap } from './SeatMap'
 import { SelectedSeatCard } from './SelectedSeatCard'
@@ -19,6 +20,7 @@ type SeatSelectionStepProps = {
   filterOptions: FilterOptions
   seatMap: SeatMapData | undefined
   onRetryMap: () => void
+  isRetryingMap: boolean
   selected: SelectedSeat[]
   lostCodes: string[]
   notice: string | null
@@ -33,6 +35,7 @@ export function SeatSelectionStep({
   filterOptions,
   seatMap,
   onRetryMap,
+  isRetryingMap,
   selected,
   lostCodes,
   notice,
@@ -72,14 +75,11 @@ export function SeatSelectionStep({
             onToggle={onToggleSeat}
           />
         ) : (
-          <div className="flex flex-col items-start gap-3">
-            <Typography variant="bodyM" className="text-muted">
-              Could not load the hall map.
-            </Typography>
-            <Button variant="tertiary" size="sm" onClick={onRetryMap}>
-              Try again
-            </Button>
-          </div>
+          <ErrorState
+            message="Could not load the hall map."
+            onRetry={onRetryMap}
+            isRetrying={isRetryingMap}
+          />
         )
       }
       aside={

@@ -8,6 +8,8 @@ import type { MovieDetail, Session } from '@/api/types'
 import { useAuth } from '@/hooks/useAuth'
 import { formatDayMonth } from '@/utils/formatDate'
 import { getFirstAvailableDate } from '@/utils/getUpcomingDates'
+import { EmptyState } from '@/components/core/EmptyState'
+import { ErrorState } from '@/components/core/ErrorState'
 import { Spinner } from '@/components/core/Spinner'
 import { Typography } from '@/components/core/Typography'
 import { DateStrip } from '@/components/DateStrip'
@@ -40,8 +42,10 @@ export function MovieSessions({ movie }: { movie: MovieDetail }) {
   const {
     data: venues,
     isPending,
-    isError,
+    isLoadingError,
+    isFetching,
     isPlaceholderData,
+    refetch,
   } = useMovieSessionsData(movie.slug, date)
 
   const sessionCount = venues?.reduce((total, venue) => total + venue.sessions.length, 0) ?? 0
@@ -90,15 +94,18 @@ export function MovieSessions({ movie }: { movie: MovieDetail }) {
           <Spinner />
         </div>
       )}
-      {isError && (
-        <Typography variant="bodyM" className="text-muted">
-          Sessions could not be loaded.
-        </Typography>
+      {isLoadingError && (
+        <ErrorState
+          message="Sessions could not be loaded."
+          onRetry={() => refetch()}
+          isRetrying={isFetching}
+        />
       )}
       {venues && !isPlaceholderData && sessionCount === 0 && (
-        <Typography variant="bodyM" className="text-muted">
-          No sessions on this date.
-        </Typography>
+        <EmptyState
+          title="No sessions on this date"
+          description="Pick another date to see more sessions."
+        />
       )}
       {venues && sessionCount > 0 && (
         <div className={`flex flex-col gap-6.75 ${fade}`}>

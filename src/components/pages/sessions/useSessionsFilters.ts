@@ -1,7 +1,12 @@
 import { useNavigate, useSearch } from '@tanstack/react-router'
 import { useFilterOptionsData } from '@/api/queries/filter-options/useFilterOptionsData'
 import type { SessionSort, SessionsFilters } from '@/api/types'
-import { parseList, toSessionsFilters, type SessionsSearch } from '@/utils/sessionsSearchSchema'
+import {
+  getAvailableFormats,
+  parseList,
+  toSessionsFilters,
+  type SessionsSearch,
+} from '@/utils/sessionsSearchSchema'
 
 type ListKey = 'venue' | 'format' | 'language' | 'band'
 
@@ -22,13 +27,24 @@ export function useSessionsFilters() {
     })
   }
 
+  /** Removes the formats the selected venues do not offer, so a hidden format does not stay in the URL. */
+  function dropHiddenFormats(previous: SessionsSearch, venues: string[]) {
+    if (!options) return {}
+    const offered = getAvailableFormats(options, venues).map((format) => format.slug)
+    const kept = parseList(previous.format)?.filter((slug) => offered.includes(slug))
+    return { format: kept?.join(',') || undefined }
+  }
+
   function toggle(key: ListKey, value: string) {
     update((previous) => {
       const current = parseList(previous[key]) ?? []
       const next = current.includes(value)
         ? current.filter((item) => item !== value)
         : [...current, value]
-      return { [key]: next.join(',') || undefined }
+      return {
+        [key]: next.join(',') || undefined,
+        ...(key === 'venue' && dropHiddenFormats(previous, next)),
+      }
     })
   }
 

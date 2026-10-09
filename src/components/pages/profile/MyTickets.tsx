@@ -1,12 +1,13 @@
 import { useState } from 'react'
-import { ApiError } from '@/api/client'
 import { useRefundOrder } from '@/api/queries/tickets/useRefundOrder'
 import { useTicketsData } from '@/api/queries/tickets/useTicketsData'
 import type { Order, TicketFilter } from '@/api/types'
+import { ButtonLink } from '@/components/core/ButtonLink'
+import { EmptyState } from '@/components/core/EmptyState'
+import { ErrorState } from '@/components/core/ErrorState'
 import { Spinner } from '@/components/core/Spinner'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/core/Tabs'
 import { TooltipProvider } from '@/components/core/Tooltip'
-import { Typography } from '@/components/core/Typography'
 import { MyTicketsCard } from './MyTicketsCard'
 import { RefundConfirmModal } from './RefundConfirmModal'
 
@@ -22,22 +23,38 @@ export function MyTickets() {
     const { reference } = selected
     setErrors(({ [reference]: _cleared, ...rest }) => rest)
     refund.mutate(reference, {
-      onError: (error) => {
-        if (error instanceof ApiError && error.status === 422) {
-          setErrors((current) => ({ ...current, [reference]: error.message }))
-        }
-      },
+      // The card shows the message, and its Refund button stays enabled, so the user can try again.
+      onError: (error) => setErrors((current) => ({ ...current, [reference]: error.message })),
       onSettled: () => setSelected(null),
     })
   }
 
   function renderList(filter: TicketFilter, query: typeof upcoming) {
     if (query.isPending) return <Spinner className="mx-auto mt-10" />
-    if (!query.data?.length) {
+    if (query.isLoadingError) {
       return (
-        <Typography variant="bodyM" className="text-muted">
-          No {filter} tickets
-        </Typography>
+        <ErrorState
+          message="Could not load your tickets."
+          onRetry={() => query.refetch()}
+          isRetrying={query.isFetching}
+        />
+      )
+    }
+    if (query.data.length === 0) {
+      return filter === 'upcoming' ? (
+        <EmptyState
+          title="No upcoming tickets"
+          description="Book a session and your tickets will show up here."
+        >
+          <ButtonLink to="/sessions" variant="tertiary" size="sm">
+            Browse sessions
+          </ButtonLink>
+        </EmptyState>
+      ) : (
+        <EmptyState
+          title="No past tickets"
+          description="Tickets for sessions that already took place will show up here."
+        />
       )
     }
     return (

@@ -7,7 +7,7 @@ import { useFilterOptionsData } from '@/api/queries/filter-options/useFilterOpti
 import { useSeatMapData } from '@/api/queries/sessions/useSeatMapData'
 import type { Order, Seat, SeatHold, Session } from '@/api/types'
 import { useAuth } from '@/hooks/useAuth'
-import { useAuthModal } from '@/hooks/useAuthModal'
+import { ErrorState } from '@/components/core/ErrorState'
 import { Modal } from '@/components/core/Modal'
 import { Spinner } from '@/components/core/Spinner'
 import { BookingHeader } from './BookingHeader'
@@ -28,8 +28,12 @@ type BookingModalProps = {
 /** Mount it when a session is picked and unmount it on close, so every opening starts on step 1. */
 export function BookingModal({ session, onClose }: BookingModalProps) {
   const { user } = useAuth()
-  const { openLogin } = useAuthModal()
-  const { data: filterOptions } = useFilterOptionsData()
+  const {
+    data: filterOptions,
+    isError: isFilterOptionsError,
+    isFetching: isFetchingFilterOptions,
+    refetch: refetchFilterOptions,
+  } = useFilterOptionsData()
   const seatMap = useSeatMapData(session.id)
   const createHold = useCreateHold(session.id)
   const releaseHold = useReleaseHold()
@@ -91,9 +95,7 @@ export function BookingModal({ session, onClose }: BookingModalProps) {
       onError: (error) => {
         if (!(error instanceof ApiError))
           return setNotice('Could not hold the seats. Please try again.')
-        // A guest gets the login modal, then the hold runs again.
-        if (error.status === 401) openLogin({ onSuccess: holdSeats })
-        else if (error.status === 409) handleSeatsLost(error.contested ?? [])
+        if (error.status === 409) handleSeatsLost(error.contested ?? [])
         else setNotice(Object.values(error.errors ?? {})[0]?.[0] ?? error.message)
       },
     })
@@ -103,6 +105,12 @@ export function BookingModal({ session, onClose }: BookingModalProps) {
     <Modal open onClose={handleClose} className={`w-286.5 ${order ? '' : 'min-h-165'}`}>
       {order ? (
         <ConfirmationView order={order} onClose={handleClose} />
+      ) : isFilterOptionsError && !filterOptions ? (
+        <ErrorState
+          message="Could not load the booking options."
+          onRetry={() => refetchFilterOptions()}
+          isRetrying={isFetchingFilterOptions}
+        />
       ) : !filterOptions || !user || seatMap.isPending ? (
         <Spinner className="absolute inset-0 m-auto" />
       ) : (
@@ -114,6 +122,7 @@ export function BookingModal({ session, onClose }: BookingModalProps) {
               filterOptions={filterOptions}
               seatMap={seatMap.data}
               onRetryMap={() => seatMap.refetch()}
+              isRetryingMap={seatMap.isFetching}
               selected={selected}
               lostCodes={lostCodes}
               notice={notice}

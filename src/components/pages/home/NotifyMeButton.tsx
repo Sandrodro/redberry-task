@@ -1,8 +1,6 @@
-import { ApiError } from '@/api/client'
 import { useNotifyMe } from '@/api/queries/movies/useNotifyMe'
 import BellIcon from '@/assets/icons/bell.svg?react'
 import CheckIcon from '@/assets/icons/check.svg?react'
-import { useAuthModal } from '@/hooks/useAuthModal'
 import { Typography } from '@/components/core/Typography'
 
 type NotifyMeButtonProps = {
@@ -12,27 +10,19 @@ type NotifyMeButtonProps = {
 
 export function NotifyMeButton({ slug, notified }: NotifyMeButtonProps) {
   const notify = useNotifyMe()
-  const { openLogin } = useAuthModal()
-  const done = notified || notify.isSuccess
-
-  function handleClick() {
-    notify.mutate(slug, {
-      onError: (error) => {
-        // A guest gets the login modal, then the action runs again.
-        if (error instanceof ApiError && error.status === 401) openLogin({ onSuccess: handleClick })
-      },
-    })
-  }
 
   return (
     <button
       type="button"
-      disabled={done || notify.isPending}
-      onClick={handleClick}
+      // `notified` comes from the server. The mutation stays pending until the lists are loaded again.
+      disabled={notified || notify.isPending}
+      onClick={() => notify.mutate(slug)}
       className="flex cursor-pointer items-center gap-1 rounded-full border border-muted px-3 py-1.5 disabled:cursor-default"
     >
-      {done ? <CheckIcon className="size-4" /> : <BellIcon className="size-4" />}
-      <Typography variant="labelS">{done ? 'Notified' : 'Notify Me'}</Typography>
+      {notified ? <CheckIcon className="size-4" /> : <BellIcon className="size-4" />}
+      <Typography variant="labelS">
+        {notified ? 'Notified' : notify.isError ? 'Try again' : 'Notify Me'}
+      </Typography>
     </button>
   )
 }

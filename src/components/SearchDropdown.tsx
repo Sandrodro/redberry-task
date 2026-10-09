@@ -1,6 +1,7 @@
 import PopcornIcon from '@/assets/icons/popcorn.svg?react'
 import SearchIcon from '@/assets/icons/magnifying-glass.svg?react'
 import { useSearchMoviesData } from '@/api/queries/search/useSearchMoviesData'
+import { ErrorState } from '@/components/core/ErrorState'
 import { Spinner } from '@/components/core/Spinner'
 import { Typography } from '@/components/core/Typography'
 import { useDebouncedValue } from '@/hooks/useDebouncedValue'
@@ -16,7 +17,8 @@ type SearchDropdownProps = {
 
 export function SearchDropdown({ query, onSelectMovie, onBrowse }: SearchDropdownProps) {
   const term = useDebouncedValue(query)
-  const { data, isPending, isError, isPlaceholderData } = useSearchMoviesData(term)
+  const { data, isPending, isLoadingError, isFetching, isPlaceholderData, refetch } =
+    useSearchMoviesData(term)
 
   function renderContent() {
     if (query === '') {
@@ -37,11 +39,14 @@ export function SearchDropdown({ query, onSelectMovie, onBrowse }: SearchDropdow
         </div>
       )
     }
-    if (isError) {
+    if (isLoadingError) {
       return (
-        <Typography variant="bodyM" className="px-6 py-8 text-center text-muted">
-          Could not load results.
-        </Typography>
+        <ErrorState
+          message="Could not load results."
+          onRetry={() => refetch()}
+          isRetrying={isFetching}
+          className="px-6 py-8"
+        />
       )
     }
     if (data.length === 0) {

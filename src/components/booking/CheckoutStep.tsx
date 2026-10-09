@@ -3,7 +3,6 @@ import type { ComponentProps } from 'react'
 import { ApiError } from '@/api/client'
 import { useCreateOrder } from '@/api/queries/orders/useCreateOrder'
 import type { Order, SeatHold, Session, User } from '@/api/types'
-import { useAuthModal } from '@/hooks/useAuthModal'
 import { checkoutSchema, type CheckoutValues } from '@/utils/checkoutSchema'
 import { getFieldError } from '@/utils/getFieldError'
 import { Button } from '@/components/core/Button'
@@ -53,11 +52,10 @@ export function CheckoutStep({
   onSeatsLost,
 }: CheckoutStepProps) {
   const createOrder = useCreateOrder()
-  const { openLogin } = useAuthModal()
   const error = createOrder.error instanceof ApiError ? createOrder.error : null
   // A 422 with `errors` is shown on the fields. Everything else without a booking rule handler is shown here.
   const formMessage =
-    error && !error.errors && ![401, 409, 422].includes(error.status) ? error.message : null
+    error && !error.errors && ![409, 422].includes(error.status) ? error.message : null
 
   const form = useForm({
     defaultValues: {
@@ -80,9 +78,7 @@ export function CheckoutStep({
         onSuccess: onPaid,
         onError: (failure) => {
           if (!(failure instanceof ApiError)) return
-          // A guest gets the login modal, then the payment runs again.
-          if (failure.status === 401) openLogin({ onSuccess: () => submit(input) })
-          else if (failure.status === 409) onSeatsLost(failure.contested ?? [])
+          if (failure.status === 409) onSeatsLost(failure.contested ?? [])
           else if (failure.status === 422 && !failure.errors) onHoldExpired()
         },
       },

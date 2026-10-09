@@ -3,13 +3,14 @@ import CalendarIcon from '@/assets/icons/calendar.svg?react'
 import { ApiError } from '@/api/client'
 import { useUpdateProfile } from '@/api/queries/profile/useUpdateProfile'
 import { useFilterOptionsData } from '@/api/queries/filter-options/useFilterOptionsData'
-import type { AgeRating, ProfileInput, User } from '@/api/types'
+import type { AgeRating, User } from '@/api/types'
 import { getFieldError } from '@/utils/getFieldError'
 import { getAge, MIN_AGE, profileSchema } from '@/utils/profileSchema'
 import { Button } from '@/components/core/Button'
 import { Input } from '@/components/core/Input'
 import { Select } from '@/components/core/Select'
 import { Typography } from '@/components/core/Typography'
+import { getProfileFormValues } from './utils'
 
 function getAgeNote(dateOfBirth: string, ageRatings: AgeRating[] = []) {
   if (!dateOfBirth) return undefined
@@ -27,17 +28,12 @@ export function PersonalInformationForm({ user }: { user: User }) {
   const { data: filterOptions } = useFilterOptionsData()
 
   const form = useForm({
-    defaultValues: {
-      fullName: user.fullName ?? '',
-      mobileNumber: user.mobileNumber ?? '',
-      dateOfBirth: user.dateOfBirth ?? '',
-      preferredVenueId: user.preferredVenue?.id ?? null,
-    } satisfies ProfileInput,
+    defaultValues: getProfileFormValues(user),
     validators: { onMount: profileSchema, onChange: profileSchema },
     onSubmit: ({ value }) => {
       const input = profileSchema.parse(value)
-      // The saved values become the new defaults, so the button is disabled until the next edit.
-      update.mutate(input, { onSuccess: () => form.reset(input) })
+      // The values the server returned become the new defaults, so the button is disabled until the next edit.
+      update.mutate(input, { onSuccess: (saved) => form.reset(getProfileFormValues(saved)) })
     },
   })
 

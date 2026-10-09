@@ -54,7 +54,9 @@ src/
 - Read localStorage only through `storage` in `src/utils/storage.ts`.
 - The auth token is in localStorage under `TOKEN_KEY`, sent as `Authorization: Bearer`. Use `useAuth()` for login status and the active user.
 - Do not hardcode values the API provides (venues, formats, ticket ratios, seat cap, hold minutes). Read them from `/filter-options`.
-- Error handling follows the docs: `422` with `errors` maps to form fields. `422` with only `message` is a booking rule, show the message. `409` means seats were lost, read `contested`. `401` should open login and replay the action.
+- Error handling follows the docs: `422` with `errors` maps to form fields. `422` with only `message` is a booking rule, show the message. `409` means seats were lost, read `contested`. `401` is handled once in `src/api/client.ts`: it opens the login modal (set up in `AuthModalProvider`) and sends the request again after a login. Components do not handle `401`. A network failure and a `5xx` become an `ApiError` with a generic message, so `error.message` is always safe to show.
+- Every list has three states. Loading: a skeleton (`Skeleton`) on the sessions page, a spinner elsewhere. Error: `ErrorState` with a retry button, disabled while it retries. Empty: `EmptyState` with a way out when there is one. Never treat an error as an empty list.
+- After a mutation, show what the server returned or refetched. Do not copy the submitted values into the UI.
 - Import from other folders with the `@/` alias (`@/components/core/Button`, `@/api/types`). `@` maps to `src/`. Imports from the same folder stay relative (`./SeatMap`). Prettier sets the style (single quotes, no semicolons). Run `pnpm format` before you finish.
 
 ## Environment

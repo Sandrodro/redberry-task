@@ -1,34 +1,47 @@
-import { useQueryClient } from '@tanstack/react-query'
-import { useCallback, useMemo, useRef, type ReactNode } from 'react'
-import { authKeys } from '@/api/queryKeys'
+import { useCallback, useEffect, useMemo, useRef, type ReactNode } from 'react'
+import { setUnauthorizedHandler, TOKEN_KEY } from '@/api/client'
 import { AuthModalContext, type OpenLoginOptions } from '@/hooks/useAuthModal'
 import { useModal } from '@/hooks/useModal'
 import { LoginFormModal } from '@/components/LoginFormModal'
 import { SignUpModal } from '@/components/SignUpModal'
+import { storage } from '@/utils/storage'
 
-/** Owns the login and sign up modals, so any component can open them. */
+/** Owns the login and sign up modals, so any component can open them. A 401 from the API opens the login modal too. */
 export function AuthModalProvider({ children }: { children: ReactNode }) {
-  const queryClient = useQueryClient()
   const { isOpen: isLoginOpen, open: showLogin, close: closeLogin } = useModal()
   const { isOpen: isSignUpOpen, open: openSignUp, close: closeSignUp } = useModal()
-  const pending = useRef<OpenLoginOptions>(undefined)
+  // Everyone who asked for a login while the modal was closed. They all get the same answer.
+  const pending = useRef<OpenLoginOptions[]>([])
+  const tokenWhenOpened = useRef<string | null>(null)
 
   const openLogin = useCallback(
     (options?: OpenLoginOptions) => {
-      pending.current = options
+      if (pending.current.length === 0) tokenWhenOpened.current = storage.get(TOKEN_KEY)
+      if (options) pending.current.push(options)
       showLogin()
     },
     [showLogin],
   )
   const value = useMemo(() => ({ openLogin, openSignUp }), [openLogin, openSignUp])
 
-  /** Runs the callbacks of the last `openLogin`. Sign up is another way through the same flow, so it resolves them too. */
+  useEffect(() => {
+    setUnauthorizedHandler(
+      () =>
+        new Promise((resolve) =>
+          openLogin({ onSuccess: () => resolve(true), onCancel: () => resolve(false) }),
+        ),
+    )
+    return () => setUnauthorizedHandler(undefined)
+  }, [openLogin])
+
+  /** Runs the callbacks of every `openLogin`. Sign up is another way through the same flow, so it resolves them too. */
   function resolvePending() {
-    const options = pending.current
-    pending.current = undefined
-    // The login and register mutations store the user before they close their modal.
-    if (queryClient.getQueryData(authKeys.me.queryKey)) options?.onSuccess?.()
-    else options?.onCancel?.()
+    const callbacks = pending.current
+    pending.current = []
+    // A login or a sign up stores a new token before it closes its modal. An expired token stays the same when the user cancels.
+    const token = storage.get(TOKEN_KEY)
+    const loggedIn = token !== null && token !== tokenWhenOpened.current
+    callbacks.forEach((options) => (loggedIn ? options.onSuccess?.() : options.onCancel?.()))
   }
 
   return (
