@@ -5,7 +5,7 @@ import type {
   Session,
   TicketTypeSlug,
 } from '@/api/types'
-import { useAuth } from '@/hooks/useAuth'
+import { useIsUnderage } from '@/hooks/useIsUnderage'
 import { Button } from '@/components/core/Button'
 import { ErrorState } from '@/components/core/ErrorState'
 import { Typography } from '@/components/core/Typography'
@@ -44,9 +44,8 @@ export function SeatSelectionStep({
   onChangeType,
   onNext,
 }: SeatSelectionStepProps) {
-  const { user } = useAuth()
   const { minAge, code: ageCode } = session.movie.ageRating
-  const tooYoung = user?.age != null && user.age < minAge
+  const tooYoung = useIsUnderage(session.movie.ageRating)
   // Cheapest first, as in the design: Child, Student, Adult.
   const ticketTypes = [...filterOptions.ticketTypes].sort((a, b) => a.priceRatio - b.priceRatio)
   const blockedTypes = ticketTypes

@@ -5,6 +5,7 @@ import type { Session, User } from '@/api/types'
 import { authKeys } from '@/api/queryKeys'
 import { useAuthModal } from '@/hooks/useAuthModal'
 import { BookingModalContext } from '@/hooks/useBookingModal'
+import { isUnderage } from '@/utils/isUnderage'
 
 // Loaded on first open: the seat map and checkout are not needed until a session is picked.
 const BookingModal = lazy(() =>
@@ -27,7 +28,7 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
       if (!user) openLogin({ onSuccess: () => open(target) })
       else if (!user.profileComplete) navigate({ to: '/profile' })
       // Too young for this film. The movie page shows its sessions disabled with the reason.
-      else if (user.age !== null && user.age < target.movie.ageRating.minAge) return
+      else if (isUnderage(user, target.movie.ageRating)) return
       else setSession(target)
     },
     [queryClient, openLogin, navigate],

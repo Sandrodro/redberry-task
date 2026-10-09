@@ -1,9 +1,8 @@
-import { useForm } from '@tanstack/react-form'
 import { ApiError } from '@/api/client'
 import { useLogin } from '@/api/queries/auth/useLogin'
-import type { LoginInput } from '@/api/types'
+import { useAppForm } from '@/hooks/useAppForm'
+import { loginSchema, type LoginValues } from '@/utils/loginSchema'
 import { Button } from './core/Button'
-import { Input } from './core/Input'
 import { Modal } from './core/Modal'
 import { Typography } from './core/Typography'
 
@@ -18,9 +17,10 @@ export function LoginFormModal({ open, onClose, onSignUp }: LoginFormModalProps)
   const login = useLogin()
   const error = login.error instanceof ApiError ? login.error : null
 
-  const form = useForm({
-    defaultValues: { email: '', password: '' } satisfies LoginInput,
-    onSubmit: ({ value }) => login.mutate(value, { onSuccess: onClose }),
+  const form = useAppForm({
+    defaultValues: { email: '', password: '' } satisfies LoginValues,
+    validators: { onMount: loginSchema, onChange: loginSchema },
+    onSubmit: ({ value }) => login.mutate(loginSchema.parse(value), { onSuccess: onClose }),
   })
 
   return (
@@ -39,40 +39,38 @@ export function LoginFormModal({ open, onClose, onSignUp }: LoginFormModalProps)
             Welcome back to Kino XII
           </Typography>
         </div>
-        <form.Field name="email">
+        <form.AppField name="email">
           {(field) => (
-            <Input
+            <field.Input
               label="Email"
               type="email"
               placeholder="example@gmail.com"
-              value={field.state.value}
-              onChange={(e) => field.handleChange(e.target.value)}
-              onBlur={field.handleBlur}
-              error={error?.errors?.email?.[0]}
+              serverError={error?.errors?.email?.[0]}
             />
           )}
-        </form.Field>
-        <form.Field name="password">
+        </form.AppField>
+        <form.AppField name="password">
           {(field) => (
-            <Input
+            <field.Input
               label="Password"
               type="password"
               placeholder="••••••••"
-              value={field.state.value}
-              onChange={(e) => field.handleChange(e.target.value)}
-              onBlur={field.handleBlur}
-              error={error?.errors?.password?.[0]}
+              serverError={error?.errors?.password?.[0]}
             />
           )}
-        </form.Field>
+        </form.AppField>
         {error && !error.errors && (
           <Typography variant="labelS" className="text-brand">
             {error.message}
           </Typography>
         )}
-        <Button type="submit" disabled={login.isPending} className="mt-2">
-          Log in
-        </Button>
+        <form.Subscribe selector={(state) => state.canSubmit}>
+          {(canSubmit) => (
+            <Button type="submit" disabled={!canSubmit || login.isPending} className="mt-2">
+              Log in
+            </Button>
+          )}
+        </form.Subscribe>
         <Typography
           variant="bodyM"
           className="flex items-center justify-center gap-1.25 text-muted"

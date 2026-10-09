@@ -1,36 +1,14 @@
-import { useForm, type AnyFieldApi } from '@tanstack/react-form'
-import type { ComponentProps } from 'react'
 import { ApiError } from '@/api/client'
 import { useCreateOrder } from '@/api/queries/orders/useCreateOrder'
 import type { Order, SeatHold, Session, User } from '@/api/types'
+import { useAppForm } from '@/hooks/useAppForm'
 import { checkoutSchema, type CheckoutValues } from '@/utils/checkoutSchema'
-import { getFieldError } from '@/utils/getFieldError'
 import { Button } from '@/components/core/Button'
-import { Input } from '@/components/core/Input'
 import { Typography } from '@/components/core/Typography'
 import { OrderSummary } from './OrderSummary'
 import { StepLayout } from './StepLayout'
 
 const FORM_ID = 'checkout-form'
-
-type CheckoutInputProps = {
-  field: AnyFieldApi
-  serverError?: string
-} & Omit<ComponentProps<typeof Input>, 'value' | 'onChange' | 'onBlur' | 'error' | 'success'>
-
-/** Connects an `Input` to a form field. A field with a value and no errors gets the success check. */
-function CheckoutInput({ field, serverError, ...props }: CheckoutInputProps) {
-  return (
-    <Input
-      {...props}
-      value={field.state.value}
-      onChange={(e) => field.handleChange(e.target.value)}
-      onBlur={field.handleBlur}
-      error={getFieldError(field, serverError)}
-      success={field.state.value !== '' && field.state.meta.errors.length === 0}
-    />
-  )
-}
 
 type CheckoutStepProps = {
   session: Session
@@ -57,7 +35,7 @@ export function CheckoutStep({
   const formMessage =
     error && !error.errors && ![409, 422].includes(error.status) ? error.message : null
 
-  const form = useForm({
+  const form = useAppForm({
     defaultValues: {
       fullName: user.fullName ?? '',
       email: user.email,
@@ -99,71 +77,58 @@ export function CheckoutStep({
             form.handleSubmit()
           }}
         >
-          <form.Field name="fullName">
+          <form.AppField name="fullName">
             {(field) => (
-              <CheckoutInput
-                field={field}
-                label="Full name"
-                serverError={error?.errors?.fullName?.[0]}
-              />
+              <field.Input label="Full name" serverError={error?.errors?.fullName?.[0]} />
             )}
-          </form.Field>
+          </form.AppField>
           <div className="grid grid-cols-2 gap-6">
-            <form.Field name="email">
+            <form.AppField name="email">
               {(field) => (
-                <CheckoutInput
-                  field={field}
-                  label="Email"
-                  type="email"
-                  serverError={error?.errors?.email?.[0]}
-                />
+                <field.Input label="Email" type="email" serverError={error?.errors?.email?.[0]} />
               )}
-            </form.Field>
-            <form.Field name="mobileNumber">
+            </form.AppField>
+            <form.AppField name="mobileNumber">
               {(field) => (
-                <CheckoutInput
-                  field={field}
+                <field.Input
                   label="Mobile number"
                   type="tel"
                   serverError={error?.errors?.mobileNumber?.[0]}
                 />
               )}
-            </form.Field>
+            </form.AppField>
           </div>
           <hr className="h-px border-0 bg-card" />
-          <form.Field name="cardNumber">
+          <form.AppField name="cardNumber">
             {(field) => (
-              <CheckoutInput
-                field={field}
+              <field.Input
                 label="Card number"
                 inputMode="numeric"
                 placeholder="e.g. 1234 4567 8901 2345"
                 serverError={error?.errors?.cardNumber?.[0]}
               />
             )}
-          </form.Field>
+          </form.AppField>
           <div className="grid grid-cols-2 gap-6">
-            <form.Field name="expiry">
+            <form.AppField name="expiry">
               {(field) => (
-                <CheckoutInput
-                  field={field}
+                <field.Input
                   label="Expiry"
                   placeholder="e.g. 12/34"
                   serverError={error?.errors?.expiry?.[0]}
                 />
               )}
-            </form.Field>
-            <form.Field name="cvv">
+            </form.AppField>
+            <form.AppField name="cvv">
               {(field) => (
-                <CheckoutInput
-                  field={field}
+                <field.Input
                   label="CVV"
                   inputMode="numeric"
                   placeholder="e.g. 123"
                   serverError={error?.errors?.cvv?.[0]}
                 />
               )}
-            </form.Field>
+            </form.AppField>
           </div>
           {formMessage && (
             <Typography variant="labelS" className="text-brand">

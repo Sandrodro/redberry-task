@@ -1,15 +1,19 @@
-import { useForm } from '@tanstack/react-form'
 import { useState } from 'react'
 import { ApiError } from '@/api/client'
 import { useRegister } from '@/api/queries/auth/useRegister'
-import type { RegisterInput } from '@/api/types'
+import { useAppForm } from '@/hooks/useAppForm'
+import { signUpSchema, type SignUpValues } from '@/utils/signUpSchema'
 import { AvatarUpload } from './AvatarUpload'
 import { Button } from './core/Button'
-import { Input } from './core/Input'
 import { Modal } from './core/Modal'
 import { Typography } from './core/Typography'
 
-const EMAIL_PATTERN = /^\S+@\S+\.\S+$/
+const DEFAULT_VALUES: SignUpValues = {
+  username: '',
+  email: '',
+  password: '',
+  password_confirmation: '',
+}
 
 type SignUpModalProps = {
   open: boolean
@@ -23,19 +27,16 @@ export function SignUpModal({ open, onClose, onLogIn }: SignUpModalProps) {
   const [resetKey, setResetKey] = useState(0)
   const error = register.error instanceof ApiError ? register.error : null
 
-  const form = useForm({
-    defaultValues: {
-      username: '',
-      email: '',
-      password: '',
-      password_confirmation: '',
-      avatar: undefined as File | undefined,
-    } satisfies RegisterInput,
-    onSubmit: ({ value }) => register.mutate(value, { onSuccess: handleClose }),
+  const form = useAppForm({
+    defaultValues: DEFAULT_VALUES,
+    validators: { onMount: signUpSchema, onChange: signUpSchema },
+    onSubmit: ({ value }) => register.mutate(signUpSchema.parse(value), { onSuccess: handleClose }),
   })
 
   function reset() {
     form.reset()
+    // A reset clears the errors from the mount check, so the empty form must be checked again.
+    form.validateSync('mount')
     register.reset()
     setResetKey((key) => key + 1)
   }
@@ -73,60 +74,46 @@ export function SignUpModal({ open, onClose, onLogIn }: SignUpModalProps) {
             )}
           </form.Field>
           <div className="flex flex-col gap-6">
-            <form.Field name="username">
+            <form.AppField name="username">
               {(field) => (
-                <Input
+                <field.Input
                   label="Username"
                   placeholder="User"
-                  value={field.state.value}
-                  onChange={(e) => field.handleChange(e.target.value)}
-                  onBlur={field.handleBlur}
-                  error={error?.errors?.username?.[0]}
-                  success={field.state.value.length >= 3}
+                  serverError={error?.errors?.username?.[0]}
                 />
               )}
-            </form.Field>
-            <form.Field name="email">
+            </form.AppField>
+            <form.AppField name="email">
               {(field) => (
-                <Input
+                <field.Input
                   label="Email"
                   type="email"
                   placeholder="example@gmail.com"
-                  value={field.state.value}
-                  onChange={(e) => field.handleChange(e.target.value)}
-                  onBlur={field.handleBlur}
-                  error={error?.errors?.email?.[0]}
-                  success={EMAIL_PATTERN.test(field.state.value)}
+                  serverError={error?.errors?.email?.[0]}
                 />
               )}
-            </form.Field>
+            </form.AppField>
             <div className="grid grid-cols-2 gap-3">
-              <form.Field name="password">
+              <form.AppField name="password">
                 {(field) => (
-                  <Input
+                  <field.Input
                     label="Password"
                     type="password"
                     placeholder="••••••••"
-                    value={field.state.value}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                    onBlur={field.handleBlur}
-                    error={error?.errors?.password?.[0]}
+                    serverError={error?.errors?.password?.[0]}
                   />
                 )}
-              </form.Field>
-              <form.Field name="password_confirmation">
+              </form.AppField>
+              <form.AppField name="password_confirmation">
                 {(field) => (
-                  <Input
+                  <field.Input
                     label="Confirm password"
                     type="password"
                     placeholder="••••••••"
-                    value={field.state.value}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                    onBlur={field.handleBlur}
-                    error={error?.errors?.password_confirmation?.[0]}
+                    serverError={error?.errors?.password_confirmation?.[0]}
                   />
                 )}
-              </form.Field>
+              </form.AppField>
             </div>
           </div>
           <div className="flex flex-col gap-6">
@@ -135,9 +122,13 @@ export function SignUpModal({ open, onClose, onLogIn }: SignUpModalProps) {
                 {error.message}
               </Typography>
             )}
-            <Button type="submit" disabled={register.isPending}>
-              Sign up
-            </Button>
+            <form.Subscribe selector={(state) => state.canSubmit}>
+              {(canSubmit) => (
+                <Button type="submit" disabled={!canSubmit || register.isPending}>
+                  Sign up
+                </Button>
+              )}
+            </form.Subscribe>
             <Typography
               variant="bodyM"
               className="flex items-center justify-center gap-1.25 text-muted"

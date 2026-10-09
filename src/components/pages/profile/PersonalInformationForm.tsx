@@ -1,10 +1,9 @@
-import { useForm } from '@tanstack/react-form'
 import CalendarIcon from '@/assets/icons/calendar.svg?react'
 import { ApiError } from '@/api/client'
 import { useUpdateProfile } from '@/api/queries/profile/useUpdateProfile'
 import { useFilterOptionsData } from '@/api/queries/filter-options/useFilterOptionsData'
 import type { AgeRating, User } from '@/api/types'
-import { getFieldError } from '@/utils/getFieldError'
+import { useAppForm } from '@/hooks/useAppForm'
 import { getAge, MIN_AGE, profileSchema } from '@/utils/profileSchema'
 import { Button } from '@/components/core/Button'
 import { Input } from '@/components/core/Input'
@@ -27,7 +26,7 @@ export function PersonalInformationForm({ user }: { user: User }) {
   const error = update.error instanceof ApiError ? update.error : null
   const { data: filterOptions } = useFilterOptionsData()
 
-  const form = useForm({
+  const form = useAppForm({
     defaultValues: getProfileFormValues(user),
     validators: { onMount: profileSchema, onChange: profileSchema },
     onSubmit: ({ value }) => {
@@ -48,17 +47,15 @@ export function PersonalInformationForm({ user }: { user: User }) {
     >
       <div className="flex flex-col gap-6">
         <div className="flex flex-col gap-4.5">
-          <form.Field name="fullName">
+          <form.AppField name="fullName">
             {(field) => (
-              <Input
+              <field.Input
                 label="Full name"
-                value={field.state.value}
-                onChange={(e) => field.handleChange(e.target.value)}
-                onBlur={field.handleBlur}
-                error={getFieldError(field, error?.errors?.fullName?.[0])}
+                success={false}
+                serverError={error?.errors?.fullName?.[0]}
               />
             )}
-          </form.Field>
+          </form.AppField>
           <Input
             label="Email"
             value={user.email}
@@ -67,33 +64,29 @@ export function PersonalInformationForm({ user }: { user: User }) {
           />
         </div>
         <div className="flex flex-col gap-5">
-          <form.Field name="mobileNumber">
+          <form.AppField name="mobileNumber">
             {(field) => (
-              <Input
+              <field.Input
                 label="Mobile number"
                 type="tel"
-                value={field.state.value}
-                onChange={(e) => field.handleChange(e.target.value)}
-                onBlur={field.handleBlur}
-                error={getFieldError(field, error?.errors?.mobileNumber?.[0])}
+                success={false}
+                serverError={error?.errors?.mobileNumber?.[0]}
               />
             )}
-          </form.Field>
-          <form.Field name="dateOfBirth">
+          </form.AppField>
+          <form.AppField name="dateOfBirth">
             {(field) => (
-              <Input
+              <field.Input
                 label="Date of birth"
                 type="date"
-                value={field.state.value}
-                onChange={(e) => field.handleChange(e.target.value)}
-                onBlur={field.handleBlur}
-                error={getFieldError(field, error?.errors?.dateOfBirth?.[0])}
+                success={false}
+                serverError={error?.errors?.dateOfBirth?.[0]}
                 hint={getAgeNote(field.state.value, filterOptions?.ageRatings)}
                 icon={<CalendarIcon className="pointer-events-none size-4 shrink-0 text-white" />}
                 className="[&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:inset-0 [&::-webkit-calendar-picker-indicator]:size-full [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-0"
               />
             )}
-          </form.Field>
+          </form.AppField>
           <form.Field name="preferredVenueId">
             {(field) => (
               <Select
