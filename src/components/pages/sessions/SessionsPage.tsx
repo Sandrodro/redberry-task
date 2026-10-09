@@ -1,5 +1,6 @@
 import { Fragment, useEffect, useRef } from 'react'
 import { useSessionsData } from '@/api/queries/sessions/useSessionsData'
+import { useDebouncedValue } from '@/hooks/useDebouncedValue'
 import { useSessionsFilters } from './useSessionsFilters'
 import { Button } from '@/components/core/Button'
 import { EmptyState } from '@/components/core/EmptyState'
@@ -20,8 +21,11 @@ function formatCount(total: number) {
 
 export function SessionsPage() {
   const { filters, setPage, clear, activeCount } = useSessionsFilters()
+  // Quick changes in a row send one request. The list is dimmed while it waits.
+  const requestedFilters = useDebouncedValue(filters)
   const { data, isPending, isLoadingError, isFetching, isPlaceholderData, refetch } =
-    useSessionsData(filters)
+    useSessionsData(requestedFilters)
+  const isOutdated = isPlaceholderData || requestedFilters !== filters
   const sectionRef = useRef<HTMLElement>(null)
   // The page number is left out: a page change keeps the default scroll to the top of the page.
   const filtersKey = JSON.stringify({ ...filters, page: undefined })
@@ -79,7 +83,7 @@ export function SessionsPage() {
                 </EmptyState>
               )}
               <div
-                className={`flex flex-col gap-8 transition-opacity ${isPlaceholderData ? 'opacity-60' : ''}`}
+                className={`flex flex-col gap-8 transition-opacity ${isOutdated ? 'opacity-60' : ''}`}
               >
                 {data?.data.map((group, index) => (
                   <Fragment key={group.movie.id}>

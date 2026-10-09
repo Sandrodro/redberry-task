@@ -1,4 +1,5 @@
 import { useNavigate, useSearch } from '@tanstack/react-router'
+import { useMemo } from 'react'
 import { useFilterOptionsData } from '@/api/queries/filter-options/useFilterOptionsData'
 import type { SessionSort, SessionsFilters } from '@/api/types'
 import {
@@ -17,7 +18,11 @@ export function useSessionsFilters() {
   // The route loader loads the options before the page renders.
   const { data: options } = useFilterOptionsData()
 
-  const filters: SessionsFilters = options ? toSessionsFilters(search, options) : {}
+  // The same object until the search or the options change, so it can be debounced by identity.
+  const filters: SessionsFilters = useMemo(
+    () => (options ? toSessionsFilters(search, options) : {}),
+    [search, options],
+  )
 
   /** `patch` gets the latest search, so quick clicks in a row do not overwrite each other. */
   function update(patch: (previous: SessionsSearch) => Partial<SessionsSearch>) {
