@@ -86,7 +86,7 @@ export function SeatSelectionStep({
           <Typography variant="button">
             Your seats · Max {filterOptions.maxSeatsPerOrder}
           </Typography>
-          <div className="flex max-h-87.75 flex-col gap-3 overflow-y-auto">
+          <div className="no-scrollbar flex max-h-87.75 flex-col gap-3 overflow-y-auto">
             {selected.length === 0 ? (
               <Typography variant="bodyS" className="text-muted">
                 Pick up to {filterOptions.maxSeatsPerOrder} seats from the map. Each seat can carry

@@ -40,7 +40,7 @@ export function Modal({ open, onClose, children, className }: ModalProps) {
         // so the press must have started on the backdrop too.
         if (pressStartedOnBackdrop.current && isBackdropEvent(e)) onClose()
       }}
-      className={`m-auto rounded-[28px] border border-elevated bg-background p-7.75 text-white shadow-[0px_20px_50px_-10px_var(--shadow)] backdrop:bg-black/30 backdrop:backdrop-blur-[5px] ${className ?? ''}`}
+      className={`no-scrollbar m-auto rounded-[28px] border border-elevated bg-background p-7.75 text-white shadow-[0px_20px_50px_-10px_var(--shadow)] backdrop:bg-black/30 backdrop:backdrop-blur-[5px] ${className ?? ''}`}
     >
       <button
         type="button"

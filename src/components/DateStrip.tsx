@@ -39,9 +39,7 @@ export function DateStrip({
   const style = sizes[size]
 
   return (
-    <div
-      className={`flex overflow-x-auto [scrollbar-color:var(--color-subtle)_transparent] [scrollbar-width:thin] ${style.strip}`}
-    >
+    <div className={`no-scrollbar flex overflow-x-auto ${style.strip}`}>
       {dates.map((date) => (
         <button
           key={date.value}
