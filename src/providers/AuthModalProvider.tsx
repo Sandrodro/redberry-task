@@ -2,8 +2,8 @@ import { useCallback, useEffect, useMemo, useRef, type ReactNode } from 'react'
 import { setUnauthorizedHandler, TOKEN_KEY } from '@/api/client'
 import { AuthModalContext, type OpenLoginOptions } from '@/hooks/useAuthModal'
 import { useModal } from '@/hooks/useModal'
-import { LoginFormModal } from '@/components/LoginFormModal'
-import { SignUpModal } from '@/components/SignUpModal'
+import { LoginFormModal } from '@/components/auth/LoginFormModal'
+import { SignUpModal } from '@/components/auth/SignUpModal'
 import { storage } from '@/utils/storage'
 
 /** Owns the login and sign up modals, so any component can open them. A 401 from the API opens the login modal too. */

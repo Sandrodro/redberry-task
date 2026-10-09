@@ -1,7 +1,7 @@
 import type { FeaturedMovie } from '@/api/types'
 import TicketIcon from '@/assets/icons/ticket.svg?react'
 import TimerIcon from '@/assets/icons/timer.svg?react'
-import { formatDayMonth } from '@/utils/formatDate'
+import { formatDayMonth } from '@/utils/formatters/formatDate'
 import { Badge } from '@/components/core/Badge'
 import { ButtonLink } from '@/components/core/ButtonLink'
 import { Typography } from '@/components/core/Typography'

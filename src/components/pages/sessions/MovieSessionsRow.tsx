@@ -3,7 +3,7 @@ import type { MovieSessions } from '@/api/types'
 import { Badge } from '@/components/core/Badge'
 import { Slider } from '@/components/core/Slider'
 import { Typography } from '@/components/core/Typography'
-import { UnderageNote } from '@/components/UnderageNote'
+import { UnderageNote } from '@/components/session/UnderageNote'
 import { useIsUnderage } from '@/hooks/useIsUnderage'
 import { SessionCard } from './SessionCard'
 

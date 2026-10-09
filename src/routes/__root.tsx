@@ -1,6 +1,6 @@
 import type { QueryClient } from '@tanstack/react-query'
 import { createRootRouteWithContext, Outlet } from '@tanstack/react-router'
-import { DefaultLayout } from '@/components/DefaultLayout'
+import { DefaultLayout } from '@/components/layout/DefaultLayout'
 import { AuthModalProvider } from '@/providers/AuthModalProvider'
 import { BookingModalProvider } from '@/providers/BookingModalProvider'
 

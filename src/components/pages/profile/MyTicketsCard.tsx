@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import type { Order } from '@/api/types'
-import { formatShortDate } from '@/utils/formatDate'
+import { formatShortDate } from '@/utils/formatters/formatDate'
 import { Button } from '@/components/core/Button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/core/Tooltip'
 import { Typography } from '@/components/core/Typography'

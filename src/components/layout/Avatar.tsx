@@ -1,4 +1,4 @@
-import { Typography } from './core/Typography'
+import { Typography } from '@/components/core/Typography'
 
 const dotColors = { warning: 'bg-warning', success: 'bg-success' } as const
 

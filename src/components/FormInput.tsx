@@ -1,6 +1,6 @@
 import type { ComponentProps } from 'react'
 import { useFieldContext } from '@/hooks/formContext'
-import { getFieldError } from '@/utils/getFieldError'
+import { getFieldError } from '@/utils/form/getFieldError'
 import { Input } from './core/Input'
 
 type FormInputProps = {

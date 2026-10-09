@@ -3,7 +3,7 @@ import SeatsIcon from '@/assets/icons/seats.svg?react'
 import { useBookingModal } from '@/hooks/useBookingModal'
 import { Badge } from '@/components/core/Badge'
 import { Typography } from '@/components/core/Typography'
-import { EndedSessionTooltip } from '@/components/EndedSessionTooltip'
+import { EndedSessionTooltip } from '@/components/session/EndedSessionTooltip'
 import { hasSessionEnded } from '@/utils/hasSessionEnded'
 
 const LOW_SEATS_LIMIT = 10

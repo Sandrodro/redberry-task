@@ -1,7 +1,7 @@
 import { useFilterOptionsData } from '@/api/queries/filter-options/useFilterOptionsData'
 import { useSessionsFilters } from './useSessionsFilters'
-import { getAvailableFormats } from '@/utils/sessionsSearchSchema'
-import { DateStrip } from '@/components/DateStrip'
+import { getAvailableFormats } from '@/utils/schemas/sessionsSearchSchema'
+import { DateStrip } from '@/components/session/DateStrip'
 import { Typography } from '@/components/core/Typography'
 import { CheckboxFilter } from './CheckboxFilter'
 

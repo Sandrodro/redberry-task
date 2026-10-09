@@ -7,8 +7,12 @@ import type { User } from '@/api/types'
 import { useLogout } from '@/api/queries/auth/useLogout'
 import { usePrefetchTickets } from '@/hooks/usePrefetchTickets'
 import { Avatar } from './Avatar'
-import { DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from './core/DropdownMenu'
-import { Typography } from './core/Typography'
+import {
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from '@/components/core/DropdownMenu'
+import { Typography } from '@/components/core/Typography'
 
 type ProfileDropdownProps = {
   user: User

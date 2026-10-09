@@ -2,11 +2,11 @@ import { useState } from 'react'
 import { ApiError } from '@/api/client'
 import { useRegister } from '@/api/queries/auth/useRegister'
 import { useAppForm } from '@/hooks/useAppForm'
-import { signUpSchema, type SignUpValues } from '@/utils/signUpSchema'
+import { signUpSchema, type SignUpValues } from '@/utils/schemas/signUpSchema'
 import { AvatarUpload } from './AvatarUpload'
-import { Button } from './core/Button'
-import { Modal } from './core/Modal'
-import { Typography } from './core/Typography'
+import { Button } from '@/components/core/Button'
+import { Modal } from '@/components/core/Modal'
+import { Typography } from '@/components/core/Typography'
 
 const DEFAULT_VALUES: SignUpValues = {
   username: '',

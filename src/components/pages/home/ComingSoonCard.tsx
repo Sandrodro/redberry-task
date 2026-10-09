@@ -1,6 +1,6 @@
 import type { Movie } from '@/api/types'
-import { formatDayMonth } from '@/utils/formatDate'
-import { formatMovieDetails } from '@/utils/formatMovieDetails'
+import { formatDayMonth } from '@/utils/formatters/formatDate'
+import { formatMovieDetails } from '@/utils/formatters/formatMovieDetails'
 import { Badge } from '@/components/core/Badge'
 import { Typography } from '@/components/core/Typography'
 import { NotifyMeButton } from './NotifyMeButton'

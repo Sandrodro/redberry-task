@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import type { Movie } from '@/api/types'
-import { formatMovieDetails } from '@/utils/formatMovieDetails'
+import { formatMovieDetails } from '@/utils/formatters/formatMovieDetails'
 import { Badge } from '@/components/core/Badge'
 import { Typography } from '@/components/core/Typography'
 

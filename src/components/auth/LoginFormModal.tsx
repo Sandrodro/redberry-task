@@ -1,10 +1,10 @@
 import { ApiError } from '@/api/client'
 import { useLogin } from '@/api/queries/auth/useLogin'
 import { useAppForm } from '@/hooks/useAppForm'
-import { loginSchema, type LoginValues } from '@/utils/loginSchema'
-import { Button } from './core/Button'
-import { Modal } from './core/Modal'
-import { Typography } from './core/Typography'
+import { loginSchema, type LoginValues } from '@/utils/schemas/loginSchema'
+import { Button } from '@/components/core/Button'
+import { Modal } from '@/components/core/Modal'
+import { Typography } from '@/components/core/Typography'
 
 type LoginFormModalProps = {
   open: boolean

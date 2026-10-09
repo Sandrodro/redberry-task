@@ -2,8 +2,8 @@ import ArrowIcon from '@/assets/icons/arrow.svg?react'
 import type { User } from '@/api/types'
 import { Avatar } from './Avatar'
 import { ProfileDropdown } from './ProfileDropdown'
-import { DropdownMenu, DropdownMenuTrigger } from './core/DropdownMenu'
-import { Typography } from './core/Typography'
+import { DropdownMenu, DropdownMenuTrigger } from '@/components/core/DropdownMenu'
+import { Typography } from '@/components/core/Typography'
 
 /** Initials are the first letters of the first and last name. Falls back to the username. */
 function getInitials({ fullName, username }: User) {

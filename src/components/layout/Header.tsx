@@ -2,9 +2,9 @@ import { Link } from '@tanstack/react-router'
 import { lazy, Suspense } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 import { useAuthModal } from '@/hooks/useAuthModal'
-import { Button } from './core/Button'
-import { SearchField } from './SearchField'
-import { Typography } from './core/Typography'
+import { Button } from '@/components/core/Button'
+import { SearchField } from '@/components/search/SearchField'
+import { Typography } from '@/components/core/Typography'
 
 // Loaded on demand: the menu pulls in Radix, which a guest never needs.
 const ProfileMenu = lazy(() =>

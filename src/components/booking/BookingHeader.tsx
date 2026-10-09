@@ -1,5 +1,5 @@
 import type { Session } from '@/api/types'
-import { formatLongDate } from '@/utils/formatDate'
+import { formatLongDate } from '@/utils/formatters/formatDate'
 import { Typography } from '@/components/core/Typography'
 
 type BookingHeaderProps = {

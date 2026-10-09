@@ -1,4 +1,4 @@
-import { Typography } from './core/Typography'
+import { Typography } from '@/components/core/Typography'
 
 const CURRENT_YEAR = new Date().getFullYear()
 

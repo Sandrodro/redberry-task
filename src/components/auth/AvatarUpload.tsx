@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import UploadIcon from '@/assets/icons/upload.svg?react'
-import { AVATAR_TYPES, getAvatarFileError } from '@/utils/avatarFile'
-import { Typography } from './core/Typography'
+import { AVATAR_TYPES, getAvatarFileError } from '@/utils/form/avatarFile'
+import { Typography } from '@/components/core/Typography'
 
 type AvatarUploadProps = {
   onChange: (file?: File) => void

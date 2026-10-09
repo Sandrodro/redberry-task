@@ -7,7 +7,7 @@ import {
   parseList,
   toSessionsFilters,
   type SessionsSearch,
-} from '@/utils/sessionsSearchSchema'
+} from '@/utils/schemas/sessionsSearchSchema'
 
 type ListKey = 'venue' | 'format' | 'language' | 'band'
 

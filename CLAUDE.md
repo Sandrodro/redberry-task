@@ -25,23 +25,28 @@ src/
     queryKeys.ts    query key factories
     types.ts        API types
     queries/        one folder per resource, one hook per file (useFeaturedMoviesData, useLogin, ...)
-  components/       app components used by more than one page (Header, DefaultLayout, ...)
+  components/       app components used by more than one page. A component with no group stays at the root (FormInput, RouteError)
+    auth/           login and sign-up modals, avatar upload
     booking/        the booking modal and its steps, opened from the sessions and movie pages
-    core/           base UI components (Button, Input, Modal, Typography)
+    core/           base UI components (Button, Input, Modal, Typography, WarningNote)
+    layout/         the app shell: DefaultLayout, Header, Footer, ProfileMenu, ProfileDropdown, Avatar
     pages/          one folder per page: the page component and the components only that page uses (home/HomePage, home/MovieCard, ...)
+    search/         the header search: SearchField, SearchDropdown, SearchResult, SearchEmptyState
+    session/        session UI shared by the sessions and movie pages (DateStrip, EndedSessionTooltip, UnderageNote)
   hooks/            app hooks (useAuth)
   providers/        context providers mounted in the root route (AuthModalProvider)
   routes/           route files only: declare the route, render a page
-  utils/            generic helpers (storage)
+  utils/            generic helpers (storage). schemas/ holds the Zod schemas (forms and URL search params), form/ holds form helpers, formatters/ holds formatting helpers
 ```
 
 ## Conventions
 
 - Routes in `src/routes/` only call `createFileRoute` and point to a page component in `src/components/pages/`. No page logic in route files.
 - Routes that need a logged in user go in `src/routes/_protected/`. A guest gets the login modal on the same URL and goes home if they close it. To open the modal from code, use `useAuthModal().openLogin({ onSuccess, onCancel })`. `onSuccess` resumes what the user was doing.
-- Form validation is a Zod schema in `src/utils/`, passed to `useForm` as `validators: { onMount, onChange }`. Show a field error only when `field.state.meta.isBlurred` is true.
+- Form validation is a Zod schema in `src/utils/schemas/`, passed to `useForm` as `validators: { onMount, onChange }`. Show a field error only when `field.state.meta.isBlurred` is true.
 - Build UI from reusable components. Check `src/components/core/` and `src/components/` before writing new markup. A component used by one page lives in that page's folder. When a second page needs it, move it up to `src/components/`.
 - Helper functions (formatting, calculations) do not live in component files. A feature folder with such helpers keeps them in a `utils.ts` next to its components (`components/booking/utils.ts`). A helper used by more than one folder goes in `src/utils/`.
+- Group files in `src/utils/` by what they are, in a subfolder named for the kind: `schemas/` (Zod schemas), `formatters/` (value to text), `form/` (form helpers). A new file goes into the folder that matches its kind. When two files of one kind exist outside a folder, make the folder. A file with no kind group stays at the root of `utils/`. Do not make catch-all folders like `helpers/` or `misc/`. Components, hooks and `api/queries/` follow the same rule: one folder per kind or resource.
 - A handler used once is written inline in the JSX prop. A function stays named only when two or more places call it.
 - Destructure hook results at the call, and rename with `:` when two calls clash: `const { isOpen: isLoginOpen, open: showLogin } = useModal()`. Do not keep the whole object only to read fields from it.
 - Use `Typography` for all text. Do not hand-write font size or weight classes.

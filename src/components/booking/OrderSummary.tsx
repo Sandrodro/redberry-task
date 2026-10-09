@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import type { Session } from '@/api/types'
-import { formatShortDate } from '@/utils/formatDate'
+import { formatShortDate } from '@/utils/formatters/formatDate'
 import { Typography } from '@/components/core/Typography'
 import { formatTickets } from './utils'
 

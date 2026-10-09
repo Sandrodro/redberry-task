@@ -6,14 +6,14 @@ import {
 } from '@/api/queries/movies/useMovieSessionsData'
 import type { MovieDetail, Session } from '@/api/types'
 import { useIsUnderage } from '@/hooks/useIsUnderage'
-import { formatDayMonth } from '@/utils/formatDate'
+import { formatDayMonth } from '@/utils/formatters/formatDate'
 import { getFirstAvailableDate } from '@/utils/getUpcomingDates'
 import { EmptyState } from '@/components/core/EmptyState'
 import { ErrorState } from '@/components/core/ErrorState'
 import { Spinner } from '@/components/core/Spinner'
 import { Typography } from '@/components/core/Typography'
-import { DateStrip } from '@/components/DateStrip'
-import { UnderageNote } from '@/components/UnderageNote'
+import { DateStrip } from '@/components/session/DateStrip'
+import { UnderageNote } from '@/components/session/UnderageNote'
 import { SessionTicket } from './SessionTicket'
 
 /** A date loaded on hover is reused for this long, so moving over it again does not fetch again. */
