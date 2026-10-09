@@ -11,6 +11,57 @@ import { TooltipProvider } from '@/components/core/Tooltip'
 import { MyTicketsCard } from './MyTicketsCard'
 import { RefundConfirmModal } from './RefundConfirmModal'
 
+type TicketListProps = {
+  filter: TicketFilter
+  /** Refund error messages by order reference. */
+  errors: Record<string, string>
+  onRefund: (order: Order) => void
+}
+
+function TicketList({ filter, errors, onRefund }: TicketListProps) {
+  const { data, isPending, isLoadingError, isFetching, refetch } = useTicketsData(filter)
+
+  if (isPending) return <Spinner className="mx-auto mt-10" />
+  if (isLoadingError) {
+    return (
+      <ErrorState
+        message="Could not load your tickets."
+        onRetry={() => refetch()}
+        isRetrying={isFetching}
+      />
+    )
+  }
+  if (data.length === 0) {
+    return filter === 'upcoming' ? (
+      <EmptyState
+        title="No upcoming tickets"
+        description="Book a session and your tickets will show up here."
+      >
+        <ButtonLink to="/sessions" variant="tertiary" size="sm">
+          Browse sessions
+        </ButtonLink>
+      </EmptyState>
+    ) : (
+      <EmptyState
+        title="No past tickets"
+        description="Tickets for sessions that already took place will show up here."
+      />
+    )
+  }
+  return (
+    <div className="flex flex-col gap-5">
+      {data.map((order) => (
+        <MyTicketsCard
+          key={order.id}
+          order={order}
+          error={errors[order.reference]}
+          onRefund={() => onRefund(order)}
+        />
+      ))}
+    </div>
+  )
+}
+
 export function MyTickets() {
   const upcoming = useTicketsData('upcoming')
   const past = useTicketsData('past')
@@ -29,48 +80,6 @@ export function MyTickets() {
     })
   }
 
-  function renderList(filter: TicketFilter, query: typeof upcoming) {
-    if (query.isPending) return <Spinner className="mx-auto mt-10" />
-    if (query.isLoadingError) {
-      return (
-        <ErrorState
-          message="Could not load your tickets."
-          onRetry={() => query.refetch()}
-          isRetrying={query.isFetching}
-        />
-      )
-    }
-    if (query.data.length === 0) {
-      return filter === 'upcoming' ? (
-        <EmptyState
-          title="No upcoming tickets"
-          description="Book a session and your tickets will show up here."
-        >
-          <ButtonLink to="/sessions" variant="tertiary" size="sm">
-            Browse sessions
-          </ButtonLink>
-        </EmptyState>
-      ) : (
-        <EmptyState
-          title="No past tickets"
-          description="Tickets for sessions that already took place will show up here."
-        />
-      )
-    }
-    return (
-      <div className="flex flex-col gap-5">
-        {query.data.map((order) => (
-          <MyTicketsCard
-            key={order.id}
-            order={order}
-            error={errors[order.reference]}
-            onRefund={() => setSelected(order)}
-          />
-        ))}
-      </div>
-    )
-  }
-
   return (
     <TooltipProvider>
       <Tabs defaultValue="upcoming" className="flex flex-col gap-5">
@@ -82,8 +91,12 @@ export function MyTickets() {
             Past
           </TabsTrigger>
         </TabsList>
-        <TabsContent value="upcoming">{renderList('upcoming', upcoming)}</TabsContent>
-        <TabsContent value="past">{renderList('past', past)}</TabsContent>
+        <TabsContent value="upcoming">
+          <TicketList filter="upcoming" errors={errors} onRefund={setSelected} />
+        </TabsContent>
+        <TabsContent value="past">
+          <TicketList filter="past" errors={errors} onRefund={setSelected} />
+        </TabsContent>
       </Tabs>
       <RefundConfirmModal
         order={selected}

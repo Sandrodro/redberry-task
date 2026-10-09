@@ -34,10 +34,13 @@ function groupByHall(sessions: Session[]) {
   return Array.from(halls.values())
 }
 
-export function MovieSessions({ movie }: { movie: MovieDetail }) {
-  const queryClient = useQueryClient()
-  const [selectedDate, setSelectedDate] = useState<string>()
-  const date = selectedDate ?? getFirstAvailableDate(movie.availableDates)
+type SessionsListProps = {
+  movie: MovieDetail
+  date: string
+  isUnderage: boolean
+}
+
+function SessionsList({ movie, date, isUnderage }: SessionsListProps) {
   const {
     data: venues,
     isPending,
@@ -46,6 +49,69 @@ export function MovieSessions({ movie }: { movie: MovieDetail }) {
     isPlaceholderData,
     refetch,
   } = useMovieSessionsData(movie.slug, date)
+
+  if (isPending) {
+    return (
+      <div className="flex justify-center py-10">
+        <Spinner />
+      </div>
+    )
+  }
+  if (isLoadingError) {
+    return (
+      <ErrorState
+        message="Sessions could not be loaded."
+        onRetry={() => refetch()}
+        isRetrying={isFetching}
+      />
+    )
+  }
+  if (venues.every((venue) => venue.sessions.length === 0)) {
+    // While a new date loads, the previous (empty) result stays and shows nothing.
+    if (isPlaceholderData) return null
+    return (
+      <EmptyState
+        title="No sessions on this date"
+        description="Pick another date to see more sessions."
+      />
+    )
+  }
+  return (
+    <div
+      className={`flex flex-col gap-6.75 transition-opacity ${isPlaceholderData ? 'opacity-60' : ''}`}
+    >
+      {venues.map(({ venue, sessions }) => (
+        <div key={venue.id} className="flex flex-col gap-3">
+          <Typography variant="button">{venue.name}</Typography>
+          <div className="flex flex-wrap gap-2.5">
+            {groupByHall(sessions).map((hall) => (
+              <div key={hall.id} className="flex flex-col gap-2.25 rounded-[18px] bg-card p-3.75">
+                <Typography variant="labelS">Hall {hall.name}</Typography>
+                <div className="flex flex-wrap gap-2.25">
+                  {hall.sessions.map((session) => (
+                    <SessionTicket
+                      key={session.id}
+                      // This endpoint leaves out `movie`, which the booking modal reads.
+                      session={{ ...session, movie }}
+                      disabled={session.isSoldOut || isUnderage}
+                    />
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+export function MovieSessions({ movie }: { movie: MovieDetail }) {
+  const queryClient = useQueryClient()
+  const [selectedDate, setSelectedDate] = useState<string>()
+  const date = selectedDate ?? getFirstAvailableDate(movie.availableDates)
+  // The list below reads the same query, so this is one request.
+  const { data: venues, isPlaceholderData } = useMovieSessionsData(movie.slug, date)
 
   const sessionCount = venues?.reduce((total, venue) => total + venue.sessions.length, 0) ?? 0
   // While a new date loads, the previous sessions stay on screen, so the text names their date.
@@ -81,53 +147,7 @@ export function MovieSessions({ movie }: { movie: MovieDetail }) {
         />
       </div>
       {isUnderage && <UnderageNote ageRating={movie.ageRating} />}
-      {isPending && (
-        <div className="flex justify-center py-10">
-          <Spinner />
-        </div>
-      )}
-      {isLoadingError && (
-        <ErrorState
-          message="Sessions could not be loaded."
-          onRetry={() => refetch()}
-          isRetrying={isFetching}
-        />
-      )}
-      {venues && !isPlaceholderData && sessionCount === 0 && (
-        <EmptyState
-          title="No sessions on this date"
-          description="Pick another date to see more sessions."
-        />
-      )}
-      {venues && sessionCount > 0 && (
-        <div className={`flex flex-col gap-6.75 ${fade}`}>
-          {venues.map(({ venue, sessions }) => (
-            <div key={venue.id} className="flex flex-col gap-3">
-              <Typography variant="button">{venue.name}</Typography>
-              <div className="flex flex-wrap gap-2.5">
-                {groupByHall(sessions).map((hall) => (
-                  <div
-                    key={hall.id}
-                    className="flex flex-col gap-2.25 rounded-[18px] bg-card p-3.75"
-                  >
-                    <Typography variant="labelS">Hall {hall.name}</Typography>
-                    <div className="flex flex-wrap gap-2.25">
-                      {hall.sessions.map((session) => (
-                        <SessionTicket
-                          key={session.id}
-                          // This endpoint leaves out `movie`, which the booking modal reads.
-                          session={{ ...session, movie }}
-                          disabled={session.isSoldOut || isUnderage}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
+      <SessionsList movie={movie} date={date} isUnderage={isUnderage} />
     </section>
   )
 }
