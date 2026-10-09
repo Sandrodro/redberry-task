@@ -4,7 +4,9 @@ import useEmblaCarousel from 'embla-carousel-react'
 import { useCallback, useEffect, useState, type Key, type ReactNode } from 'react'
 import ArrowLeftIcon from '@/assets/icons/arrow-left.svg?react'
 
-const AUTOPLAY_DELAY_MS = 6000
+const AUTOPLAY_DELAY_MS = 3000
+/** Embla's duration has no unit. 15 fades in about 0.3s, as in the design. The default 25 takes about 1s. */
+const FADE_DURATION = 15
 
 function ArrowButton({ direction, onClick }: { direction: 'prev' | 'next'; onClick: () => void }) {
   return (
@@ -35,7 +37,7 @@ export function Carousel<T>({
   autoplayDelay = AUTOPLAY_DELAY_MS,
   className = '',
 }: CarouselProps<T>) {
-  const [viewportRef, emblaApi] = useEmblaCarousel({ loop: true }, [
+  const [viewportRef, emblaApi] = useEmblaCarousel({ loop: true, duration: FADE_DURATION }, [
     Fade(),
     Autoplay({ delay: autoplayDelay, stopOnInteraction: false, stopOnMouseEnter: true }),
   ])

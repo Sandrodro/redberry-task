@@ -31,7 +31,7 @@ export function DropdownMenuItem({
   ...props
 }: ComponentProps<typeof DropdownMenuPrimitive.Item>) {
   const base =
-    'flex w-full cursor-pointer items-center gap-2 rounded-[10px] py-2.5 pl-5 text-left outline-none data-highlighted:bg-white/10'
+    'flex w-full cursor-pointer items-center gap-2 py-2.5 pl-5 text-left outline-none data-highlighted:bg-card'
 
   return (
     <DropdownMenuPrimitive.Item className={className ? `${base} ${className}` : base} {...props} />
