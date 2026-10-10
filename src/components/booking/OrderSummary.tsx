@@ -1,6 +1,8 @@
 import type { ReactNode } from 'react'
 import type { Session } from '@/api/types'
 import { formatShortDate } from '@/utils/formatters/formatDate'
+import { Cover } from '@/components/core/Cover'
+import { Divider } from '@/components/core/Divider'
 import { Typography } from '@/components/core/Typography'
 import { formatTickets } from './utils'
 
@@ -30,16 +32,7 @@ export function OrderSummary({ session, seats, total, showPoster }: OrderSummary
   return (
     <div className="flex flex-col gap-3 rounded-2xl bg-card p-4.5">
       <div className="flex gap-3">
-        {showPoster &&
-          (movie.posterUrl ? (
-            <img
-              src={movie.posterUrl}
-              alt=""
-              className="h-12 w-12 shrink-0 rounded-md object-cover"
-            />
-          ) : (
-            <div className="h-12 w-12 shrink-0 rounded-md bg-elevated" />
-          ))}
+        {showPoster && <Cover src={movie.posterUrl} className="h-12 w-12 shrink-0 rounded-md" />}
         <div className="flex flex-col gap-2">
           <Typography variant="button" as="p" className="uppercase">
             {movie.title}
@@ -49,12 +42,12 @@ export function OrderSummary({ session, seats, total, showPoster }: OrderSummary
           </Typography>
         </div>
       </div>
-      <hr className="h-px border-0 bg-elevated" />
+      <Divider />
       <Row label="Seats">{seats.map((seat) => seat.code).join(', ')}</Row>
       <Row label="Tickets">{formatTickets(seats)}</Row>
       {total && (
         <>
-          <hr className="h-px border-0 bg-elevated" />
+          <Divider />
           <div className="flex items-center justify-between">
             <Typography variant="bodyS" as="span" className="text-muted uppercase">
               {total.label}

@@ -1,5 +1,6 @@
 import { Tooltip as TooltipPrimitive } from 'radix-ui'
 import type { ComponentProps } from 'react'
+import { cx } from '@/utils/cx'
 import { Typography } from './Typography'
 
 /** Mount it above the tooltips, once per page that uses them. */
@@ -20,11 +21,7 @@ export function TooltipContent({
 
   return (
     <TooltipPrimitive.Portal>
-      <TooltipPrimitive.Content
-        sideOffset={6}
-        className={className ? `${base} ${className}` : base}
-        {...props}
-      >
+      <TooltipPrimitive.Content sideOffset={6} className={cx(base, className)} {...props}>
         <Typography variant="bodyS">{children}</Typography>
       </TooltipPrimitive.Content>
     </TooltipPrimitive.Portal>

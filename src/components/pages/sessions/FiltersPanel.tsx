@@ -2,6 +2,7 @@ import { useFilterOptionsData } from '@/api/queries/filter-options/useFilterOpti
 import { useSessionsFilters } from './useSessionsFilters'
 import { getAvailableFormats } from '@/utils/schemas/sessionsSearchSchema'
 import { DateStrip } from '@/components/session/DateStrip'
+import { Divider } from '@/components/core/Divider'
 import { Typography } from '@/components/core/Typography'
 import { CheckboxFilter } from './CheckboxFilter'
 
@@ -32,14 +33,14 @@ export function FiltersPanel() {
         selected={filters.venues}
         onToggle={(value) => toggle('venue', value)}
       />
-      <hr className="h-px border-0 bg-elevated" />
+      <Divider />
       <section className="flex flex-col gap-3">
         <Typography variant="overline" as="h3" className="text-muted">
           Date
         </Typography>
         <DateStrip value={filters.date} onChange={setDate} />
       </section>
-      <hr className="h-px border-0 bg-elevated" />
+      <Divider />
       <CheckboxFilter
         title="Format"
         options={getAvailableFormats(options, filters.venues).map((format) => ({
@@ -49,7 +50,7 @@ export function FiltersPanel() {
         selected={filters.formats}
         onToggle={(value) => toggle('format', value)}
       />
-      <hr className="h-px border-0 bg-elevated" />
+      <Divider />
       <CheckboxFilter
         title="Language"
         options={options.languages.map((language) => ({
@@ -59,7 +60,7 @@ export function FiltersPanel() {
         selected={filters.languages}
         onToggle={(value) => toggle('language', value)}
       />
-      <hr className="h-px border-0 bg-elevated" />
+      <Divider />
       <CheckboxFilter
         title="Time of day"
         options={options.timeBands.map((band) => ({
@@ -69,7 +70,7 @@ export function FiltersPanel() {
         selected={filters.bands}
         onToggle={(value) => toggle('band', value)}
       />
-      <hr className="h-px border-0 bg-elevated" />
+      <Divider />
       <div className="flex flex-col items-center gap-3">
         {activeCount > 0 && (
           <button

@@ -1,14 +1,13 @@
 import CalendarIcon from '@/assets/icons/calendar.svg?react'
-import { ApiError } from '@/api/client'
 import { useUpdateProfile } from '@/api/queries/profile/useUpdateProfile'
 import { useFilterOptionsData } from '@/api/queries/filter-options/useFilterOptionsData'
 import type { AgeRating, User } from '@/api/types'
 import { useAppForm } from '@/hooks/useAppForm'
+import { getServerErrors } from '@/utils/form/getServerErrors'
 import { getAge, MIN_AGE, profileSchema } from '@/utils/schemas/profileSchema'
-import { Button } from '@/components/core/Button'
+import { ErrorMessage } from '@/components/core/ErrorMessage'
 import { Input } from '@/components/core/Input'
 import { Select } from '@/components/core/Select'
-import { Typography } from '@/components/core/Typography'
 import { getProfileFormValues } from './utils'
 
 function getAgeNote(dateOfBirth: string, ageRatings: AgeRating[] = []) {
@@ -23,7 +22,7 @@ function getAgeNote(dateOfBirth: string, ageRatings: AgeRating[] = []) {
 
 export function PersonalInformationForm({ user }: { user: User }) {
   const update = useUpdateProfile()
-  const error = update.error instanceof ApiError ? update.error : null
+  const { fieldErrors, message } = getServerErrors(update.error)
   const { data: filterOptions } = useFilterOptionsData()
 
   const form = useAppForm({
@@ -49,11 +48,7 @@ export function PersonalInformationForm({ user }: { user: User }) {
         <div className="flex flex-col gap-4.5">
           <form.AppField name="fullName">
             {(field) => (
-              <field.Input
-                label="Full name"
-                success={false}
-                serverError={error?.errors?.fullName?.[0]}
-              />
+              <field.Input label="Full name" success={false} serverError={fieldErrors.fullName} />
             )}
           </form.AppField>
           <Input
@@ -70,7 +65,7 @@ export function PersonalInformationForm({ user }: { user: User }) {
                 label="Mobile number"
                 type="tel"
                 success={false}
-                serverError={error?.errors?.mobileNumber?.[0]}
+                serverError={fieldErrors.mobileNumber}
               />
             )}
           </form.AppField>
@@ -80,7 +75,7 @@ export function PersonalInformationForm({ user }: { user: User }) {
                 label="Date of birth"
                 type="date"
                 success={false}
-                serverError={error?.errors?.dateOfBirth?.[0]}
+                serverError={fieldErrors.dateOfBirth}
                 hint={getAgeNote(field.state.value, filterOptions?.ageRatings)}
                 icon={<CalendarIcon className="pointer-events-none size-4 shrink-0 text-white" />}
                 className="[&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:inset-0 [&::-webkit-calendar-picker-indicator]:size-full [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-0"
@@ -94,7 +89,7 @@ export function PersonalInformationForm({ user }: { user: User }) {
                 value={field.state.value ?? ''}
                 onChange={(e) => field.handleChange(e.target.value ? Number(e.target.value) : null)}
                 onBlur={field.handleBlur}
-                error={error?.errors?.preferredVenueId?.[0]}
+                error={fieldErrors.preferredVenueId}
               >
                 <option value="">Select venue</option>
                 {filterOptions?.venues.map((venue) => (
@@ -106,19 +101,18 @@ export function PersonalInformationForm({ user }: { user: User }) {
             )}
           </form.Field>
         </div>
-        {error && !error.errors && (
-          <Typography variant="labelS" className="text-brand">
-            {error.message}
-          </Typography>
-        )}
+        <ErrorMessage message={message} />
       </div>
-      <form.Subscribe selector={(state) => state.canSubmit && !state.isDefaultValue}>
-        {(canSave) => (
-          <Button type="submit" disabled={!canSave || update.isPending} className="self-start">
-            {update.isPending ? 'Saving...' : 'Save changes'}
-          </Button>
-        )}
-      </form.Subscribe>
+      <form.AppForm>
+        <form.SubmitButton
+          isPending={update.isPending}
+          pendingLabel="Saving..."
+          requireChange
+          className="self-start"
+        >
+          Save changes
+        </form.SubmitButton>
+      </form.AppForm>
     </form>
   )
 }

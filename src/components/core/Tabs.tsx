@@ -1,5 +1,6 @@
 import { Tabs as TabsPrimitive } from 'radix-ui'
 import type { ComponentProps } from 'react'
+import { cx } from '@/utils/cx'
 import { Typography } from './Typography'
 
 type TabsVariant = 'underline' | 'pill'
@@ -22,9 +23,7 @@ export function TabsList({
   className,
   ...props
 }: ComponentProps<typeof TabsPrimitive.List> & { variant?: TabsVariant }) {
-  const base = listStyles[variant]
-
-  return <TabsPrimitive.List className={className ? `${base} ${className}` : base} {...props} />
+  return <TabsPrimitive.List className={cx(listStyles[variant], className)} {...props} />
 }
 
 export function TabsTrigger({
@@ -34,10 +33,8 @@ export function TabsTrigger({
   children,
   ...props
 }: ComponentProps<typeof TabsPrimitive.Trigger> & { variant?: TabsVariant; count?: number }) {
-  const base = triggerStyles[variant]
-
   return (
-    <TabsPrimitive.Trigger className={className ? `${base} ${className}` : base} {...props}>
+    <TabsPrimitive.Trigger className={cx(triggerStyles[variant], className)} {...props}>
       {variant === 'pill' ? (
         <>
           <Typography variant="labelM">{children}</Typography>

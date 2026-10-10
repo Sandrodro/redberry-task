@@ -50,13 +50,7 @@ function SessionsList({ movie, date, isUnderage }: SessionsListProps) {
     refetch,
   } = useMovieSessionsData(movie.slug, date)
 
-  if (isPending) {
-    return (
-      <div className="flex justify-center py-10">
-        <Spinner />
-      </div>
-    )
-  }
+  if (isPending) return <Spinner className="mx-auto my-10" />
   if (isLoadingError) {
     return (
       <ErrorState

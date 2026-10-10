@@ -5,6 +5,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import { ApiError } from './api/client'
+import { PageSpinner } from './components/PageSpinner'
 import { RouteError } from './components/RouteError'
 import { routeTree } from './routeTree.gen'
 
@@ -23,6 +24,7 @@ const router = createRouter({
   routeTree,
   context: { queryClient },
   defaultErrorComponent: RouteError,
+  defaultPendingComponent: PageSpinner,
   // Keep commas readable in the URL: ?venue=galleria,batumi
   stringifySearch: (search) => defaultStringifySearch(search).replace(/%2C/g, ','),
 })

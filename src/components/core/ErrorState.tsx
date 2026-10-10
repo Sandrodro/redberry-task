@@ -1,3 +1,4 @@
+import { cx } from '@/utils/cx'
 import { Button } from './Button'
 import { Typography } from './Typography'
 
@@ -11,10 +12,8 @@ type ErrorStateProps = {
 
 /** A failed request: what went wrong, and a button that sends it again. */
 export function ErrorState({ message, onRetry, isRetrying, className }: ErrorStateProps) {
-  const base = 'flex flex-col items-start gap-3'
-
   return (
-    <div role="alert" className={className ? `${base} ${className}` : base}>
+    <div role="alert" className={cx('flex flex-col items-start gap-3', className)}>
       <Typography variant="bodyM" className="text-muted">
         {message}
       </Typography>

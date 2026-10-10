@@ -1,27 +1,19 @@
 import type { MovieDetail } from '@/api/types'
 import TimerIcon from '@/assets/icons/timer.svg?react'
 import { Badge } from '@/components/core/Badge'
+import { Cover } from '@/components/core/Cover'
 import { Typography } from '@/components/core/Typography'
 
 export function MovieHero({ movie }: { movie: MovieDetail }) {
   return (
     <section className="relative -mt-28 h-141.75 overflow-hidden">
-      {movie.backdropUrl ? (
-        <img src={movie.backdropUrl} alt="" className="absolute inset-0 size-full object-cover" />
-      ) : (
-        <div className="absolute inset-0 bg-elevated" />
-      )}
+      <Cover src={movie.backdropUrl} className="absolute inset-0 size-full" />
       <div className="absolute inset-0 bg-background/20 backdrop-blur-[5px]" />
       <div className="absolute left-15 top-38 flex items-end gap-8.5">
-        {movie.posterUrl ? (
-          <img
-            src={movie.posterUrl}
-            alt=""
-            className="h-93.5 w-72.25 rounded-[14px] object-cover shadow-[0_4px_64px_var(--shadow)]"
-          />
-        ) : (
-          <div className="h-93.5 w-72.25 rounded-[14px] bg-elevated shadow-[0_4px_64px_var(--shadow)]" />
-        )}
+        <Cover
+          src={movie.posterUrl}
+          className="h-93.5 w-72.25 rounded-[14px] shadow-[0_4px_64px_var(--shadow)]"
+        />
         <div className="flex w-145 flex-col items-start gap-3.75 py-2.25">
           <Badge tone="brand" className="px-2.5! uppercase">
             {movie.isComingSoon ? 'Coming soon' : 'Now playing'}

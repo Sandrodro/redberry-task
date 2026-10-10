@@ -3,6 +3,7 @@ import { useSessionsData } from '@/api/queries/sessions/useSessionsData'
 import { useDebouncedValue } from '@/hooks/useDebouncedValue'
 import { useSessionsFilters } from './useSessionsFilters'
 import { Button } from '@/components/core/Button'
+import { Divider } from '@/components/core/Divider'
 import { EmptyState } from '@/components/core/EmptyState'
 import { ErrorState } from '@/components/core/ErrorState'
 import { Pagination } from '@/components/core/Pagination'
@@ -87,7 +88,7 @@ export function SessionsPage() {
               >
                 {data?.data.map((group, index) => (
                   <Fragment key={group.movie.id}>
-                    {index > 0 && <hr className="h-px border-0 bg-elevated" />}
+                    {index > 0 && <Divider />}
                     <MovieSessionsRow {...group} />
                   </Fragment>
                 ))}

@@ -1,5 +1,6 @@
 import { Link, type LinkComponentProps } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
+import { cx } from '@/utils/cx'
 import { buttonStyles, type ButtonStyleProps } from './buttonStyles'
 import { Typography } from './Typography'
 
@@ -19,7 +20,7 @@ export function ButtonLink({
   const base = `${buttonStyles({ variant, size })} gap-1`
 
   return (
-    <Link className={className ? `${base} ${className}` : base} {...props}>
+    <Link className={cx(base, className)} {...props}>
       {icon}
       <Typography variant="button">{children}</Typography>
     </Link>

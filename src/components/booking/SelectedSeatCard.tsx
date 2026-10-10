@@ -1,5 +1,6 @@
 import type { TicketType, TicketTypeSlug } from '@/api/types'
 import CloseIcon from '@/assets/icons/close.svg?react'
+import { Divider } from '@/components/core/Divider'
 import { Typography } from '@/components/core/Typography'
 import type { SelectedSeat } from './types'
 
@@ -50,7 +51,7 @@ export function SelectedSeatCard({
           </button>
         </div>
       </div>
-      <hr className="h-px border-0 bg-elevated" />
+      <Divider />
       <div className="flex gap-2">
         {ticketTypes.map((type) => {
           const active = type.slug === selected.ticketType

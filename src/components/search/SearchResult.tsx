@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import type { Movie } from '@/api/types'
+import { Cover } from '@/components/core/Cover'
 import { Typography } from '@/components/core/Typography'
 
 /** Shows the part of the title that matches the query in white. */
@@ -31,16 +32,7 @@ export function SearchResult({ movie, query, onSelect }: SearchResultProps) {
       onClick={onSelect}
       className="flex h-18 items-center gap-3.5 rounded-[10px] py-2 pl-2.5 pr-5 hover:bg-white/10"
     >
-      {movie.posterUrl ? (
-        <img
-          src={movie.posterUrl}
-          alt=""
-          draggable={false}
-          className="h-14 w-10 shrink-0 rounded-md object-cover"
-        />
-      ) : (
-        <div className="h-14 w-10 shrink-0 rounded-md bg-elevated" />
-      )}
+      <Cover src={movie.posterUrl} className="h-14 w-10 shrink-0 rounded-md" />
       <div className="flex min-w-0 flex-1 flex-col gap-0.75">
         <Typography variant="labelM" as="p" className="truncate text-muted">
           <HighlightedTitle title={movie.title} query={query} />

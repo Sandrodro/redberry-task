@@ -31,7 +31,7 @@ export function RefundConfirmModal({
             Cancel
           </Button>
           <Button onClick={onConfirm} disabled={isPending} className="flex-1">
-            Refund
+            {isPending ? 'Refunding...' : 'Refund'}
           </Button>
         </div>
       </div>

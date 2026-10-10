@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import AlertIcon from '@/assets/icons/alert.svg?react'
 import CheckIcon from '@/assets/icons/check.svg?react'
+import { ErrorMessage } from './ErrorMessage'
 import { Typography } from './Typography'
 
 export type FieldProps = {
@@ -51,9 +52,7 @@ export function Field({
         </div>
       </div>
       {error ? (
-        <Typography variant="labelS" className="text-brand">
-          {error}
-        </Typography>
+        <ErrorMessage message={error} />
       ) : (
         hint && (
           <Typography variant="labelS" className="text-muted">

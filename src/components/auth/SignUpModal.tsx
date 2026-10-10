@@ -1,10 +1,10 @@
 import { useState } from 'react'
-import { ApiError } from '@/api/client'
 import { useRegister } from '@/api/queries/auth/useRegister'
 import { useAppForm } from '@/hooks/useAppForm'
+import { getServerErrors } from '@/utils/form/getServerErrors'
 import { signUpSchema, type SignUpValues } from '@/utils/schemas/signUpSchema'
 import { AvatarUpload } from './AvatarUpload'
-import { Button } from '@/components/core/Button'
+import { ErrorMessage } from '@/components/core/ErrorMessage'
 import { Modal } from '@/components/core/Modal'
 import { Typography } from '@/components/core/Typography'
 
@@ -25,7 +25,7 @@ type SignUpModalProps = {
 export function SignUpModal({ open, onClose, onLogIn }: SignUpModalProps) {
   const register = useRegister()
   const [resetKey, setResetKey] = useState(0)
-  const error = register.error instanceof ApiError ? register.error : null
+  const { fieldErrors, message } = getServerErrors(register.error)
 
   const form = useAppForm({
     defaultValues: DEFAULT_VALUES,
@@ -69,7 +69,7 @@ export function SignUpModal({ open, onClose, onLogIn }: SignUpModalProps) {
               <AvatarUpload
                 key={resetKey}
                 onChange={field.handleChange}
-                error={error?.errors?.avatar?.[0]}
+                error={fieldErrors.avatar}
               />
             )}
           </form.Field>
@@ -79,7 +79,7 @@ export function SignUpModal({ open, onClose, onLogIn }: SignUpModalProps) {
                 <field.Input
                   label="Username"
                   placeholder="User"
-                  serverError={error?.errors?.username?.[0]}
+                  serverError={fieldErrors.username}
                 />
               )}
             </form.AppField>
@@ -89,7 +89,7 @@ export function SignUpModal({ open, onClose, onLogIn }: SignUpModalProps) {
                   label="Email"
                   type="email"
                   placeholder="example@gmail.com"
-                  serverError={error?.errors?.email?.[0]}
+                  serverError={fieldErrors.email}
                 />
               )}
             </form.AppField>
@@ -100,7 +100,7 @@ export function SignUpModal({ open, onClose, onLogIn }: SignUpModalProps) {
                     label="Password"
                     type="password"
                     placeholder="••••••••"
-                    serverError={error?.errors?.password?.[0]}
+                    serverError={fieldErrors.password}
                   />
                 )}
               </form.AppField>
@@ -110,25 +110,19 @@ export function SignUpModal({ open, onClose, onLogIn }: SignUpModalProps) {
                     label="Confirm password"
                     type="password"
                     placeholder="••••••••"
-                    serverError={error?.errors?.password_confirmation?.[0]}
+                    serverError={fieldErrors.password_confirmation}
                   />
                 )}
               </form.AppField>
             </div>
           </div>
           <div className="flex flex-col gap-6">
-            {error && !error.errors && (
-              <Typography variant="labelS" className="text-brand">
-                {error.message}
-              </Typography>
-            )}
-            <form.Subscribe selector={(state) => state.canSubmit}>
-              {(canSubmit) => (
-                <Button type="submit" disabled={!canSubmit || register.isPending}>
-                  Sign up
-                </Button>
-              )}
-            </form.Subscribe>
+            <ErrorMessage message={message} />
+            <form.AppForm>
+              <form.SubmitButton isPending={register.isPending} pendingLabel="Signing up...">
+                Sign up
+              </form.SubmitButton>
+            </form.AppForm>
             <Typography
               variant="bodyM"
               className="flex items-center justify-center gap-1.25 text-muted"

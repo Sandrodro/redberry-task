@@ -2,7 +2,7 @@ import { useParams } from '@tanstack/react-router'
 import { useEffect } from 'react'
 import { useMovieData } from '@/api/queries/movies/useMovieData'
 import { ErrorState } from '@/components/core/ErrorState'
-import { Spinner } from '@/components/core/Spinner'
+import { PageSpinner } from '@/components/PageSpinner'
 import { TooltipProvider } from '@/components/core/Tooltip'
 import { addRecentlyViewed } from '@/utils/recentlyViewed'
 import { MovieDetails } from './MovieDetails'
@@ -18,13 +18,7 @@ export function MoviePage() {
     if (movie) addRecentlyViewed(movie.slug)
   }, [movie])
 
-  if (isPending) {
-    return (
-      <div className="flex justify-center py-40">
-        <Spinner />
-      </div>
-    )
-  }
+  if (isPending) return <PageSpinner />
 
   if (isLoadingError) {
     return (

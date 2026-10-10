@@ -1,8 +1,8 @@
-import { ApiError } from '@/api/client'
 import { useLogin } from '@/api/queries/auth/useLogin'
 import { useAppForm } from '@/hooks/useAppForm'
+import { getServerErrors } from '@/utils/form/getServerErrors'
 import { loginSchema, type LoginValues } from '@/utils/schemas/loginSchema'
-import { Button } from '@/components/core/Button'
+import { ErrorMessage } from '@/components/core/ErrorMessage'
 import { Modal } from '@/components/core/Modal'
 import { Typography } from '@/components/core/Typography'
 
@@ -15,7 +15,7 @@ type LoginFormModalProps = {
 
 export function LoginFormModal({ open, onClose, onSignUp }: LoginFormModalProps) {
   const login = useLogin()
-  const error = login.error instanceof ApiError ? login.error : null
+  const { fieldErrors, message } = getServerErrors(login.error)
 
   const form = useAppForm({
     defaultValues: { email: '', password: '' } satisfies LoginValues,
@@ -45,7 +45,7 @@ export function LoginFormModal({ open, onClose, onSignUp }: LoginFormModalProps)
               label="Email"
               type="email"
               placeholder="example@gmail.com"
-              serverError={error?.errors?.email?.[0]}
+              serverError={fieldErrors.email}
             />
           )}
         </form.AppField>
@@ -55,22 +55,20 @@ export function LoginFormModal({ open, onClose, onSignUp }: LoginFormModalProps)
               label="Password"
               type="password"
               placeholder="••••••••"
-              serverError={error?.errors?.password?.[0]}
+              serverError={fieldErrors.password}
             />
           )}
         </form.AppField>
-        {error && !error.errors && (
-          <Typography variant="labelS" className="text-brand">
-            {error.message}
-          </Typography>
-        )}
-        <form.Subscribe selector={(state) => state.canSubmit}>
-          {(canSubmit) => (
-            <Button type="submit" disabled={!canSubmit || login.isPending} className="mt-2">
-              Log in
-            </Button>
-          )}
-        </form.Subscribe>
+        <ErrorMessage message={message} />
+        <form.AppForm>
+          <form.SubmitButton
+            isPending={login.isPending}
+            pendingLabel="Logging in..."
+            className="mt-2"
+          >
+            Log in
+          </form.SubmitButton>
+        </form.AppForm>
         <Typography
           variant="bodyM"
           className="flex items-center justify-center gap-1.25 text-muted"

@@ -4,16 +4,13 @@ import TimerIcon from '@/assets/icons/timer.svg?react'
 import { formatDayMonth } from '@/utils/formatters/formatDate'
 import { Badge } from '@/components/core/Badge'
 import { ButtonLink } from '@/components/core/ButtonLink'
+import { Cover } from '@/components/core/Cover'
 import { Typography } from '@/components/core/Typography'
 
 export function FeaturedBanner({ movie }: { movie: FeaturedMovie }) {
   return (
     <article className="relative h-full">
-      {movie.backdropUrl ? (
-        <img src={movie.backdropUrl} alt="" className="absolute inset-0 size-full object-cover" />
-      ) : (
-        <div className="absolute inset-0 bg-elevated" />
-      )}
+      <Cover src={movie.backdropUrl} className="absolute inset-0 size-full" />
       <div className="absolute inset-0 bg-linear-to-l from-black/8 to-black/80" />
       <div className="absolute bottom-44.75 left-16.75 flex w-145 flex-col items-start gap-3.75">
         <Badge tone="brand" className="px-2.5! uppercase">

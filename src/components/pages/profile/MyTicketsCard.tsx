@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import type { Order } from '@/api/types'
 import { formatShortDate } from '@/utils/formatters/formatDate'
 import { Button } from '@/components/core/Button'
+import { Cover } from '@/components/core/Cover'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/core/Tooltip'
 import { Typography } from '@/components/core/Typography'
 
@@ -36,15 +37,7 @@ export function MyTicketsCard({ order, onRefund, error }: MyTicketsCardProps) {
   return (
     <article className="flex gap-4.5 overflow-hidden rounded-[26px] bg-card">
       <div className="flex flex-1 items-center gap-4.5 px-7.5">
-        {movie.posterUrl ? (
-          <img
-            src={movie.posterUrl}
-            alt=""
-            className="aspect-3/4 w-25 shrink-0 rounded-[10px] object-cover"
-          />
-        ) : (
-          <div className="aspect-3/4 w-25 shrink-0 rounded-[10px] bg-elevated" />
-        )}
+        <Cover src={movie.posterUrl} className="aspect-3/4 w-25 shrink-0 rounded-[10px]" />
         <div className="flex min-w-0 flex-1 flex-col gap-3">
           <div className="flex items-center gap-2.5">
             <Typography variant="h2">{movie.title}</Typography>

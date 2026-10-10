@@ -7,6 +7,7 @@ import type {
 } from '@/api/types'
 import { useIsUnderage } from '@/hooks/useIsUnderage'
 import { Button } from '@/components/core/Button'
+import { ErrorMessage } from '@/components/core/ErrorMessage'
 import { ErrorState } from '@/components/core/ErrorState'
 import { Typography } from '@/components/core/Typography'
 import { SeatMap } from './SeatMap'
@@ -107,11 +108,7 @@ export function SeatSelectionStep({
             )}
           </div>
           <div className="mt-auto flex flex-col gap-3 pt-2.5">
-            {message && (
-              <Typography variant="labelS" className="text-brand">
-                {message}
-              </Typography>
-            )}
+            <ErrorMessage message={message} />
             <div className="flex items-center justify-between px-1.25">
               <Typography variant="labelS">SUBTOTAL</Typography>
               <Typography variant="h1" as="span">

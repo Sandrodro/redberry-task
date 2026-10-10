@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { cx } from '@/utils/cx'
 import { Typography } from './Typography'
 
 type EmptyStateProps = {
@@ -11,10 +12,8 @@ type EmptyStateProps = {
 
 /** A list with nothing in it: what is missing, and where to go from here. */
 export function EmptyState({ title, description, children, className }: EmptyStateProps) {
-  const base = 'flex flex-col items-start gap-3'
-
   return (
-    <div className={className ? `${base} ${className}` : base}>
+    <div className={cx('flex flex-col items-start gap-3', className)}>
       <div className="flex flex-col gap-1.5">
         <Typography variant="labelM">{title}</Typography>
         {description && (

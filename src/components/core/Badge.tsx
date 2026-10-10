@@ -1,4 +1,5 @@
 import type { ComponentPropsWithoutRef, ReactNode } from 'react'
+import { cx } from '@/utils/cx'
 import { Typography } from './Typography'
 
 const tones = {
@@ -29,7 +30,7 @@ export function Badge({
   const base = `flex items-center gap-1 rounded-full ${sizes[size]} ${tones[tone]}`
 
   return (
-    <span className={className ? `${base} ${className}` : base} {...props}>
+    <span className={cx(base, className)} {...props}>
       {icon}
       <Typography variant="labelS">{children}</Typography>
     </span>

@@ -1,38 +1,24 @@
 import { useComingSoonMoviesData } from '@/api/queries/movies/useComingSoonMoviesData'
-import { EmptyState } from '@/components/core/EmptyState'
-import { ErrorState } from '@/components/core/ErrorState'
-import { Slider } from '@/components/core/Slider'
+import { Divider } from '@/components/core/Divider'
 import { ComingSoonCard } from './ComingSoonCard'
+import { HomeMovieSlider } from './HomeMovieSlider'
 import { HomeSection } from './HomeSection'
 
 export function ComingSoonSection() {
-  const { data: movies, isError, isFetching, refetch } = useComingSoonMoviesData()
-
-  if (!movies && !isError) return null
+  const query = useComingSoonMoviesData()
 
   return (
     <>
-      <hr className="h-px border-0 bg-elevated" />
+      <Divider />
       <HomeSection title="Coming soon...">
-        {!movies ? (
-          <ErrorState
-            message="Could not load the upcoming films."
-            onRetry={() => refetch()}
-            isRetrying={isFetching}
-          />
-        ) : movies.length === 0 ? (
-          <EmptyState
-            title="No upcoming releases yet"
-            description="New releases will show up here as soon as they are announced."
-          />
-        ) : (
-          <Slider
-            items={movies}
-            getKey={(movie) => movie.id}
-            renderItem={(movie) => <ComingSoonCard movie={movie} />}
-            gapClassName="gap-5"
-          />
-        )}
+        <HomeMovieSlider
+          query={query}
+          errorMessage="Could not load the upcoming films."
+          emptyTitle="No upcoming releases yet"
+          emptyDescription="New releases will show up here as soon as they are announced."
+          renderItem={(movie) => <ComingSoonCard movie={movie} />}
+          gapClassName="gap-5"
+        />
       </HomeSection>
     </>
   )

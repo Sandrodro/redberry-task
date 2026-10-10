@@ -1,4 +1,5 @@
 import { Fragment } from 'react'
+import { Divider } from '@/components/core/Divider'
 import { Skeleton } from '@/components/core/Skeleton'
 
 const ROW_COUNT = 3
@@ -10,7 +11,7 @@ export function SessionsSkeleton() {
     <div role="status" aria-label="Loading sessions" className="flex flex-col gap-8">
       {Array.from({ length: ROW_COUNT }, (_, row) => (
         <Fragment key={row}>
-          {row > 0 && <hr className="h-px border-0 bg-elevated" />}
+          {row > 0 && <Divider />}
           <div className="flex flex-col gap-3.5">
             <div className="flex items-center gap-4">
               <Skeleton className="h-20 w-14 shrink-0" />

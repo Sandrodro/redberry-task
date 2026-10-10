@@ -2,8 +2,9 @@ import { ApiError } from '@/api/client'
 import { useCreateOrder } from '@/api/queries/orders/useCreateOrder'
 import type { Order, SeatHold, Session, User } from '@/api/types'
 import { useAppForm } from '@/hooks/useAppForm'
+import { getServerErrors } from '@/utils/form/getServerErrors'
 import { checkoutSchema, type CheckoutValues } from '@/utils/schemas/checkoutSchema'
-import { Button } from '@/components/core/Button'
+import { ErrorMessage } from '@/components/core/ErrorMessage'
 import { Typography } from '@/components/core/Typography'
 import { OrderSummary } from './OrderSummary'
 import { StepLayout } from './StepLayout'
@@ -30,6 +31,7 @@ export function CheckoutStep({
   onSeatsLost,
 }: CheckoutStepProps) {
   const createOrder = useCreateOrder()
+  const { fieldErrors } = getServerErrors(createOrder.error)
   const error = createOrder.error instanceof ApiError ? createOrder.error : null
   // A 422 with `errors` is shown on the fields. Everything else without a booking rule handler is shown here.
   const formMessage =
@@ -78,14 +80,12 @@ export function CheckoutStep({
           }}
         >
           <form.AppField name="fullName">
-            {(field) => (
-              <field.Input label="Full name" serverError={error?.errors?.fullName?.[0]} />
-            )}
+            {(field) => <field.Input label="Full name" serverError={fieldErrors.fullName} />}
           </form.AppField>
           <div className="grid grid-cols-2 gap-6">
             <form.AppField name="email">
               {(field) => (
-                <field.Input label="Email" type="email" serverError={error?.errors?.email?.[0]} />
+                <field.Input label="Email" type="email" serverError={fieldErrors.email} />
               )}
             </form.AppField>
             <form.AppField name="mobileNumber">
@@ -93,7 +93,7 @@ export function CheckoutStep({
                 <field.Input
                   label="Mobile number"
                   type="tel"
-                  serverError={error?.errors?.mobileNumber?.[0]}
+                  serverError={fieldErrors.mobileNumber}
                 />
               )}
             </form.AppField>
@@ -105,7 +105,7 @@ export function CheckoutStep({
                 label="Card number"
                 inputMode="numeric"
                 placeholder="e.g. 1234 4567 8901 2345"
-                serverError={error?.errors?.cardNumber?.[0]}
+                serverError={fieldErrors.cardNumber}
               />
             )}
           </form.AppField>
@@ -115,7 +115,7 @@ export function CheckoutStep({
                 <field.Input
                   label="Expiry"
                   placeholder="e.g. 12/34"
-                  serverError={error?.errors?.expiry?.[0]}
+                  serverError={fieldErrors.expiry}
                 />
               )}
             </form.AppField>
@@ -125,16 +125,12 @@ export function CheckoutStep({
                   label="CVV"
                   inputMode="numeric"
                   placeholder="e.g. 123"
-                  serverError={error?.errors?.cvv?.[0]}
+                  serverError={fieldErrors.cvv}
                 />
               )}
             </form.AppField>
           </div>
-          {formMessage && (
-            <Typography variant="labelS" className="text-brand">
-              {formMessage}
-            </Typography>
-          )}
+          <ErrorMessage message={formMessage} />
         </form>
       }
       aside={
@@ -148,18 +144,16 @@ export function CheckoutStep({
                 ₾ {hold.subtotal}
               </Typography>
             </div>
-            <form.Subscribe selector={(state) => state.canSubmit}>
-              {(canSubmit) => (
-                <Button
-                  type="submit"
-                  form={FORM_ID}
-                  disabled={!canSubmit || createOrder.isPending}
-                  className="w-full"
-                >
-                  {createOrder.isPending ? 'Processing...' : 'Pay & Complete Order'}
-                </Button>
-              )}
-            </form.Subscribe>
+            <form.AppForm>
+              <form.SubmitButton
+                form={FORM_ID}
+                isPending={createOrder.isPending}
+                pendingLabel="Processing..."
+                className="w-full"
+              >
+                Pay & Complete Order
+              </form.SubmitButton>
+            </form.AppForm>
           </div>
         </>
       }

@@ -32,11 +32,7 @@ function SearchDropdownContent({ query, onSelectMovie, onBrowse }: SearchDropdow
   }
   // Waiting for the debounce, or for the first answer.
   if (term === '' || isPending) {
-    return (
-      <div className="flex justify-center py-10">
-        <Spinner />
-      </div>
-    )
+    return <Spinner className="mx-auto my-10" />
   }
   if (isLoadingError) {
     return (

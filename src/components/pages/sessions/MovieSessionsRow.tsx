@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import type { MovieSessions } from '@/api/types'
 import { Badge } from '@/components/core/Badge'
+import { Cover } from '@/components/core/Cover'
 import { Slider } from '@/components/core/Slider'
 import { Typography } from '@/components/core/Typography'
 import { UnderageNote } from '@/components/session/UnderageNote'
@@ -17,15 +18,7 @@ export function MovieSessionsRow({ movie, sessions }: MovieSessions) {
         params={{ slug: movie.slug }}
         className="flex items-center gap-4 self-start"
       >
-        {movie.posterUrl ? (
-          <img
-            src={movie.posterUrl}
-            alt=""
-            className="h-20 w-14 shrink-0 rounded-lg object-cover"
-          />
-        ) : (
-          <div className="h-20 w-14 shrink-0 rounded-lg bg-elevated" />
-        )}
+        <Cover src={movie.posterUrl} className="h-20 w-14 shrink-0 rounded-lg" />
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-3">
             <Typography variant="h3" as="h2">

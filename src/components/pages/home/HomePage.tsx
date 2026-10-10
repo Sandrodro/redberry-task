@@ -1,4 +1,5 @@
 import { useRecentlyViewedMoviesData } from '@/api/queries/movies/useRecentlyViewedMoviesData'
+import { Divider } from '@/components/core/Divider'
 import { ComingSoonSection } from './ComingSoonSection'
 import { FeaturedSection } from './FeaturedSection'
 import { NowPlayingSection } from './NowPlayingSection'
@@ -14,7 +15,7 @@ export function HomePage() {
         {recentlyViewedMovies.length > 0 && (
           <>
             <RecentlyViewed movies={recentlyViewedMovies} />
-            <hr className="h-px border-0 bg-elevated" />
+            <Divider />
           </>
         )}
         <NowPlayingSection />
