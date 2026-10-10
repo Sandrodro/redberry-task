@@ -12,7 +12,8 @@ import { ErrorState } from '@/components/core/ErrorState'
 import { Modal } from '@/components/core/Modal'
 import { Spinner } from '@/components/core/Spinner'
 import { BookingHeader } from './BookingHeader'
-import { bookingReducer, getInitialBookingState } from './bookingReducer'
+import { BookingStep } from './types'
+import { BookingActionType, bookingReducer, getInitialBookingState } from './bookingReducer'
 import { CheckoutStep } from './CheckoutStep'
 import { ConfirmationView } from './ConfirmationView'
 import { SeatSelectionStep } from './SeatSelectionStep'
@@ -56,12 +57,15 @@ export function BookingModal({ session, onClose }: BookingModalProps) {
   if (!isResumed && !savedHold.isPending && seatMap.data) {
     if (savedHold.data && isSavedHoldLive) {
       dispatch({
-        type: 'holdResumed',
+        type: BookingActionType.HoldResumed,
         hold: savedHold.data,
         selected: getSelectedSeats(seatMap.data, savedHold.data.seats),
       })
     } else {
-      dispatch({ type: 'resumed', isHoldExpired: !!savedHold.data && !savedHold.data.isLive })
+      dispatch({
+        type: BookingActionType.Resumed,
+        isHoldExpired: !!savedHold.data && !savedHold.data.isLive,
+      })
     }
   }
 
@@ -73,35 +77,35 @@ export function BookingModal({ session, onClose }: BookingModalProps) {
   const secondsLeft = useHoldCountdown(order ? null : (hold?.expiresAt ?? null), handleHoldExpired)
 
   function handleSeatsLost(codes: string[]) {
-    dispatch({ type: 'seatsLost', codes })
+    dispatch({ type: BookingActionType.SeatsLost, codes })
     storage.remove(holdKey)
   }
 
   function handleHoldExpired() {
-    dispatch({ type: 'holdExpired' })
+    dispatch({ type: BookingActionType.HoldExpired })
     storage.remove(holdKey)
     refreshSessions()
   }
 
   function holdSeats() {
-    dispatch({ type: 'noticeChanged', notice: null })
+    dispatch({ type: BookingActionType.NoticeChanged, notice: null })
     const seats = selected.map(({ seat, ticketType }) => ({ seatId: seat.id, ticketType }))
     createHold.mutate(seats, {
       onSuccess: (data) => {
-        dispatch({ type: 'held', hold: data })
+        dispatch({ type: BookingActionType.Held, hold: data })
         storage.set(holdKey, data.holdId)
       },
       onError: (error) => {
         if (!(error instanceof ApiError)) {
           return dispatch({
-            type: 'noticeChanged',
+            type: BookingActionType.NoticeChanged,
             notice: 'Could not hold the seats. Please try again.',
           })
         }
         if (error.status === 409) handleSeatsLost(error.contested ?? [])
         else {
           const message = Object.values(error.errors ?? {})[0]?.[0] ?? error.message
-          dispatch({ type: 'noticeChanged', notice: message })
+          dispatch({ type: BookingActionType.NoticeChanged, notice: message })
         }
       },
     })
@@ -122,7 +126,7 @@ export function BookingModal({ session, onClose }: BookingModalProps) {
       ) : (
         <div className="flex flex-col gap-8">
           <BookingHeader session={session} secondsLeft={secondsLeft} />
-          {step === 'seats' || !hold ? (
+          {step === BookingStep.Seats || !hold ? (
             <SeatSelectionStep
               session={session}
               filterOptions={filterOptions}
@@ -135,14 +139,14 @@ export function BookingModal({ session, onClose }: BookingModalProps) {
               isPending={createHold.isPending}
               onToggleSeat={(seat, sectionName) =>
                 dispatch({
-                  type: 'seatToggled',
+                  type: BookingActionType.SeatToggled,
                   seat,
                   sectionName,
                   maxSeats: filterOptions.maxSeatsPerOrder,
                 })
               }
               onChangeType={(seatId, ticketType) =>
-                dispatch({ type: 'ticketTypeChanged', seatId, ticketType })
+                dispatch({ type: BookingActionType.TicketTypeChanged, seatId, ticketType })
               }
               onNext={holdSeats}
             />
@@ -151,10 +155,10 @@ export function BookingModal({ session, onClose }: BookingModalProps) {
               session={session}
               hold={hold}
               user={user}
-              onBackToSeats={() => dispatch({ type: 'backToSeats' })}
+              onBackToSeats={() => dispatch({ type: BookingActionType.BackToSeats })}
               onPaid={(paid) => {
                 storage.remove(holdKey)
-                dispatch({ type: 'paid', order: paid })
+                dispatch({ type: BookingActionType.Paid, order: paid })
               }}
               onHoldExpired={handleHoldExpired}
               onSeatsLost={handleSeatsLost}

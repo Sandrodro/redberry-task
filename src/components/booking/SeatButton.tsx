@@ -1,7 +1,6 @@
 import stripes from '@/assets/icons/seat-held-stripes.svg'
 import { Typography } from '@/components/core/Typography'
-
-export type SeatButtonState = 'available' | 'selected' | 'sold' | 'held' | 'unavailable'
+import { SeatButtonState } from './types'
 
 type SeatButtonProps = {
   label: string
@@ -14,7 +13,7 @@ const base =
   'relative flex size-(--seat-size) shrink-0 items-center justify-center overflow-hidden rounded-[10px]'
 
 export function SeatButton({ label, state, onClick }: SeatButtonProps) {
-  if (state === 'sold') {
+  if (state === SeatButtonState.Sold) {
     return (
       <span className={`${base} bg-card text-subtle`}>
         <Typography variant="h3" as="span">
@@ -24,7 +23,7 @@ export function SeatButton({ label, state, onClick }: SeatButtonProps) {
     )
   }
 
-  if (state === 'unavailable') {
+  if (state === SeatButtonState.Unavailable) {
     return (
       <span className={`${base} border border-dashed border-subtle text-subtle`}>
         <Typography variant="h3" as="span">
@@ -34,7 +33,7 @@ export function SeatButton({ label, state, onClick }: SeatButtonProps) {
     )
   }
 
-  if (state === 'held') {
+  if (state === SeatButtonState.Held) {
     return (
       <span className={`${base} bg-card text-muted`}>
         <img
@@ -50,14 +49,14 @@ export function SeatButton({ label, state, onClick }: SeatButtonProps) {
   }
 
   const styles =
-    state === 'selected'
+    state === SeatButtonState.Selected
       ? 'border border-background bg-brand'
       : 'border border-subtle bg-card shadow-[0px_1px_2px_0px_var(--shadow)]'
 
   return (
     <button
       type="button"
-      aria-pressed={state === 'selected'}
+      aria-pressed={state === SeatButtonState.Selected}
       onClick={onClick}
       className={`${base} ${styles} cursor-pointer text-white`}
     >

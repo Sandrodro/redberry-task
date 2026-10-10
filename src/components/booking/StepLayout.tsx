@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
-import { StepIndicator, type BookingStep } from './StepIndicator'
+import { StepIndicator } from './StepIndicator'
+import type { BookingStep } from './types'
 
 type StepLayoutProps = {
   step: BookingStep

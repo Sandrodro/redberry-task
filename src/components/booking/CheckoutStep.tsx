@@ -8,6 +8,7 @@ import { ErrorMessage } from '@/components/core/ErrorMessage'
 import { Typography } from '@/components/core/Typography'
 import { OrderSummary } from './OrderSummary'
 import { StepLayout } from './StepLayout'
+import { BookingStep } from './types'
 
 const FORM_ID = 'checkout-form'
 
@@ -67,7 +68,7 @@ export function CheckoutStep({
 
   return (
     <StepLayout
-      step="checkout"
+      step={BookingStep.Checkout}
       onSeatsClick={onBackToSeats}
       main={
         <form

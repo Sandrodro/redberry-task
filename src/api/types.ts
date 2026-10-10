@@ -131,7 +131,13 @@ export interface SessionsPage {
   meta: SessionsMeta
 }
 
-export type SeatState = 'available' | 'sold' | 'held' | 'unavailable'
+export const SeatState = {
+  Available: 'available',
+  Sold: 'sold',
+  Held: 'held',
+  Unavailable: 'unavailable',
+} as const
+export type SeatState = (typeof SeatState)[keyof typeof SeatState]
 
 export interface Seat {
   id: number

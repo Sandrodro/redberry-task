@@ -13,7 +13,7 @@ import { Typography } from '@/components/core/Typography'
 import { SeatMap } from './SeatMap'
 import { SelectedSeatCard } from './SelectedSeatCard'
 import { StepLayout } from './StepLayout'
-import type { SelectedSeat } from './types'
+import { BookingStep, type SelectedSeat } from './types'
 import { getTicketPrice, roundPrice } from './utils'
 
 type SeatSelectionStepProps = {
@@ -64,7 +64,7 @@ export function SeatSelectionStep({
 
   return (
     <StepLayout
-      step="seats"
+      step={BookingStep.Seats}
       onSeatsClick={() => {}}
       main={
         seatMap ? (

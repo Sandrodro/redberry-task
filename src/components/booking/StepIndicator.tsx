@@ -1,6 +1,5 @@
 import { Typography } from '@/components/core/Typography'
-
-export type BookingStep = 'seats' | 'checkout'
+import { BookingStep } from './types'
 
 type StepIndicatorProps = {
   step: BookingStep
@@ -15,13 +14,13 @@ export function StepIndicator({ step, onSeatsClick }: StepIndicatorProps) {
     <div className="flex gap-2 rounded-full bg-card">
       <button
         type="button"
-        disabled={step === 'seats'}
+        disabled={step === BookingStep.Seats}
         onClick={onSeatsClick}
-        className={`${base} enabled:cursor-pointer ${step === 'seats' ? 'bg-brand' : ''}`}
+        className={`${base} enabled:cursor-pointer ${step === BookingStep.Seats ? 'bg-brand' : ''}`}
       >
         <Typography variant="labelS">SEATS</Typography>
       </button>
-      <span className={`${base} ${step === 'checkout' ? 'bg-brand' : ''}`}>
+      <span className={`${base} ${step === BookingStep.Checkout ? 'bg-brand' : ''}`}>
         <Typography variant="labelS">CHECKOUT</Typography>
       </span>
     </div>

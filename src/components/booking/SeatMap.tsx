@@ -2,7 +2,8 @@ import { Fragment, type CSSProperties, type ReactNode } from 'react'
 import type { Seat, SeatMap as SeatMapData } from '@/api/types'
 import stripes from '@/assets/icons/seat-held-stripes.svg'
 import { Typography } from '@/components/core/Typography'
-import { SeatButton, type SeatButtonState } from './SeatButton'
+import { SeatButton } from './SeatButton'
+import { SeatButtonState } from './types'
 import { getSeatSize } from './utils'
 
 type SeatMapProps = {
@@ -15,10 +16,10 @@ type SeatMapProps = {
 
 export function SeatMap({ map, selectedIds, lostCodes, onToggle }: SeatMapProps) {
   function getState(seat: Seat): SeatButtonState {
-    if (lostCodes.includes(seat.code)) return 'sold'
-    if (selectedIds.includes(seat.id)) return 'selected'
+    if (lostCodes.includes(seat.code)) return SeatButtonState.Sold
+    if (selectedIds.includes(seat.id)) return SeatButtonState.Selected
     // The user's own live hold is not blocked, it stays pickable.
-    if (seat.isMine) return 'available'
+    if (seat.isMine) return SeatButtonState.Available
     return seat.state
   }
 
