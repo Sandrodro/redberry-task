@@ -14,17 +14,6 @@ type OrderSummaryProps = {
   showPoster?: boolean
 }
 
-function Row({ label, children }: { label: string; children: ReactNode }) {
-  return (
-    <div className="flex items-center justify-between gap-4">
-      <Typography variant="bodyS" as="span" className="text-muted">
-        {label}
-      </Typography>
-      <Typography variant="labelS">{children}</Typography>
-    </div>
-  )
-}
-
 export function OrderSummary({ session, seats, total, showPoster }: OrderSummaryProps) {
   const { movie, venue, hall } = session
   const startsAt = new Date(`${session.date}T${session.time}`)
@@ -58,6 +47,17 @@ export function OrderSummary({ session, seats, total, showPoster }: OrderSummary
           </div>
         </>
       )}
+    </div>
+  )
+}
+
+function Row({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <div className="flex items-center justify-between gap-4">
+      <Typography variant="bodyS" as="span" className="text-muted">
+        {label}
+      </Typography>
+      <Typography variant="labelS">{children}</Typography>
     </div>
   )
 }

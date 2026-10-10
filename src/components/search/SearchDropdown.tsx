@@ -15,6 +15,17 @@ type SearchDropdownProps = {
   onBrowse: () => void
 }
 
+export function SearchDropdown(props: SearchDropdownProps) {
+  return (
+    <div
+      tabIndex={-1}
+      className="absolute right-0 top-full z-20 mt-2 w-120 rounded-2xl border border-elevated bg-background p-2 shadow-[0_2px_3px_var(--shadow),0_20px_24px_var(--shadow)] outline-none"
+    >
+      <SearchDropdownContent {...props} />
+    </div>
+  )
+}
+
 function SearchDropdownContent({ query, onSelectMovie, onBrowse }: SearchDropdownProps) {
   const term = useDebouncedValue(query)
   const { data, isPending, isLoadingError, isFetching, isPlaceholderData, refetch } =
@@ -67,17 +78,6 @@ function SearchDropdownContent({ query, onSelectMovie, onBrowse }: SearchDropdow
           <SearchResult key={movie.id} movie={movie} query={term} onSelect={onSelectMovie} />
         ))}
       </div>
-    </div>
-  )
-}
-
-export function SearchDropdown(props: SearchDropdownProps) {
-  return (
-    <div
-      tabIndex={-1}
-      className="absolute right-0 top-full z-20 mt-2 w-120 rounded-2xl border border-elevated bg-background p-2 shadow-[0_2px_3px_var(--shadow),0_20px_24px_var(--shadow)] outline-none"
-    >
-      <SearchDropdownContent {...props} />
     </div>
   )
 }

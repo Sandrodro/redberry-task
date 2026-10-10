@@ -11,6 +11,52 @@ import { TooltipProvider } from '@/components/core/Tooltip'
 import { MyTicketsCard } from './MyTicketsCard'
 import { RefundConfirmModal } from './RefundConfirmModal'
 
+export function MyTickets() {
+  const upcoming = useTicketsData('upcoming')
+  const past = useTicketsData('past')
+  const refund = useRefundOrder()
+  const [selected, setSelected] = useState<Order | null>(null)
+  const [errors, setErrors] = useState<Record<string, string>>({})
+
+  function handleConfirm() {
+    if (!selected) return
+    const { reference } = selected
+    setErrors(({ [reference]: _cleared, ...rest }) => rest)
+    refund.mutate(reference, {
+      // The card shows the message, and its Refund button stays enabled, so the user can try again.
+      onError: (error) => setErrors((current) => ({ ...current, [reference]: error.message })),
+      onSettled: () => setSelected(null),
+    })
+  }
+
+  return (
+    <TooltipProvider>
+      <Tabs defaultValue="upcoming" className="flex flex-col gap-5">
+        <TabsList variant="pill">
+          <TabsTrigger variant="pill" value="upcoming" count={upcoming.data?.length}>
+            Upcoming
+          </TabsTrigger>
+          <TabsTrigger variant="pill" value="past" count={past.data?.length}>
+            Past
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value="upcoming">
+          <TicketList filter="upcoming" errors={errors} onRefund={setSelected} />
+        </TabsContent>
+        <TabsContent value="past">
+          <TicketList filter="past" errors={errors} onRefund={setSelected} />
+        </TabsContent>
+      </Tabs>
+      <RefundConfirmModal
+        order={selected}
+        isPending={refund.isPending}
+        onConfirm={handleConfirm}
+        onClose={() => setSelected(null)}
+      />
+    </TooltipProvider>
+  )
+}
+
 type TicketListProps = {
   filter: TicketFilter
   /** Refund error messages by order reference. */
@@ -59,51 +105,5 @@ function TicketList({ filter, errors, onRefund }: TicketListProps) {
         />
       ))}
     </div>
-  )
-}
-
-export function MyTickets() {
-  const upcoming = useTicketsData('upcoming')
-  const past = useTicketsData('past')
-  const refund = useRefundOrder()
-  const [selected, setSelected] = useState<Order | null>(null)
-  const [errors, setErrors] = useState<Record<string, string>>({})
-
-  function handleConfirm() {
-    if (!selected) return
-    const { reference } = selected
-    setErrors(({ [reference]: _cleared, ...rest }) => rest)
-    refund.mutate(reference, {
-      // The card shows the message, and its Refund button stays enabled, so the user can try again.
-      onError: (error) => setErrors((current) => ({ ...current, [reference]: error.message })),
-      onSettled: () => setSelected(null),
-    })
-  }
-
-  return (
-    <TooltipProvider>
-      <Tabs defaultValue="upcoming" className="flex flex-col gap-5">
-        <TabsList variant="pill">
-          <TabsTrigger variant="pill" value="upcoming" count={upcoming.data?.length}>
-            Upcoming
-          </TabsTrigger>
-          <TabsTrigger variant="pill" value="past" count={past.data?.length}>
-            Past
-          </TabsTrigger>
-        </TabsList>
-        <TabsContent value="upcoming">
-          <TicketList filter="upcoming" errors={errors} onRefund={setSelected} />
-        </TabsContent>
-        <TabsContent value="past">
-          <TicketList filter="past" errors={errors} onRefund={setSelected} />
-        </TabsContent>
-      </Tabs>
-      <RefundConfirmModal
-        order={selected}
-        isPending={refund.isPending}
-        onConfirm={handleConfirm}
-        onClose={() => setSelected(null)}
-      />
-    </TooltipProvider>
   )
 }

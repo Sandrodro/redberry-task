@@ -18,16 +18,6 @@ function getPageItems(page: number, lastPage: number) {
   return items
 }
 
-function PageButton({ className = '', ...props }: ComponentPropsWithoutRef<'button'>) {
-  return (
-    <button
-      type="button"
-      className={`flex size-10 cursor-pointer items-center justify-center rounded-full disabled:cursor-not-allowed disabled:opacity-40 ${className}`}
-      {...props}
-    />
-  )
-}
-
 type PaginationProps = {
   page: number
   lastPage: number
@@ -85,5 +75,15 @@ export function Pagination({ page, lastPage, onChange }: PaginationProps) {
         Page {page} of {lastPage}
       </Typography>
     </nav>
+  )
+}
+
+function PageButton({ className = '', ...props }: ComponentPropsWithoutRef<'button'>) {
+  return (
+    <button
+      type="button"
+      className={`flex size-10 cursor-pointer items-center justify-center rounded-full disabled:cursor-not-allowed disabled:opacity-40 ${className}`}
+      {...props}
+    />
   )
 }

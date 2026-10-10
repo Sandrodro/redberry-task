@@ -9,17 +9,6 @@ import { Typography } from '@/components/core/Typography'
 /** Refunds close this many hours before the session. Only used for the note, `isRefundable` drives the button. */
 const REFUND_CUTOFF_HOURS = 2
 
-function MetaItem({ label, children }: { label: string; children: ReactNode }) {
-  return (
-    <div className="flex flex-col gap-1">
-      <Typography variant="overline" className="text-muted">
-        {label}
-      </Typography>
-      <Typography variant="labelM">{children}</Typography>
-    </div>
-  )
-}
-
 type MyTicketsCardProps = {
   order: Order
   onRefund: () => void
@@ -131,5 +120,16 @@ export function MyTicketsCard({ order, onRefund, error }: MyTicketsCardProps) {
         </div>
       </div>
     </article>
+  )
+}
+
+function MetaItem({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <div className="flex flex-col gap-1">
+      <Typography variant="overline" className="text-muted">
+        {label}
+      </Typography>
+      <Typography variant="labelM">{children}</Typography>
+    </div>
   )
 }

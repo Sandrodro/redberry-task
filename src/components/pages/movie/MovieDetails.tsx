@@ -4,17 +4,6 @@ import { formatFullDate } from '@/utils/formatters/formatDate'
 import { Typography } from '@/components/core/Typography'
 import { WarningNote } from '@/components/core/WarningNote'
 
-function DetailRow({ label, children }: { label: string; children: ReactNode }) {
-  return (
-    <div className="flex flex-col gap-1.75">
-      <Typography variant="labelS" className="uppercase text-muted">
-        {label}
-      </Typography>
-      <Typography variant="labelM">{children}</Typography>
-    </div>
-  )
-}
-
 export function MovieDetails({ movie }: { movie: MovieDetail }) {
   return (
     <aside className="flex w-110.25 shrink-0 flex-col gap-4.25 px-6.5">
@@ -36,5 +25,16 @@ export function MovieDetails({ movie }: { movie: MovieDetail }) {
         </div>
       </WarningNote>
     </aside>
+  )
+}
+
+function DetailRow({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <div className="flex flex-col gap-1.75">
+      <Typography variant="labelS" className="uppercase text-muted">
+        {label}
+      </Typography>
+      <Typography variant="labelM">{children}</Typography>
+    </div>
   )
 }

@@ -13,45 +13,6 @@ type SeatMapProps = {
   onToggle: (seat: Seat, sectionName: string) => void
 }
 
-function LegendItem({ label, children }: { label: string; children: ReactNode }) {
-  return (
-    <div className="flex items-center gap-2">
-      {children}
-      <Typography variant="bodyS" as="span" className="text-muted">
-        {label}
-      </Typography>
-    </div>
-  )
-}
-
-function Legend() {
-  return (
-    <div className="flex justify-center gap-6">
-      <LegendItem label="Available">
-        <span className="size-4 rounded-[5px] border border-subtle bg-card" />
-      </LegendItem>
-      <LegendItem label="Selected">
-        <span className="size-4 rounded-[5px] bg-brand" />
-      </LegendItem>
-      <LegendItem label="Sold">
-        <span className="size-4 rounded-[5px] bg-card" />
-      </LegendItem>
-      <LegendItem label="Unavailable">
-        <span className="size-4 rounded-[5px] border border-dashed border-subtle" />
-      </LegendItem>
-      <LegendItem label="Held by another user">
-        <span className="relative flex size-4 items-center justify-center overflow-hidden rounded-[5px] bg-card">
-          <img
-            src={stripes}
-            alt=""
-            className="absolute size-[26.495px] max-w-none -rotate-[37.44deg]"
-          />
-        </span>
-      </LegendItem>
-    </div>
-  )
-}
-
 export function SeatMap({ map, selectedIds, lostCodes, onToggle }: SeatMapProps) {
   function getState(seat: Seat): SeatButtonState {
     if (lostCodes.includes(seat.code)) return 'sold'
@@ -94,6 +55,45 @@ export function SeatMap({ map, selectedIds, lostCodes, onToggle }: SeatMapProps)
         </div>
       ))}
       <Legend />
+    </div>
+  )
+}
+
+function LegendItem({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <div className="flex items-center gap-2">
+      {children}
+      <Typography variant="bodyS" as="span" className="text-muted">
+        {label}
+      </Typography>
+    </div>
+  )
+}
+
+function Legend() {
+  return (
+    <div className="flex justify-center gap-6">
+      <LegendItem label="Available">
+        <span className="size-4 rounded-[5px] border border-subtle bg-card" />
+      </LegendItem>
+      <LegendItem label="Selected">
+        <span className="size-4 rounded-[5px] bg-brand" />
+      </LegendItem>
+      <LegendItem label="Sold">
+        <span className="size-4 rounded-[5px] bg-card" />
+      </LegendItem>
+      <LegendItem label="Unavailable">
+        <span className="size-4 rounded-[5px] border border-dashed border-subtle" />
+      </LegendItem>
+      <LegendItem label="Held by another user">
+        <span className="relative flex size-4 items-center justify-center overflow-hidden rounded-[5px] bg-card">
+          <img
+            src={stripes}
+            alt=""
+            className="absolute size-[26.495px] max-w-none -rotate-[37.44deg]"
+          />
+        </span>
+      </LegendItem>
     </div>
   )
 }

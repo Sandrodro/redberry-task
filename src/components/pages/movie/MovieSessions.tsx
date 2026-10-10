@@ -34,6 +34,52 @@ function groupByHall(sessions: Session[]) {
   return Array.from(halls.values())
 }
 
+export function MovieSessions({ movie }: { movie: MovieDetail }) {
+  const queryClient = useQueryClient()
+  const [selectedDate, setSelectedDate] = useState<string>()
+  const date = selectedDate ?? getFirstAvailableDate(movie.availableDates)
+  // The list below reads the same query, so this is one request.
+  const { data: venues, isPlaceholderData } = useMovieSessionsData(movie.slug, date)
+
+  const sessionCount = venues?.reduce((total, venue) => total + venue.sessions.length, 0) ?? 0
+  // While a new date loads, the previous sessions stay on screen, so the text names their date.
+  const shownDate = venues?.[0]?.sessions[0]?.date ?? date
+  const fade = `transition-opacity ${isPlaceholderData ? 'opacity-60' : ''}`
+  const isUnderage = useIsUnderage(movie.ageRating)
+
+  return (
+    <section className="flex min-w-0 flex-1 flex-col gap-6.75 pb-6.5">
+      <div className="flex flex-col gap-3.5">
+        <div className="flex flex-col gap-1.75">
+          <Typography variant="h2">Sessions</Typography>
+          {sessionCount > 0 && (
+            <Typography variant="bodyS" className={`text-muted ${fade}`}>
+              {sessionCount} {sessionCount === 1 ? 'session' : 'sessions'} on{' '}
+              {formatDayMonth(shownDate)}
+            </Typography>
+          )}
+        </div>
+        <DateStrip
+          size="lg"
+          value={date}
+          onChange={setSelectedDate}
+          onHover={(hoveredDate) => {
+            void queryClient
+              .query({
+                ...movieSessionsQueryOptions(movie.slug, hoveredDate),
+                staleTime: PREFETCH_STALE_MS,
+              })
+              .catch(noop)
+          }}
+          availableDates={movie.availableDates}
+        />
+      </div>
+      {isUnderage && <UnderageNote ageRating={movie.ageRating} />}
+      <SessionsList movie={movie} date={date} isUnderage={isUnderage} />
+    </section>
+  )
+}
+
 type SessionsListProps = {
   movie: MovieDetail
   date: string
@@ -97,51 +143,5 @@ function SessionsList({ movie, date, isUnderage }: SessionsListProps) {
         </div>
       ))}
     </div>
-  )
-}
-
-export function MovieSessions({ movie }: { movie: MovieDetail }) {
-  const queryClient = useQueryClient()
-  const [selectedDate, setSelectedDate] = useState<string>()
-  const date = selectedDate ?? getFirstAvailableDate(movie.availableDates)
-  // The list below reads the same query, so this is one request.
-  const { data: venues, isPlaceholderData } = useMovieSessionsData(movie.slug, date)
-
-  const sessionCount = venues?.reduce((total, venue) => total + venue.sessions.length, 0) ?? 0
-  // While a new date loads, the previous sessions stay on screen, so the text names their date.
-  const shownDate = venues?.[0]?.sessions[0]?.date ?? date
-  const fade = `transition-opacity ${isPlaceholderData ? 'opacity-60' : ''}`
-  const isUnderage = useIsUnderage(movie.ageRating)
-
-  return (
-    <section className="flex min-w-0 flex-1 flex-col gap-6.75 pb-6.5">
-      <div className="flex flex-col gap-3.5">
-        <div className="flex flex-col gap-1.75">
-          <Typography variant="h2">Sessions</Typography>
-          {sessionCount > 0 && (
-            <Typography variant="bodyS" className={`text-muted ${fade}`}>
-              {sessionCount} {sessionCount === 1 ? 'session' : 'sessions'} on{' '}
-              {formatDayMonth(shownDate)}
-            </Typography>
-          )}
-        </div>
-        <DateStrip
-          size="lg"
-          value={date}
-          onChange={setSelectedDate}
-          onHover={(hoveredDate) => {
-            void queryClient
-              .query({
-                ...movieSessionsQueryOptions(movie.slug, hoveredDate),
-                staleTime: PREFETCH_STALE_MS,
-              })
-              .catch(noop)
-          }}
-          availableDates={movie.availableDates}
-        />
-      </div>
-      {isUnderage && <UnderageNote ageRating={movie.ageRating} />}
-      <SessionsList movie={movie} date={date} isUnderage={isUnderage} />
-    </section>
   )
 }

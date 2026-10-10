@@ -3,21 +3,6 @@ import type { Movie } from '@/api/types'
 import { Cover } from '@/components/core/Cover'
 import { Typography } from '@/components/core/Typography'
 
-/** Shows the part of the title that matches the query in white. */
-function HighlightedTitle({ title, query }: { title: string; query: string }) {
-  const start = title.toLowerCase().indexOf(query.toLowerCase())
-  if (start === -1) return <span className="text-white">{title}</span>
-
-  const end = start + query.length
-  return (
-    <>
-      {title.slice(0, start)}
-      <span className="text-white">{title.slice(start, end)}</span>
-      {title.slice(end)}
-    </>
-  )
-}
-
 type SearchResultProps = {
   movie: Movie
   query: string
@@ -48,5 +33,20 @@ export function SearchResult({ movie, query, onSelect }: SearchResultProps) {
         {movie.isComingSoon ? 'Coming Soon' : `from ₾${movie.fromPrice}`}
       </Typography>
     </Link>
+  )
+}
+
+/** Shows the part of the title that matches the query in white. */
+function HighlightedTitle({ title, query }: { title: string; query: string }) {
+  const start = title.toLowerCase().indexOf(query.toLowerCase())
+  if (start === -1) return <span className="text-white">{title}</span>
+
+  const end = start + query.length
+  return (
+    <>
+      {title.slice(0, start)}
+      <span className="text-white">{title.slice(start, end)}</span>
+      {title.slice(end)}
+    </>
   )
 }

@@ -8,19 +8,6 @@ const AUTOPLAY_DELAY_MS = 3000
 /** Embla's duration has no unit. 15 fades in about 0.3s, as in the design. The default 25 takes about 1s. */
 const FADE_DURATION = 15
 
-function ArrowButton({ direction, onClick }: { direction: 'prev' | 'next'; onClick: () => void }) {
-  return (
-    <button
-      type="button"
-      aria-label={direction === 'prev' ? 'Previous slide' : 'Next slide'}
-      onClick={onClick}
-      className="flex size-13.5 cursor-pointer items-center justify-center rounded-full bg-background/20 text-white transition-[background-color,box-shadow] hover:bg-background hover:shadow-[0_2px_8px_var(--shadow)]"
-    >
-      <ArrowLeftIcon className={direction === 'next' ? 'rotate-180' : ''} />
-    </button>
-  )
-}
-
 type CarouselProps<T> = {
   items: T[]
   getKey: (item: T) => Key
@@ -94,5 +81,18 @@ export function Carousel<T>({
         </div>
       </div>
     </section>
+  )
+}
+
+function ArrowButton({ direction, onClick }: { direction: 'prev' | 'next'; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      aria-label={direction === 'prev' ? 'Previous slide' : 'Next slide'}
+      onClick={onClick}
+      className="flex size-13.5 cursor-pointer items-center justify-center rounded-full bg-background/20 text-white transition-[background-color,box-shadow] hover:bg-background hover:shadow-[0_2px_8px_var(--shadow)]"
+    >
+      <ArrowLeftIcon className={direction === 'next' ? 'rotate-180' : ''} />
+    </button>
   )
 }
