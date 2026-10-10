@@ -35,6 +35,8 @@ declare module '@tanstack/react-router' {
   }
 }
 
+await document.fonts.load('1em "Archivo Variable"')
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
