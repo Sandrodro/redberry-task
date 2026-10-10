@@ -6,7 +6,7 @@ import type { Movie } from '@/api/types'
 
 export function useComingSoonMoviesData(limit?: number) {
   return useQuery({
-    queryKey: moviesKeys.comingSoon(limit).queryKey,
+    queryKey: moviesKeys.comingSoon(limit),
     queryFn: async () =>
       (await api.get<{ data: Movie[] }>(Endpoint.ComingSoon, { query: { limit } })).data,
   })

@@ -6,7 +6,7 @@ import type { VenueSessions } from '@/api/types'
 
 export const movieSessionsQueryOptions = (slug: string, date?: string) =>
   queryOptions({
-    queryKey: moviesKeys.sessions(slug, date).queryKey,
+    queryKey: moviesKeys.sessions(slug, date),
     queryFn: async () =>
       (
         await api.get<{ data: VenueSessions[] }>(

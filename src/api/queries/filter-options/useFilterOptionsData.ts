@@ -6,7 +6,7 @@ import type { FilterOptions } from '@/api/types'
 
 export const filterOptionsQueryOptions = () =>
   queryOptions({
-    queryKey: filterOptionsKeys.all.queryKey,
+    queryKey: filterOptionsKeys.all,
     queryFn: async () => (await api.get<{ data: FilterOptions }>(Endpoint.FilterOptions)).data,
     // The same for every user, so it is fetched once and kept for the whole session.
     staleTime: Infinity,

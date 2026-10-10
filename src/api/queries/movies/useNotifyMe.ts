@@ -13,6 +13,6 @@ export function useNotifyMe() {
         )
       ).data,
     // `isNotified` is part of the movie lists.
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: moviesKeys._def }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: moviesKeys.all }),
   })
 }

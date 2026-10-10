@@ -24,7 +24,7 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
   const openBooking = useCallback(
     function open(target: Session) {
       // Read the cache, not a hook value, so the replay after login sees the new user.
-      const user = queryClient.getQueryData<User | null>(authKeys.me.queryKey)
+      const user = queryClient.getQueryData<User | null>(authKeys.me)
       if (!user) openLogin({ onSuccess: () => open(target) })
       else if (!user.profileComplete) navigate({ to: '/profile' })
       // Too young for this film. The movie page shows its sessions disabled with the reason.

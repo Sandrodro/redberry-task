@@ -1,32 +1,37 @@
-import { createQueryKeys } from '@lukemorales/query-key-factory'
 import type { SessionsFilters, TicketFilter } from './types'
 
-export const authKeys = createQueryKeys('auth', {
-  me: null,
-})
+export const authKeys = {
+  all: ['auth'] as const,
+  me: ['auth', 'me'] as const,
+}
 
-export const filterOptionsKeys = createQueryKeys('filterOptions', {
-  all: null,
-})
+export const filterOptionsKeys = {
+  all: ['filterOptions'] as const,
+}
 
-export const moviesKeys = createQueryKeys('movies', {
-  search: (q: string) => [q],
-  nowPlaying: (limit?: number) => [{ limit }],
-  comingSoon: (limit?: number) => [{ limit }],
-  featured: null,
-  detail: (slug: string) => [slug],
-  sessions: (slug: string, date?: string) => [slug, { date }],
-})
+export const moviesKeys = {
+  all: ['movies'] as const,
+  search: (q: string) => [...moviesKeys.all, 'search', q] as const,
+  nowPlaying: (limit?: number) => [...moviesKeys.all, 'nowPlaying', { limit }] as const,
+  comingSoon: (limit?: number) => [...moviesKeys.all, 'comingSoon', { limit }] as const,
+  featured: ['movies', 'featured'] as const,
+  detail: (slug: string) => [...moviesKeys.all, 'detail', slug] as const,
+  sessions: (slug: string, date?: string) =>
+    [...moviesKeys.all, 'sessions', slug, { date }] as const,
+}
 
-export const sessionsKeys = createQueryKeys('sessions', {
-  list: (filters: SessionsFilters) => [filters],
-  seats: (id: number) => [id],
-})
+export const sessionsKeys = {
+  all: ['sessions'] as const,
+  list: (filters: SessionsFilters) => [...sessionsKeys.all, 'list', filters] as const,
+  seats: (id: number) => [...sessionsKeys.all, 'seats', id] as const,
+}
 
-export const holdsKeys = createQueryKeys('holds', {
-  detail: (id: string) => [id],
-})
+export const holdsKeys = {
+  all: ['holds'] as const,
+  detail: (id: string) => [...holdsKeys.all, 'detail', id] as const,
+}
 
-export const ticketsKeys = createQueryKeys('tickets', {
-  list: (filter?: TicketFilter) => [{ filter }],
-})
+export const ticketsKeys = {
+  all: ['tickets'] as const,
+  list: (filter?: TicketFilter) => [...ticketsKeys.all, 'list', { filter }] as const,
+}

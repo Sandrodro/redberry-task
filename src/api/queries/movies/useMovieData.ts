@@ -6,7 +6,7 @@ import type { MovieDetail } from '@/api/types'
 
 export const movieQueryOptions = (slug: string) =>
   queryOptions({
-    queryKey: moviesKeys.detail(slug).queryKey,
+    queryKey: moviesKeys.detail(slug),
     queryFn: async () =>
       (await api.get<{ data: MovieDetail }>(`${Endpoint.Movies}/${encodeURIComponent(slug)}`)).data,
   })

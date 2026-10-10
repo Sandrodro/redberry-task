@@ -8,7 +8,7 @@ import type { User } from '@/api/types'
 /** The signed in user. Does not fetch when no token is stored. */
 export function useMe() {
   return useQuery({
-    queryKey: authKeys.me.queryKey,
+    queryKey: authKeys.me,
     // `null` marks a guest, set on logout. Setting data notifies mounted observers, removing the query does not.
     queryFn: async (): Promise<User | null> => {
       try {

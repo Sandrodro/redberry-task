@@ -6,7 +6,7 @@ import type { FeaturedMovie } from '@/api/types'
 
 export const featuredMoviesQueryOptions = () =>
   queryOptions({
-    queryKey: moviesKeys.featured.queryKey,
+    queryKey: moviesKeys.featured,
     queryFn: async () => (await api.get<{ data: FeaturedMovie[] }>(Endpoint.Featured)).data,
   })
 

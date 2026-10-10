@@ -2,7 +2,7 @@ import { ApiError } from '@/api/client'
 import { useCreateOrder } from '@/api/queries/orders/useCreateOrder'
 import type { Order, SeatHold, Session, User } from '@/api/types'
 import { useAppForm } from '@/hooks/useAppForm'
-import { getServerErrors } from '@/utils/form/getServerErrors'
+import { setServerErrors } from '@/utils/form/setServerErrors'
 import { checkoutSchema, type CheckoutValues } from '@/utils/schemas/checkoutSchema'
 import { ErrorMessage } from '@/components/core/ErrorMessage'
 import { Typography } from '@/components/core/Typography'
@@ -32,7 +32,6 @@ export function CheckoutStep({
   onSeatsLost,
 }: CheckoutStepProps) {
   const createOrder = useCreateOrder()
-  const { fieldErrors } = getServerErrors(createOrder.error)
   const error = createOrder.error instanceof ApiError ? createOrder.error : null
   // A 422 with `errors` is shown on the fields. Everything else without a booking rule handler is shown here.
   const formMessage =
@@ -58,6 +57,7 @@ export function CheckoutStep({
       {
         onSuccess: onPaid,
         onError: (failure) => {
+          setServerErrors(form, failure)
           if (!(failure instanceof ApiError)) return
           if (failure.status === 409) onSeatsLost(failure.contested ?? [])
           else if (failure.status === 422 && !failure.errors) onHoldExpired()
@@ -81,22 +81,14 @@ export function CheckoutStep({
           }}
         >
           <form.AppField name="fullName">
-            {(field) => <field.Input label="Full name" serverError={fieldErrors.fullName} />}
+            {(field) => <field.Input label="Full name" />}
           </form.AppField>
           <div className="grid grid-cols-2 gap-6">
             <form.AppField name="email">
-              {(field) => (
-                <field.Input label="Email" type="email" serverError={fieldErrors.email} />
-              )}
+              {(field) => <field.Input label="Email" type="email" />}
             </form.AppField>
             <form.AppField name="mobileNumber">
-              {(field) => (
-                <field.Input
-                  label="Mobile number"
-                  type="tel"
-                  serverError={fieldErrors.mobileNumber}
-                />
-              )}
+              {(field) => <field.Input label="Mobile number" type="tel" />}
             </form.AppField>
           </div>
           <hr className="h-px border-0 bg-card" />
@@ -106,29 +98,15 @@ export function CheckoutStep({
                 label="Card number"
                 inputMode="numeric"
                 placeholder="e.g. 1234 4567 8901 2345"
-                serverError={fieldErrors.cardNumber}
               />
             )}
           </form.AppField>
           <div className="grid grid-cols-2 gap-6">
             <form.AppField name="expiry">
-              {(field) => (
-                <field.Input
-                  label="Expiry"
-                  placeholder="e.g. 12/34"
-                  serverError={fieldErrors.expiry}
-                />
-              )}
+              {(field) => <field.Input label="Expiry" placeholder="e.g. 12/34" />}
             </form.AppField>
             <form.AppField name="cvv">
-              {(field) => (
-                <field.Input
-                  label="CVV"
-                  inputMode="numeric"
-                  placeholder="e.g. 123"
-                  serverError={fieldErrors.cvv}
-                />
-              )}
+              {(field) => <field.Input label="CVV" inputMode="numeric" placeholder="e.g. 123" />}
             </form.AppField>
           </div>
           <ErrorMessage message={formMessage} />

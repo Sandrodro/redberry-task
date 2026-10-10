@@ -2,8 +2,8 @@
 
 Cinema booking frontend for the Redberry Bootcamp XII task. Users browse films, filter sessions, pick seats, hold them, and pay for tickets.
 
-- Live demo: https://redberry-task-blond.vercel.app/
-- API docs: https://api.kinoxii.redberryinternship.ge/docs
+- Live demo: <https://redberry-task-blond.vercel.app/>
+- API docs: <https://api.kinoxii.redberryinternship.ge/docs>
 
 ## Getting started
 
@@ -32,7 +32,7 @@ GitHub Actions (`.github/workflows/ci.yml`) runs lint and build on every pull re
 | UI            | React 19, TypeScript, Vite                                                  |
 | Styling       | Tailwind v4 with theme tokens in `src/index.css`, Archivo font (fontsource) |
 | Routing       | TanStack Router, file-based, automatic code splitting                       |
-| Server state  | TanStack Query, `@lukemorales/query-key-factory` for query keys             |
+| Server state  | TanStack Query                                                              |
 | Forms         | TanStack Form, Zod schemas                                                  |
 | UI primitives | Radix UI (dropdown menu, tabs, tooltip), Embla Carousel                     |
 | Tooling       | pnpm, oxlint, Prettier, `vite-plugin-svgr` (SVG icons as components)        |
@@ -62,16 +62,15 @@ Rules that keep it consistent:
 - A component used by one page lives in that page's folder. When a second page needs it, it moves to `src/components/`.
 - Helpers do not live in component files. They go in a `utils.ts` next to the feature, or in `src/utils/<kind>/` when shared.
 - All text uses `Typography`. All colors come from theme tokens. No hardcoded hex values.
-- A piece of UI that switches on state (loading, error, empty, list) is its own child component with early returns. There are no `renderList()` functions inside components.
 
 ## Architecture decisions
 
-**Data layer.** Each query is a hook named `use{Thing}Data` in `src/api/queries/<resource>/`. Query keys come from one factory in `src/api/queryKeys.ts`, and mutations invalidate with `xKeys._def`. After a mutation, the UI shows what the server returned or refetched, not the submitted values. Paths come from the `Endpoint` const object. Values the API owns (venues, formats, ticket ratios, seat cap, hold minutes) are read from `/filter-options`, never hardcoded.
+**Data layer.** Each query is a hook named `use{Thing}Data` in `src/api/queries/<resource>/`. Query keys are plain `as const` objects in `src/api/queryKeys.ts`, and mutations invalidate with `xKeys.all`. A query that waits for an input (like `useHoldData`) uses `skipToken` as its `queryFn`. After a mutation, the UI shows what the server returned or refetched, not the submitted values. Paths come from the `Endpoint` const object. Values the API owns (venues, formats, ticket ratios, seat cap, hold minutes) are read from `/filter-options`, never hardcoded.
 
 **Error handling.** `src/api/client.ts` turns every failure into one `ApiError`, so `error.message` is always safe to show.
 
 - A network failure or a `5xx` gets a generic message. Server text is never shown.
-- `422` with `errors` maps to form fields (`getServerErrors`).
+- `422` with `errors` maps to form fields (`setServerErrors`). A field clears its server message when the user enters a valid value.
 - `422` with only `message` is a booking rule. The message is shown as a notice.
 - `409` means seats were lost. The `contested` codes mark those seats in the seat map.
 - Queries retry up to 3 times, except on `4xx` errors, which do not change on retry.
@@ -84,7 +83,7 @@ Rules that keep it consistent:
 
 **URL as state.** The sessions page keeps its filters, date, sort, and page in the URL (`?venue=galleria,batumi&date=2026-11-14&sort=price_asc`). A Zod schema validates the search params, and a bad value falls back to "not set". Values that `/filter-options` does not know are dropped before the request, because the API rejects the whole request with `422` for an unknown value. The links can be shared and the back button works.
 
-**Forms.** Each form has a Zod schema in `src/utils/schemas/`, passed to TanStack Form as `onMount` and `onChange` validators. A field error shows only after the field is blurred.
+**Forms.** Each form has a Zod schema in `src/utils/schemas/`, passed to TanStack Form as `onMount` and `onChange` validators. A field error shows only after the field is blurred. Server field errors are set in the form's error map, so they use the same field error display.
 
 **Booking flow.** The steps run through a reducer (`bookingReducer.ts`). The hold ID is saved in localStorage. If the user reloads or reopens the modal, the booking resumes at checkout when the hold is still live, and the stale ID is removed when it is not. The hold countdown ticks against the absolute expiry time, so a background tab does not drift.
 

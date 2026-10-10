@@ -4,7 +4,7 @@ Cinema booking frontend for the Redberry Bootcamp XII task. API contract: https:
 
 ## Stack
 
-React 19, TypeScript, Vite, Tailwind v4, TanStack Router (file-based), TanStack Query, TanStack Form, `@lukemorales/query-key-factory`, Zod. Package manager is pnpm.
+React 19, TypeScript, Vite, Tailwind v4, TanStack Router (file-based), TanStack Query, TanStack Form, Zod. Package manager is pnpm.
 
 ## Commands
 
@@ -22,7 +22,7 @@ src/
   api/
     client.ts       fetch wrapper, ApiError, TOKEN_KEY
     endpoints.ts    Endpoint const (paths)
-    queryKeys.ts    query key factories
+    queryKeys.ts    query keys
     types.ts        API types
     queries/        one folder per resource, one hook per file (useFeaturedMoviesData, useLogin, ...)
   components/       app components used by more than one page. A component with no group stays at the root (FormInput, RouteError)
@@ -43,7 +43,7 @@ src/
 
 - Routes in `src/routes/` only call `createFileRoute` and point to a page component in `src/components/pages/`. No page logic in route files.
 - Routes that need a logged in user go in `src/routes/_protected/`. A guest gets the login modal on the same URL and goes home if they close it. To open the modal from code, use `useAuthModal().openLogin({ onSuccess, onCancel })`. `onSuccess` resumes what the user was doing.
-- Form validation is a Zod schema in `src/utils/schemas/`, passed to `useForm` as `validators: { onMount, onChange }`. Show a field error only when `field.state.meta.isBlurred` is true.
+- Form validation is a Zod schema in `src/utils/schemas/`, passed to `useForm` as `validators: { onMount, onChange }`. Show a field error only when `field.state.meta.isBlurred` is true. Server field errors (`422` with `errors`) go into the form with `setServerErrors(form, error)` in the mutation's `onError`. The field clears the message when the user enters a valid value. Fields read them through `getFieldError(field)`, so do not pass server errors down as props.
 - Build UI from reusable components. Check `src/components/core/` and `src/components/` before writing new markup. A component used by one page lives in that page's folder. When a second page needs it, move it up to `src/components/`.
 - Helper functions (formatting, calculations) do not live in component files. A feature folder with such helpers keeps them in a `utils.ts` next to its components (`components/booking/utils.ts`). A helper used by more than one folder goes in `src/utils/`.
 - Group files in `src/utils/` by what they are, in a subfolder named for the kind: `schemas/` (Zod schemas), `formatters/` (value to text), `form/` (form helpers). A new file goes into the folder that matches its kind. When two files of one kind exist outside a folder, make the folder. A file with no kind group stays at the root of `utils/`. Do not make catch-all folders like `helpers/` or `misc/`. Components, hooks and `api/queries/` follow the same rule: one folder per kind or resource.
@@ -53,13 +53,13 @@ src/
 - Use theme tokens from `src/index.css` (`bg-background`, `text-muted`, `text-brand`, ...). No hardcoded hex values. Tints use the opacity modifier (`bg-brand/10`).
 - Font is Archivo, loaded with `@fontsource-variable/archivo`.
 - Use `Endpoint` for every API path. Param paths interpolate from base entries: `${Endpoint.Movies}/${slug}`. `Endpoint` is an `as const` object, not an `enum`, because `erasableSyntaxOnly` is on.
-- Define query keys in `src/api/queryKeys.ts` with the key factory. Never write inline keys. Invalidate with `xKeys._def`.
-- Each query is a hook named `use{Thing}Data` that returns the `useQuery` result. Mutations are hooks (`useCreateHold`, ...) that invalidate what they change. Code outside a hook reads cache through the key factory, e.g. `authKeys.me.queryKey`.
+- Define query keys in `src/api/queryKeys.ts` as plain `as const` objects, one per resource: `all` plus a function per query (`moviesKeys.detail(slug)`). Never write inline keys. Invalidate with `xKeys.all`. A query that waits for an input uses `skipToken` as its `queryFn`, not `enabled` with a fake key value.
+- Each query is a hook named `use{Thing}Data` that returns the `useQuery` result. Mutations are hooks (`useCreateHold`, ...) that invalidate what they change. Code outside a hook reads cache through the key objects, e.g. `authKeys.me`.
 - Use `api.get`, `api.post`, `api.put`, `api.delete`. Unwrap `{ data }` responses inline: `(await api.get<{ data: T }>(path)).data`. For multipart bodies, pass `toFormData(input)` as the body.
 - Read localStorage only through `storage` in `src/utils/storage.ts`.
 - The auth token is in localStorage under `TOKEN_KEY`, sent as `Authorization: Bearer`. Use `useAuth()` for login status and the active user.
 - Do not hardcode values the API provides (venues, formats, ticket ratios, seat cap, hold minutes). Read them from `/filter-options`.
-- Error handling follows the docs: `422` with `errors` maps to form fields. `422` with only `message` is a booking rule, show the message. `409` means seats were lost, read `contested`. `401` is handled once in `src/api/client.ts`: it opens the login modal (set up in `AuthModalProvider`) and sends the request again after a login. Components do not handle `401`. A network failure and a `5xx` become an `ApiError` with a generic message, so `error.message` is always safe to show.
+- Error handling follows the docs: `422` with `errors` maps to form fields (`setServerErrors`). `422` with only `message` is a booking rule, show the message. `409` means seats were lost, read `contested`. `401` is handled once in `src/api/client.ts`: it opens the login modal (set up in `AuthModalProvider`) and sends the request again after a login. Components do not handle `401`. A network failure and a `5xx` become an `ApiError` with a generic message, so `error.message` is always safe to show.
 - Every list has three states. Loading: a skeleton (`Skeleton`) on the sessions page, a spinner elsewhere. Error: `ErrorState` with a retry button, disabled while it retries. Empty: `EmptyState` with a way out when there is one. Never treat an error as an empty list.
 - No render functions (`renderList()`, `renderContent()`) inside components. A piece of UI that switches on state (loading, error, empty, list) is a child component with early returns. It calls its own hooks and takes the rest as props. If only one file uses it, declare it in that file and do not export it. Up to three branches, a ternary in the JSX is fine. Do not nest more than that.
 - When a file has several components and exports one, the exported component comes first, with its props type directly above it. The components only it uses follow below. Helper functions and constants stay at the top.
@@ -76,6 +76,7 @@ src/
 - If a request is ambiguous or has several valid approaches, ask before doing it.
 - Keep changes surgical and simple. No speculative features, abstractions or config.
 - For multi-step plans, mark each step as done.
+- Keep this file current. Update it when an important convention changes, and when asked to change something written here.
 - Verify before reporting: run `pnpm build`, and say plainly what you did not verify.
 - Commit and push only when asked, using the exact message given. Commit messages are short and lowercase.
 - Doubt about a library or API: check the docs or search. Do not rely on memory.

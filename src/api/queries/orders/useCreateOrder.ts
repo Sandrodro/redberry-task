@@ -12,7 +12,7 @@ export function useCreateOrder() {
     mutationFn: async (input: CreateOrderInput) =>
       (await api.post<{ data: Order }>(Endpoint.Orders, input)).data,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ticketsKeys._def })
+      queryClient.invalidateQueries({ queryKey: ticketsKeys.all })
       return refreshSessions()
     },
     onError: (error) => {

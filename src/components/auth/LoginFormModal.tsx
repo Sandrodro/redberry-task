@@ -1,6 +1,7 @@
 import { useLogin } from '@/api/queries/auth/useLogin'
 import { useAppForm } from '@/hooks/useAppForm'
 import { getServerErrors } from '@/utils/form/getServerErrors'
+import { setServerErrors } from '@/utils/form/setServerErrors'
 import { loginSchema, type LoginValues } from '@/utils/schemas/loginSchema'
 import { ErrorMessage } from '@/components/core/ErrorMessage'
 import { Modal } from '@/components/core/Modal'
@@ -15,12 +16,16 @@ type LoginFormModalProps = {
 
 export function LoginFormModal({ open, onClose, onSignUp }: LoginFormModalProps) {
   const login = useLogin()
-  const { fieldErrors, message } = getServerErrors(login.error)
+  const { message } = getServerErrors(login.error)
 
   const form = useAppForm({
     defaultValues: { email: '', password: '' } satisfies LoginValues,
     validators: { onMount: loginSchema, onChange: loginSchema },
-    onSubmit: ({ value }) => login.mutate(loginSchema.parse(value), { onSuccess: onClose }),
+    onSubmit: ({ value }) =>
+      login.mutate(loginSchema.parse(value), {
+        onSuccess: onClose,
+        onError: (error) => setServerErrors(form, error),
+      }),
   })
 
   return (
@@ -40,24 +45,10 @@ export function LoginFormModal({ open, onClose, onSignUp }: LoginFormModalProps)
           </Typography>
         </div>
         <form.AppField name="email">
-          {(field) => (
-            <field.Input
-              label="Email"
-              type="email"
-              placeholder="example@gmail.com"
-              serverError={fieldErrors.email}
-            />
-          )}
+          {(field) => <field.Input label="Email" type="email" placeholder="example@gmail.com" />}
         </form.AppField>
         <form.AppField name="password">
-          {(field) => (
-            <field.Input
-              label="Password"
-              type="password"
-              placeholder="••••••••"
-              serverError={fieldErrors.password}
-            />
-          )}
+          {(field) => <field.Input label="Password" type="password" placeholder="••••••••" />}
         </form.AppField>
         <ErrorMessage message={message} />
         <form.AppForm>

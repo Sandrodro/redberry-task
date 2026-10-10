@@ -3,7 +3,9 @@ import { useUpdateProfile } from '@/api/queries/profile/useUpdateProfile'
 import { useFilterOptionsData } from '@/api/queries/filter-options/useFilterOptionsData'
 import type { AgeRating, User } from '@/api/types'
 import { useAppForm } from '@/hooks/useAppForm'
+import { getFieldError } from '@/utils/form/getFieldError'
 import { getServerErrors } from '@/utils/form/getServerErrors'
+import { setServerErrors } from '@/utils/form/setServerErrors'
 import { getAge, MIN_AGE, profileSchema } from '@/utils/schemas/profileSchema'
 import { ErrorMessage } from '@/components/core/ErrorMessage'
 import { Input } from '@/components/core/Input'
@@ -22,7 +24,7 @@ function getAgeNote(dateOfBirth: string, ageRatings: AgeRating[] = []) {
 
 export function PersonalInformationForm({ user }: { user: User }) {
   const update = useUpdateProfile()
-  const { fieldErrors, message } = getServerErrors(update.error)
+  const { message } = getServerErrors(update.error)
   const { data: filterOptions } = useFilterOptionsData()
 
   const form = useAppForm({
@@ -31,7 +33,10 @@ export function PersonalInformationForm({ user }: { user: User }) {
     onSubmit: ({ value }) => {
       const input = profileSchema.parse(value)
       // The values the server returned become the new defaults, so the button is disabled until the next edit.
-      update.mutate(input, { onSuccess: (saved) => form.reset(getProfileFormValues(saved)) })
+      update.mutate(input, {
+        onSuccess: (saved) => form.reset(getProfileFormValues(saved)),
+        onError: (error) => setServerErrors(form, error),
+      })
     },
   })
 
@@ -47,9 +52,7 @@ export function PersonalInformationForm({ user }: { user: User }) {
       <div className="flex flex-col gap-6">
         <div className="flex flex-col gap-4.5">
           <form.AppField name="fullName">
-            {(field) => (
-              <field.Input label="Full name" success={false} serverError={fieldErrors.fullName} />
-            )}
+            {(field) => <field.Input label="Full name" success={false} />}
           </form.AppField>
           <Input
             label="Email"
@@ -60,14 +63,7 @@ export function PersonalInformationForm({ user }: { user: User }) {
         </div>
         <div className="flex flex-col gap-5">
           <form.AppField name="mobileNumber">
-            {(field) => (
-              <field.Input
-                label="Mobile number"
-                type="tel"
-                success={false}
-                serverError={fieldErrors.mobileNumber}
-              />
-            )}
+            {(field) => <field.Input label="Mobile number" type="tel" success={false} />}
           </form.AppField>
           <form.AppField name="dateOfBirth">
             {(field) => (
@@ -75,7 +71,6 @@ export function PersonalInformationForm({ user }: { user: User }) {
                 label="Date of birth"
                 type="date"
                 success={false}
-                serverError={fieldErrors.dateOfBirth}
                 hint={getAgeNote(field.state.value, filterOptions?.ageRatings)}
                 icon={<CalendarIcon className="pointer-events-none size-4 shrink-0 text-white" />}
                 className="[&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:inset-0 [&::-webkit-calendar-picker-indicator]:size-full [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-0"
@@ -89,7 +84,7 @@ export function PersonalInformationForm({ user }: { user: User }) {
                 value={field.state.value ?? ''}
                 onChange={(e) => field.handleChange(e.target.value ? Number(e.target.value) : null)}
                 onBlur={field.handleBlur}
-                error={fieldErrors.preferredVenueId}
+                error={getFieldError(field)}
               >
                 <option value="">Select venue</option>
                 {filterOptions?.venues.map((venue) => (

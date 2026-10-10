@@ -10,7 +10,7 @@ export function useStoreSession() {
   const refreshUserData = useRefreshUserData()
   return ({ user, token }: AuthResponse) => {
     storage.set(TOKEN_KEY, token)
-    queryClient.setQueryData(authKeys.me.queryKey, user)
+    queryClient.setQueryData(authKeys.me, user)
     refreshUserData()
   }
 }

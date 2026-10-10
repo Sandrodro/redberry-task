@@ -6,7 +6,7 @@ import type { SessionsFilters, SessionsPage } from '@/api/types'
 
 export const sessionsListQueryOptions = (filters: SessionsFilters) =>
   queryOptions({
-    queryKey: sessionsKeys.list(filters).queryKey,
+    queryKey: sessionsKeys.list(filters),
     queryFn: () => api.get<SessionsPage>(Endpoint.Sessions, { query: { ...filters } }),
   })
 

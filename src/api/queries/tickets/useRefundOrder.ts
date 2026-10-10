@@ -14,8 +14,8 @@ export function useRefundOrder() {
         )
       ).data,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ticketsKeys._def })
-      queryClient.invalidateQueries({ queryKey: sessionsKeys._def })
+      queryClient.invalidateQueries({ queryKey: ticketsKeys.all })
+      queryClient.invalidateQueries({ queryKey: sessionsKeys.all })
     },
   })
 }

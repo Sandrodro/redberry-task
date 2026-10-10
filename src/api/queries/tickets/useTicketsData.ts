@@ -6,7 +6,7 @@ import type { Order, TicketFilter } from '@/api/types'
 
 export const ticketsQueryOptions = (filter?: TicketFilter) =>
   queryOptions({
-    queryKey: ticketsKeys.list(filter).queryKey,
+    queryKey: ticketsKeys.list(filter),
     queryFn: async () =>
       (await api.get<{ data: Order[] }>(Endpoint.Tickets, { query: { filter } })).data,
   })

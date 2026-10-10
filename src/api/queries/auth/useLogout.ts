@@ -13,8 +13,8 @@ export function useLogout() {
     // Clear the token whether or not the request succeeded.
     onSettled: () => {
       storage.remove(TOKEN_KEY)
-      queryClient.setQueryData(authKeys.me.queryKey, null)
-      queryClient.removeQueries({ queryKey: ticketsKeys._def })
+      queryClient.setQueryData(authKeys.me, null)
+      queryClient.removeQueries({ queryKey: ticketsKeys.all })
       refreshUserData()
     },
   })

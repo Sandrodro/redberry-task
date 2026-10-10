@@ -9,6 +9,6 @@ export function useUpdateProfile() {
   return useMutation({
     mutationFn: async (input: ProfileInput) =>
       (await api.put<{ data: User }>(Endpoint.Profile, toFormData({ ...input }))).data,
-    onSuccess: (user) => queryClient.setQueryData(authKeys.me.queryKey, user),
+    onSuccess: (user) => queryClient.setQueryData(authKeys.me, user),
   })
 }
