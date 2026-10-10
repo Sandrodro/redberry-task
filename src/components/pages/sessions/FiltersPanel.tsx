@@ -19,7 +19,7 @@ export function FiltersPanel() {
   if (!options) return null
 
   return (
-    <aside className="sticky top-6 flex w-80 shrink-0 flex-col gap-6 rounded-2xl bg-card p-6">
+    <aside className="no-scrollbar sticky top-6 max-h-[calc(100vh-3rem)] overflow-y-auto flex w-80 shrink-0 flex-col gap-6 rounded-2xl bg-card p-6">
       <Typography variant="h3" as="h2">
         Filters
       </Typography>
