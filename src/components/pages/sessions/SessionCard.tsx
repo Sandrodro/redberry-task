@@ -1,3 +1,4 @@
+import { useNavigate } from '@tanstack/react-router'
 import type { Session } from '@/api/types'
 import SeatsIcon from '@/assets/icons/seats.svg?react'
 import { useBookingModal } from '@/hooks/useBookingModal'
@@ -15,6 +16,7 @@ type SessionCardProps = {
 
 export function SessionCard({ session, disabled }: SessionCardProps) {
   const { openBooking } = useBookingModal()
+  const navigate = useNavigate()
   const lowSeats = session.seatsLeft <= LOW_SEATS_LIMIT
   const ended = hasSessionEnded(session)
 
@@ -23,7 +25,10 @@ export function SessionCard({ session, disabled }: SessionCardProps) {
       <button
         type="button"
         disabled={disabled || ended}
-        onClick={() => openBooking(session)}
+        onClick={() => {
+          void navigate({ to: '/movies/$slug', params: { slug: session.movie.slug } })
+          openBooking(session)
+        }}
         className="flex w-63 cursor-pointer flex-col gap-3 rounded-2xl bg-card p-3.75 text-left disabled:cursor-not-allowed disabled:opacity-40"
       >
         <div className="flex w-full items-center justify-between">
