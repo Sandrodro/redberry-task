@@ -112,7 +112,11 @@ export function BookingModal({ session, onClose }: BookingModalProps) {
   }
 
   return (
-    <Modal open onClose={onClose} className={`w-286.5 ${order ? '' : 'min-h-165'}`}>
+    <Modal
+      open
+      onClose={onClose}
+      className={`w-286.5 ${order ? '' : 'max-h-[calc(100dvh-4rem)] min-h-165 open:flex open:flex-col'}`}
+    >
       {order ? (
         <ConfirmationView order={order} onClose={onClose} />
       ) : isFilterOptionsError && !filterOptions ? (
@@ -124,7 +128,7 @@ export function BookingModal({ session, onClose }: BookingModalProps) {
       ) : !filterOptions || !user || seatMap.isPending || isResuming ? (
         <Spinner className="absolute inset-0 m-auto" />
       ) : (
-        <div className="flex flex-col gap-8">
+        <div className="flex min-h-0 flex-1 flex-col gap-8">
           <BookingHeader session={session} secondsLeft={secondsLeft} />
           {step === BookingStep.Seats || !hold ? (
             <SeatSelectionStep
