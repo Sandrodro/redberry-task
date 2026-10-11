@@ -11,7 +11,7 @@ export function Input({ label, error, success, hint, icon, className, ...props }
       <input
         id={id}
         aria-invalid={!!error}
-        className={`min-w-0 flex-1 bg-transparent text-xs font-semibold outline-none placeholder:text-muted disabled:text-muted ${error ? 'text-brand' : 'text-white'} ${className ?? ''}`}
+        className={`min-w-0 flex-1 self-stretch bg-transparent text-xs font-semibold outline-none placeholder:text-muted disabled:text-muted ${error ? 'text-brand' : 'text-white'} ${className ?? ''}`}
         {...props}
       />
     </Field>

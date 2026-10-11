@@ -19,7 +19,7 @@ export function Select({ label, error, hint, className, children, ...props }: Se
       <select
         id={id}
         aria-invalid={!!error}
-        className={`min-w-0 flex-1 cursor-pointer appearance-none bg-transparent text-xs font-semibold outline-none [color-scheme:dark] ${error ? 'text-brand' : empty ? 'text-muted' : 'text-white'} ${className ?? ''}`}
+        className={`min-w-0 flex-1 cursor-pointer appearance-none self-stretch bg-transparent text-xs font-semibold outline-none [color-scheme:dark] ${error ? 'text-brand' : empty ? 'text-muted' : 'text-white'} ${className ?? ''}`}
         {...props}
       >
         {children}

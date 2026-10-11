@@ -22,6 +22,7 @@
     "embla-carousel-wheel-gestures": "^8.1.0",
     "radix-ui": "^1.7.0",
     "react": "^19.2.8",
+    "react-day-picker": "^10.0.2",
     "react-dom": "^19.2.8",
     "tailwindcss": "^4.3.3",
     "zod": "^4.6.5"

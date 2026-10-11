@@ -9,8 +9,15 @@ function formatParts(
 }
 
 /** A "YYYY-MM-DD" string as a local date. */
-function fromDateString(date: string) {
+export function fromDateString(date: string) {
   return new Date(`${date}T00:00`)
+}
+
+/** A local date as a "YYYY-MM-DD" string. */
+export function toDateString(date: Date) {
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${date.getFullYear()}-${month}-${day}`
 }
 
 /** "15 Sep", or "15 September" with `month: 'long'` */

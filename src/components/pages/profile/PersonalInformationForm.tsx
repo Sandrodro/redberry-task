@@ -1,4 +1,3 @@
-import CalendarIcon from '@/assets/icons/calendar.svg?react'
 import { useUpdateProfile } from '@/api/queries/profile/useUpdateProfile'
 import { useFilterOptionsData } from '@/api/queries/filter-options/useFilterOptionsData'
 import type { User } from '@/api/types'
@@ -7,6 +6,7 @@ import { getFieldError } from '@/utils/form/getFieldError'
 import { getServerErrors } from '@/utils/form/getServerErrors'
 import { setServerErrors } from '@/utils/form/setServerErrors'
 import { profileSchema } from '@/utils/schemas/profileSchema'
+import { DatePicker } from '@/components/core/DatePicker'
 import { ErrorMessage } from '@/components/core/ErrorMessage'
 import { Input } from '@/components/core/Input'
 import { Select } from '@/components/core/Select'
@@ -55,18 +55,18 @@ export function PersonalInformationForm({ user }: { user: User }) {
           <form.AppField name="mobileNumber">
             {(field) => <field.Input label="Mobile number" type="tel" success={false} />}
           </form.AppField>
-          <form.AppField name="dateOfBirth">
+          <form.Field name="dateOfBirth">
             {(field) => (
-              <field.Input
+              <DatePicker
                 label="Date of birth"
-                type="date"
-                success={false}
+                value={field.state.value}
+                onChange={field.handleChange}
+                onBlur={field.handleBlur}
+                error={getFieldError(field)}
                 hint={getAgeNote(field.state.value, filterOptions?.ageRatings)}
-                icon={<CalendarIcon className="pointer-events-none size-4 shrink-0 text-white" />}
-                className="[&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:inset-0 [&::-webkit-calendar-picker-indicator]:size-full [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-0"
               />
             )}
-          </form.AppField>
+          </form.Field>
           <form.Field name="preferredVenueId">
             {(field) => (
               <Select
