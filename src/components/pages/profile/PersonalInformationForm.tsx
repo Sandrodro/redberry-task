@@ -1,26 +1,16 @@
 import CalendarIcon from '@/assets/icons/calendar.svg?react'
 import { useUpdateProfile } from '@/api/queries/profile/useUpdateProfile'
 import { useFilterOptionsData } from '@/api/queries/filter-options/useFilterOptionsData'
-import type { AgeRating, User } from '@/api/types'
+import type { User } from '@/api/types'
 import { useAppForm } from '@/hooks/useAppForm'
 import { getFieldError } from '@/utils/form/getFieldError'
 import { getServerErrors } from '@/utils/form/getServerErrors'
 import { setServerErrors } from '@/utils/form/setServerErrors'
-import { getAge, MIN_AGE, profileSchema } from '@/utils/schemas/profileSchema'
+import { profileSchema } from '@/utils/schemas/profileSchema'
 import { ErrorMessage } from '@/components/core/ErrorMessage'
 import { Input } from '@/components/core/Input'
 import { Select } from '@/components/core/Select'
-import { getProfileFormValues } from './utils'
-
-function getAgeNote(dateOfBirth: string, ageRatings: AgeRating[] = []) {
-  if (!dateOfBirth) return undefined
-  const age = getAge(dateOfBirth)
-  if (age < MIN_AGE) return undefined
-  const blocked = ageRatings.filter((rating) => rating.minAge > age).map((rating) => rating.code)
-  if (blocked.length === 0) return undefined
-  const list = new Intl.ListFormat('en', { type: 'disjunction' }).format(blocked)
-  return `You cannot buy tickets for ${list} titles`
-}
+import { getAgeNote, getProfileFormValues } from './utils'
 
 export function PersonalInformationForm({ user }: { user: User }) {
   const update = useUpdateProfile()

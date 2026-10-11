@@ -14,11 +14,7 @@ import { FiltersPanel } from './FiltersPanel'
 import { MovieSessionsRow } from './MovieSessionsRow'
 import { SessionsSkeleton } from './SessionsSkeleton'
 import { SortSelect } from './SortSelect'
-
-function formatCount(total: number) {
-  if (total === 0) return 'No sessions found'
-  return `Showing ${total} ${total === 1 ? 'session' : 'sessions'}`
-}
+import { formatCount } from './helpers'
 
 export function SessionsPage() {
   const { filters, setPage, clear, activeCount } = useSessionsFilters()

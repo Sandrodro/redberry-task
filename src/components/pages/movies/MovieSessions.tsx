@@ -4,7 +4,7 @@ import {
   movieSessionsQueryOptions,
   useMovieSessionsData,
 } from '@/api/queries/movies/useMovieSessionsData'
-import type { MovieDetail, Session } from '@/api/types'
+import type { MovieDetail } from '@/api/types'
 import { useIsUnderage } from '@/hooks/useIsUnderage'
 import { formatDayMonth } from '@/utils/formatters/formatDate'
 import { getFirstAvailableDate } from '@/utils/getUpcomingDates'
@@ -15,24 +15,10 @@ import { Typography } from '@/components/core/Typography'
 import { DateStrip } from '@/components/session/DateStrip'
 import { UnderageNote } from '@/components/session/UnderageNote'
 import { SessionTicket } from './SessionTicket'
+import { groupByHall } from './helpers'
 
 /** A date loaded on hover is reused for this long, so moving over it again does not fetch again. */
 const PREFETCH_STALE_MS = 30_000
-
-/** Groups a venue's sessions by hall, in the order the halls first appear. */
-function groupByHall(sessions: Session[]) {
-  const halls = new Map<number, { id: number; name: string; sessions: Session[] }>()
-  for (const session of sessions) {
-    const hall = halls.get(session.hall.id) ?? {
-      id: session.hall.id,
-      name: session.hall.name,
-      sessions: [],
-    }
-    hall.sessions.push(session)
-    halls.set(hall.id, hall)
-  }
-  return Array.from(halls.values())
-}
 
 export function MovieSessions({ movie }: { movie: MovieDetail }) {
   const queryClient = useQueryClient()

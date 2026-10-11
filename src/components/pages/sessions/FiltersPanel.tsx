@@ -5,12 +5,7 @@ import { DateStrip } from '@/components/session/DateStrip'
 import { Divider } from '@/components/core/Divider'
 import { Typography } from '@/components/core/Typography'
 import { CheckboxFilter } from './CheckboxFilter'
-
-/** "Morning (before 12:00)" becomes the label "Morning" and the hint "before 12:00". */
-function splitTimeBandLabel(label: string) {
-  const match = label.match(/^(.*?)\s*\((.*)\)$/)
-  return match ? { label: match[1], hint: match[2] } : { label, hint: undefined }
-}
+import { splitTimeBandLabel } from './helpers'
 
 export function FiltersPanel() {
   const { data: options } = useFilterOptionsData()
