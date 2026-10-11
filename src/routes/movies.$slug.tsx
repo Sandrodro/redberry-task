@@ -2,7 +2,7 @@ import { noop } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { movieQueryOptions } from '@/api/queries/movies/useMovieData'
 import { movieSessionsQueryOptions } from '@/api/queries/movies/useMovieSessionsData'
-import { MoviePage } from '@/components/pages/movie/MoviePage'
+import { MoviePage } from '@/components/pages/movies/MoviePage'
 import { getFirstAvailableDate } from '@/utils/getUpcomingDates'
 import { preloadImage } from '@/utils/preloadImage'
 
