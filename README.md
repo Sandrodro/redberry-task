@@ -22,6 +22,11 @@ pnpm dev
 
 GitHub Actions (`.github/workflows/ci.yml`) runs lint and build on every pull request and push to `main`. Vercel hosts the app. `vercel.json` rewrites every path to `index.html` for client-side routing.
 
+## Things i did that were not specified in the brief
+
+- **Ended sessions are disabled.** A session has ended when its start time plus the film's runtime is in the past (`src/utils/hasSessionEnded.ts`). An ended session card cannot be clicked, and a tooltip on hover says "The screening has already ended". On the movie detail page, the date strip disables a day that is not in the movie's `availableDates`. If today is disabled because no session is left to book, a tooltip on hover says "All sessions have ended for this day".
+- **Select and calendar designs.** The brief did not include designs for the select dropdowns (sort, venue) or the calendar (date picker), so I made my own, built on Radix and shadcn and styled with the app's theme tokens.
+
 ## Tech stack
 
 | Area          | Choice                                                                      |
