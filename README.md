@@ -1,9 +1,6 @@
 # Kino XII
 
-Cinema booking frontend for the Redberry Bootcamp XII task. Users browse films, filter sessions, pick seats, hold them, and pay for tickets.
-
 - Live demo: <https://redberry-task-blond.vercel.app/>
-- API docs: <https://api.kinoxii.redberryinternship.ge/docs>
 
 ## Getting started
 
@@ -55,3 +52,14 @@ src/
   routes/       route files only
   utils/        schemas/ (Zod), formatters/, form/, and generic helpers
 ```
+
+## Code organization
+
+- **Routes** in `src/routes/` only declare the route and render a page component. Routes that need a logged in user go in `src/routes/_protected/`.
+- **Pages** live in `src/components/pages/{name}/`. `{Name}Page` (`HomePage`, `MoviePage`, `SessionsPage`, `ProfilePage`) is the whole page. The components only that page uses sit next to it. When a second page needs one, it moves up to `src/components/`.
+- **Feature folders** (`booking/`, `auth/`, `search/`, `session/`) hold components that more than one page uses.
+- **Core components** in `src/components/core/` are the base UI. Radix primitives are wrapped there (`DropdownMenu`, `Popover`, `Select`, `Tooltip`). All text goes through `Typography`, and colors come from the theme tokens in `src/index.css`.
+- **API**: each query is one hook in its own file, named `use{Thing}Data` (`useFeaturedMoviesData`). Mutations are verb hooks (`useLogin`, `useCreateHold`) that invalidate what they change. Paths come from `Endpoint` and query keys from `queryKeys.ts`.
+- **Forms**: each form has a Zod schema in `src/utils/schemas/`. Server field errors (`422`) go into the form fields.
+- **Helpers**: a helper used by one folder stays in a `utils.ts` or `helpers.ts` next to its components. A shared helper goes in `src/utils/`, in a subfolder for its kind (`formatters/`, `schemas/`, `form/`).
+- **Lists** always have loading, error (with retry), and empty states.
