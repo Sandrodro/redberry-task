@@ -1,4 +1,5 @@
 import { getUpcomingDates, UPCOMING_DAY_COUNT } from '@/utils/getUpcomingDates'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/core/Tooltip'
 import { Typography } from '@/components/core/Typography'
 
 const sizes = {
@@ -40,22 +41,35 @@ export function DateStrip({
 
   return (
     <div className={`no-scrollbar flex overflow-x-auto ${style.strip}`}>
-      {dates.map((date) => (
-        <button
-          key={date.value}
-          type="button"
-          aria-pressed={date.value === selected}
-          disabled={availableDates ? !availableDates.includes(date.value) : false}
-          onClick={() => onChange(date.value)}
-          onPointerEnter={() => onHover?.(date.value)}
-          className={`flex shrink-0 cursor-pointer flex-col items-center justify-center disabled:cursor-not-allowed disabled:opacity-40 ${style.button} ${date.value === selected ? 'bg-brand' : style.idle}`}
-        >
-          <Typography variant="labelS">{date.weekday}</Typography>
-          <Typography variant={style.day} as="span">
-            {date.day}
-          </Typography>
-        </button>
-      ))}
+      {dates.map((date, index) => {
+        const isDisabled = availableDates ? !availableDates.includes(date.value) : false
+        return (
+          <Tooltip key={date.value}>
+            {/* A disabled button gets no pointer events, so the span carries the hover. */}
+            <TooltipTrigger asChild>
+              <span className="shrink-0">
+                <button
+                  type="button"
+                  aria-pressed={date.value === selected}
+                  disabled={isDisabled}
+                  onClick={() => onChange(date.value)}
+                  onPointerEnter={() => onHover?.(date.value)}
+                  className={`flex cursor-pointer flex-col items-center justify-center disabled:cursor-not-allowed disabled:opacity-40 ${style.button} ${date.value === selected ? 'bg-brand' : style.idle}`}
+                >
+                  <Typography variant="labelS">{date.weekday}</Typography>
+                  <Typography variant={style.day} as="span">
+                    {date.day}
+                  </Typography>
+                </button>
+              </span>
+            </TooltipTrigger>
+            {/* Only today can have ended sessions. A later day without sessions has none at all. */}
+            {isDisabled && index === 0 && (
+              <TooltipContent>All sessions have ended for this day</TooltipContent>
+            )}
+          </Tooltip>
+        )
+      })}
     </div>
   )
 }
