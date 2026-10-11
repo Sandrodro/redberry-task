@@ -60,5 +60,5 @@ Rules that keep it consistent:
 
 - A route file only calls `createFileRoute`, sets loaders, and renders a page component. It has no page logic.
 - A component used by one page lives in that page's folder. When a second page needs it, it moves to `src/components/`.
-- Helpers do not live in component files. They go in a `utils.ts` next to the feature, or in `src/utils/<kind>/` when shared.
+- Helpers do not live in component files. They go in a `helpers.ts` or `utils.ts` next to the feature, or in `src/utils/<kind>/` when shared.
 - All text uses `Typography`. All colors come from theme tokens. No hardcoded hex values.
