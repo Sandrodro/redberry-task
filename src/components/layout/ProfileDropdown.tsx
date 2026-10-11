@@ -24,7 +24,7 @@ export function ProfileDropdown({ user, initials }: ProfileDropdownProps) {
   const prefetchTickets = usePrefetchTickets()
 
   return (
-    <DropdownMenuContent className="flex w-75.5 flex-col gap-1 rounded-2xl bg-background pb-2.5">
+    <DropdownMenuContent className="flex w-75.5 flex-col gap-1 rounded-2xl border border-elevated bg-background pb-2.5">
       <div className="flex flex-col gap-4">
         <div className="flex items-center gap-2.5 pl-5 pt-5">
           <Avatar

@@ -33,7 +33,11 @@ export function SessionTicket({ session, disabled }: SessionTicketProps) {
             <Typography variant="bodyS" as="span" className="text-muted">
               {session.language.code}
             </Typography>
-            <Badge tone="elevated" className="bg-card! px-3! py-1! text-white/70!">
+            <Badge
+              tone="elevated"
+              size={session.format.slug === 'panorama' ? 'xs' : 'md'}
+              className="bg-card! px-3! py-1! text-white/70!"
+            >
               {session.format.name}
             </Badge>
           </span>

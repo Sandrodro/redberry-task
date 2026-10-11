@@ -8,6 +8,7 @@ const variants = {
   button: { tag: 'span', className: 'text-sm font-extrabold leading-[normal]' },
   labelM: { tag: 'span', className: 'text-sm font-semibold leading-[normal]' },
   labelS: { tag: 'span', className: 'text-xs font-semibold leading-[normal]' },
+  labelXS: { tag: 'span', className: 'text-xxs font-semibold leading-[normal]' },
   overline: {
     tag: 'span',
     className: 'text-xs font-semibold uppercase leading-[normal] tracking-[0.06em]',

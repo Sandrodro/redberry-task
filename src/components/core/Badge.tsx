@@ -9,8 +9,9 @@ const tones = {
 } as const
 
 const sizes = {
-  md: 'px-3 py-1.5',
-  sm: 'px-1.75 py-1',
+  md: { box: 'px-3 py-1.5', label: 'labelS' },
+  sm: { box: 'px-1.75 py-1', label: 'labelS' },
+  xs: { box: 'px-3 py-1.5', label: 'labelXS' },
 } as const
 
 type BadgeProps = {
@@ -27,12 +28,12 @@ export function Badge({
   children,
   ...props
 }: BadgeProps) {
-  const base = `flex items-center gap-1 rounded-full ${sizes[size]} ${tones[tone]}`
+  const base = `flex items-center gap-1 rounded-full ${sizes[size].box} ${tones[tone]}`
 
   return (
     <span className={cx(base, className)} {...props}>
       {icon}
-      <Typography variant="labelS">{children}</Typography>
+      <Typography variant={sizes[size].label}>{children}</Typography>
     </span>
   )
 }

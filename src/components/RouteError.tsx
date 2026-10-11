@@ -12,7 +12,7 @@ export function RouteError({ reset }: ErrorComponentProps) {
         reset()
         router.invalidate()
       }}
-      className="px-12.75 py-40"
+      className="items-center! px-12.75 py-40"
     />
   )
 }
