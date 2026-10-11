@@ -9,7 +9,7 @@ import { profileSchema } from '@/utils/schemas/profileSchema'
 import { DatePicker } from '@/components/core/DatePicker'
 import { ErrorMessage } from '@/components/core/ErrorMessage'
 import { Input } from '@/components/core/Input'
-import { Select } from '@/components/core/Select'
+import { SelectField, SelectItem } from '@/components/core/Select'
 import { getAgeNote, getProfileFormValues } from './utils'
 
 export function PersonalInformationForm({ user }: { user: User }) {
@@ -69,20 +69,23 @@ export function PersonalInformationForm({ user }: { user: User }) {
           </form.Field>
           <form.Field name="preferredVenueId">
             {(field) => (
-              <Select
+              <SelectField
                 label="Preferred Venue (Optional)"
-                value={field.state.value ?? ''}
-                onChange={(e) => field.handleChange(e.target.value ? Number(e.target.value) : null)}
+                placeholder="Select venue"
+                value={field.state.value == null ? '' : String(field.state.value)}
+                onValueChange={(value) =>
+                  field.handleChange(value === 'none' ? null : Number(value))
+                }
                 onBlur={field.handleBlur}
                 error={getFieldError(field)}
               >
-                <option value="">Select venue</option>
+                <SelectItem value="none">No preference</SelectItem>
                 {filterOptions?.venues.map((venue) => (
-                  <option key={venue.id} value={venue.id}>
+                  <SelectItem key={venue.id} value={String(venue.id)}>
                     {venue.name}
-                  </option>
+                  </SelectItem>
                 ))}
-              </Select>
+              </SelectField>
             )}
           </form.Field>
         </div>

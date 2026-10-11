@@ -28,7 +28,7 @@ src/
   components/       app components used by more than one page. A component with no group stays at the root (FormInput, RouteError)
     auth/           login and sign-up modals, avatar upload
     booking/        the booking modal and its steps, opened from the sessions and movie pages
-    core/           base UI components (Button, Input, Modal, Typography, WarningNote, Popover, Calendar, DatePicker)
+    core/           base UI components (Button, Input, Modal, Typography, WarningNote, Popover, Calendar, DatePicker, DropdownMenu, Select)
     layout/         the app shell: DefaultLayout, Header, Footer, ProfileMenu, ProfileDropdown, Avatar
     pages/          one folder per page: the page component and the components only that page uses (home/HomePage, home/MovieCard, ...)
     search/         the header search: SearchField, SearchDropdown, SearchResult, SearchEmptyState

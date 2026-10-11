@@ -1,7 +1,13 @@
-import { useEffect, useRef } from 'react'
-import { DayPicker, type DayButtonProps, type DayPickerProps } from 'react-day-picker'
+import { useEffect, useRef, type ChangeEvent } from 'react'
+import {
+  DayPicker,
+  type DayButtonProps,
+  type DayPickerProps,
+  type DropdownProps,
+} from 'react-day-picker'
 import ArrowIcon from '@/assets/icons/arrow.svg?react'
 import { cx } from '@/utils/cx'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './Select'
 
 /** `DayPicker` styled with the app tokens. Month and year dropdowns by default. */
 export function Calendar({ classNames, components, ...props }: DayPickerProps) {
@@ -22,10 +28,6 @@ export function Calendar({ classNames, components, ...props }: DayPickerProps) {
         button_next: navButton,
         month_caption: 'flex h-9 items-center justify-center px-9',
         dropdowns: 'flex items-center justify-center gap-1.5',
-        dropdown_root:
-          'relative rounded-lg hover:bg-elevated has-focus-visible:ring-1 has-focus-visible:ring-subtle',
-        dropdown: 'absolute inset-0 cursor-pointer opacity-0 [color-scheme:dark]',
-        caption_label: 'flex h-8 items-center gap-1 pr-1 pl-2 select-none [&>svg]:size-4',
         month_grid: 'w-full border-collapse',
         weekdays: 'flex',
         weekday: 'size-9 flex-1 py-2 text-center text-muted select-none',
@@ -46,6 +48,8 @@ export function Calendar({ classNames, components, ...props }: DayPickerProps) {
           />
         ),
         DayButton: CalendarDayButton,
+        MonthsDropdown: CalendarDropdown,
+        YearsDropdown: CalendarDropdown,
         ...components,
       }}
       {...props}
@@ -74,5 +78,38 @@ function CalendarDayButton({ day: _day, modifiers, className, ...props }: DayBut
       )}
       {...props}
     />
+  )
+}
+
+/** Month and year picker. DayPicker reads `event.target.value`, so the change is passed as one. */
+function CalendarDropdown({
+  options,
+  value,
+  onChange,
+  disabled,
+  'aria-label': ariaLabel,
+}: DropdownProps) {
+  return (
+    <Select
+      value={String(value)}
+      disabled={disabled}
+      onValueChange={(next) =>
+        onChange?.({ target: { value: next } } as ChangeEvent<HTMLSelectElement>)
+      }
+    >
+      <SelectTrigger
+        aria-label={ariaLabel}
+        className="relative h-8 rounded-lg pr-1 pl-2 select-none hover:bg-elevated focus-visible:ring-1 focus-visible:ring-subtle"
+      >
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent className="max-h-60">
+        {options?.map((option) => (
+          <SelectItem key={option.value} value={String(option.value)} disabled={option.disabled}>
+            {option.label}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
   )
 }
